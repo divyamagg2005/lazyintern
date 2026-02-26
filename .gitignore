@@ -11,6 +11,8 @@ venv/
 .venv/
 logs/
 *.log
+data/*.pdf
+secrets/
 
 # =========================
 # OS
