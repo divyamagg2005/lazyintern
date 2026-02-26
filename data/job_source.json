@@ -7,9 +7,7 @@
   
     "sources": [
   
-      // ─────────────────────────────────────────
-      // 🏆 TIER 1 — HIGHEST QUALITY (AI/ML focused, internship specific)
-      // ─────────────────────────────────────────
+
   
       {
         "name": "YC Work at a Startup — Engineering Internships",
@@ -98,9 +96,6 @@
         "expected_quality": "medium"
       },
   
-      // ─────────────────────────────────────────
-      // 🇮🇳 TIER 2 — INDIA SPECIFIC PLATFORMS
-      // ─────────────────────────────────────────
   
       {
         "name": "Internshala — Machine Learning",
@@ -221,9 +216,7 @@
         "notes": "Good for Indian startup jobs. Often shows contact info."
       },
   
-      // ─────────────────────────────────────────
-      // 🌍 TIER 3 — GLOBAL JOB BOARDS
-      // ─────────────────────────────────────────
+
   
       {
         "name": "LinkedIn — AI Internships Remote",
@@ -321,9 +314,7 @@
         "notes": "May require login. Try public endpoint first."
       },
   
-      // ─────────────────────────────────────────
-      // 🔬 TIER 4 — RESEARCH LABS & ACADEMIC ORGS
-      // ─────────────────────────────────────────
+
   
       {
         "name": "OpenAI Careers — Internships",
@@ -439,9 +430,7 @@
         "expected_quality": "very high"
       },
   
-      // ─────────────────────────────────────────
-      // 🐦 TIER 5 — COMMUNITY & NEWSLETTER BOARDS
-      // ─────────────────────────────────────────
+
   
       {
         "name": "ML Jobs Board",
@@ -511,9 +500,7 @@
         "notes": "Mostly freelance but occasionally has part-time intern roles."
       },
   
-      // ─────────────────────────────────────────
-      // 🏫 TIER 6 — GOVERNMENT & RESEARCH PROGRAMS
-      // ─────────────────────────────────────────
+      
   
       {
         "name": "DRDO Internship Portal",
