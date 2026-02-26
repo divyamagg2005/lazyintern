@@ -104,12 +104,9 @@ class SupabaseDB:
     # -------------------------
     def upsert_internship(self, internship: dict[str, Any]) -> dict[str, Any] | None:
         # link is UNIQUE, so we can rely on upsert with on_conflict
-        res = (
-            self.client.table("internships")
-            .upsert(internship, on_conflict="link")
-            .select("*")
-            .execute()
-        )
+        res = self.client.table("internships").upsert(
+            internship, on_conflict="link"
+        ).execute()
         return res.data[0] if res.data else None
 
     def get_internship_by_link(self, link: str) -> dict[str, Any] | None:
@@ -133,15 +130,15 @@ class SupabaseDB:
         return list(res.data or [])
 
     def insert_lead(self, lead: dict[str, Any]) -> dict[str, Any]:
-        res = self.client.table("leads").insert(lead).select("*").execute()
+        res = self.client.table("leads").insert(lead).execute()
         return res.data[0]
 
     def insert_email_draft(self, draft: dict[str, Any]) -> dict[str, Any]:
-        res = self.client.table("email_drafts").insert(draft).select("*").execute()
+        res = self.client.table("email_drafts").insert(draft).execute()
         return res.data[0]
 
     def insert_followup(self, followup: dict[str, Any]) -> dict[str, Any]:
-        res = self.client.table("followup_queue").insert(followup).select("*").execute()
+        res = self.client.table("followup_queue").insert(followup).execute()
         return res.data[0]
 
     def update_email_draft(self, draft_id: str, patch: dict[str, Any]) -> dict[str, Any]:
@@ -149,7 +146,6 @@ class SupabaseDB:
             self.client.table("email_drafts")
             .update(patch)
             .eq("id", draft_id)
-            .select("*")
             .execute()
         )
         return res.data[0]

@@ -8,10 +8,13 @@ Backend + dashboard for the internship discovery → outreach pipeline described
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
+scrapling install
 copy .env.example .env
 ```
 
 Fill in `.env` with your Supabase + API keys.
+
+`scrapling install` downloads browsers for DynamicFetcher (Tier 2).
 
 ## Run API (Twilio webhooks)
 
