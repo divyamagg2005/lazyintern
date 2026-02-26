@@ -20,27 +20,9 @@ PRE_SCORE_THRESHOLD_REGEX = 40
 PRE_SCORE_THRESHOLD_HUNTER = 60
 
 
-def run_cycle() -> None:
-    """
-    Minimal end-to-end cycle:
-    - Process retry_queue
-    - Process followups + quarantine
-    - Run pre-score → regex email extraction → validation → full-score → draft generation
-      for newly discovered internships
-    - Process email send queue
-    """
+def _process_discovered_internships(resume: dict[str, object], *, limit: int = 200) -> None:
     today = today_utc()
-    db.get_or_create_daily_usage(today)
-
-    process_retry_queue()
-    process_followups()
-    process_quarantine_re_evaluations()
-
-    # Phase 1 — discovery (best-effort)
-    discover_and_store(limit=50)
-
-    resume = _load_resume()
-    internships = db.list_discovered_internships()
+    internships = db.list_discovered_internships(limit=limit)
 
     for internship in internships:
         iid = internship["id"]
@@ -142,6 +124,28 @@ def run_cycle() -> None:
 
         # Phase 9 — Twilio human approval (send SMS, wait for webhook / auto-approver)
         send_approval_sms(draft, lead, internship, int(fs.score))
+
+
+def run_cycle() -> None:
+    """
+    One complete cycle:
+    1) process existing discovered internships first
+    2) run new discovery
+    3) process newly discovered internships
+    """
+    today = today_utc()
+    db.get_or_create_daily_usage(today)
+
+    process_retry_queue()
+    process_followups()
+    process_quarantine_re_evaluations()
+
+    resume = _load_resume()
+    _process_discovered_internships(resume, limit=200)
+
+    # Phase 1 — discovery (best-effort)
+    discover_and_store(limit=50)
+    _process_discovered_internships(resume, limit=200)
 
     # Phase 11 / 12 — email queue + follow-ups
     process_email_queue()

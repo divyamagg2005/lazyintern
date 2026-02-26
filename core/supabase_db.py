@@ -211,7 +211,41 @@ class SupabaseDB:
     # -------------------------
     # Scoring config
     # -------------------------
+    def seed_scoring_config_if_empty(self) -> None:
+        check = self.client.table("scoring_config").select("key").limit(1).execute()
+        if check.data:
+            return
+        defaults = [
+            {
+                "key": "relevance_score",
+                "weight": 0.35,
+                "description": "Role/title keyword match",
+            },
+            {
+                "key": "resume_overlap_score",
+                "weight": 0.25,
+                "description": "Resume keyword overlap with JD",
+            },
+            {
+                "key": "tech_stack_score",
+                "weight": 0.20,
+                "description": "Tech stack alignment",
+            },
+            {
+                "key": "location_score",
+                "weight": 0.10,
+                "description": "Location preference match",
+            },
+            {
+                "key": "historical_success_score",
+                "weight": 0.10,
+                "description": "Past reply rate for similar companies",
+            },
+        ]
+        self.client.table("scoring_config").insert(defaults).execute()
+
     def get_scoring_weights(self) -> dict[str, float]:
+        self.seed_scoring_config_if_empty()
         res = self.client.table("scoring_config").select("key,weight").execute()
         weights: dict[str, float] = {}
         for row in (res.data or []):
