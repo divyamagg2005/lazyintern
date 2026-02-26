@@ -1,0 +1,594 @@
+{
+    "meta": {
+      "last_updated": "2025-02-26",
+      "total_sources": 60,
+      "notes": "type: http = Scrapling Tier 1 first. type: dynamic = Scrapling Tier 2 first. Update HackerNews item IDs monthly."
+    },
+  
+    "sources": [
+  
+      // ─────────────────────────────────────────
+      // 🏆 TIER 1 — HIGHEST QUALITY (AI/ML focused, internship specific)
+      // ─────────────────────────────────────────
+  
+      {
+        "name": "YC Work at a Startup — Engineering Internships",
+        "url": "https://www.workatastartup.com/jobs?role=eng&jobType=intern",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "very high",
+        "notes": "YC-backed companies only. Highest reply rates. Must scrape."
+      },
+      {
+        "name": "YC Work at a Startup — Data Science Internships",
+        "url": "https://www.workatastartup.com/jobs?role=ds&jobType=intern",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "very high",
+        "notes": "Separate URL for DS roles on workatastartup."
+      },
+      {
+        "name": "Wellfound — ML Engineer Internships",
+        "url": "https://wellfound.com/jobs?role=Machine+Learning+Engineer&jobType=internship",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "very high",
+        "notes": "Formerly AngelList. Strong startup coverage."
+      },
+      {
+        "name": "Wellfound — AI Internships",
+        "url": "https://wellfound.com/jobs?role=Artificial+Intelligence&jobType=internship",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Wellfound — Data Science Internships",
+        "url": "https://wellfound.com/jobs?role=Data+Scientist&jobType=internship",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high"
+      },
+      {
+        "name": "HackerNews — Who is Hiring (Monthly Thread)",
+        "url": "https://news.ycombinator.com/item?id=REPLACE_WITH_CURRENT_MONTH_ID",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "monthly",
+        "expected_quality": "very high",
+        "notes": "Update item ID every 1st of month. Thread posts on first weekday. Best for research labs and stealth startups. Item IDs: Jan2025=42575537, Feb2025=42931219. Find new IDs at news.ycombinator.com/ask"
+      },
+      {
+        "name": "HackerNews — Who Wants to be Hired (Monthly Thread)",
+        "url": "https://news.ycombinator.com/item?id=REPLACE_WITH_CURRENT_MONTH_ID_HIRED",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "monthly",
+        "expected_quality": "medium",
+        "notes": "Companion thread — scrape for company names and domains that are actively hiring."
+      },
+      {
+        "name": "RemoteOK — AI & ML Jobs",
+        "url": "https://remoteok.com/remote-ai+ml-jobs",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Clean HTML. Easy to scrape. Good global remote coverage."
+      },
+      {
+        "name": "RemoteOK — Machine Learning Jobs",
+        "url": "https://remoteok.com/remote-machine-learning-jobs",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high"
+      },
+      {
+        "name": "RemoteOK — Data Science Jobs",
+        "url": "https://remoteok.com/remote-data-science-jobs",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+  
+      // ─────────────────────────────────────────
+      // 🇮🇳 TIER 2 — INDIA SPECIFIC PLATFORMS
+      // ─────────────────────────────────────────
+  
+      {
+        "name": "Internshala — Machine Learning",
+        "url": "https://internshala.com/internships/machine-learning-internship",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium",
+        "notes": "Largest Indian internship platform. High volume."
+      },
+      {
+        "name": "Internshala — Artificial Intelligence",
+        "url": "https://internshala.com/internships/artificial-intelligence-internship",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Internshala — Data Science",
+        "url": "https://internshala.com/internships/data-science-internship",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Internshala — Python",
+        "url": "https://internshala.com/internships/python-internship",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Internshala — Deep Learning",
+        "url": "https://internshala.com/internships/deep-learning-internship",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Unstop — Engineering Internships",
+        "url": "https://unstop.com/internships?domain=Engineering&opportunity=Internships",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium",
+        "notes": "Good for competitions + internships both."
+      },
+      {
+        "name": "LinkedIn — AI Internships India",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=AI+intern&location=India&f_JT=I",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Public listings without login. Use rotating proxies. f_JT=I filters internships."
+      },
+      {
+        "name": "LinkedIn — Machine Learning Internships India",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=machine+learning+intern&location=India&f_JT=I",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high"
+      },
+      {
+        "name": "LinkedIn — Data Science Internships India",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=data+science+intern&location=India&f_JT=I",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "high"
+      },
+      {
+        "name": "Naukri — ML Internships",
+        "url": "https://www.naukri.com/machine-learning-internship-jobs",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium",
+        "notes": "Good for finding Indian company contacts."
+      },
+      {
+        "name": "Indeed India — AI Intern",
+        "url": "https://in.indeed.com/jobs?q=AI+intern&jt=internship",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Glassdoor India — ML Internships",
+        "url": "https://www.glassdoor.co.in/Job/india-machine-learning-intern-jobs-SRCH_IL.0,5_IN115_KO6,29.htm",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "IIMJobs — Data Science Internship",
+        "url": "https://www.iimjobs.com/search/data-science-internship",
+        "type": "http",
+        "priority": "low",
+        "scrape_frequency": "weekly",
+        "expected_quality": "medium",
+        "notes": "More senior roles but occasionally posts good internships."
+      },
+      {
+        "name": "CutShort — AI Internships",
+        "url": "https://cutshort.io/jobs/ai-machine-learning-jobs-in-india?experience=0-1",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium",
+        "notes": "Good for Indian startup jobs. Often shows contact info."
+      },
+  
+      // ─────────────────────────────────────────
+      // 🌍 TIER 3 — GLOBAL JOB BOARDS
+      // ─────────────────────────────────────────
+  
+      {
+        "name": "LinkedIn — AI Internships Remote",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=AI+intern&f_WT=2&f_JT=I",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "f_WT=2 = remote only. f_JT=I = internship."
+      },
+      {
+        "name": "LinkedIn — LLM Engineer Internships",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=LLM+engineer+intern&f_JT=I",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "LinkedIn — Generative AI Internships",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=generative+AI+intern&f_JT=I",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Indeed — AI Research Internship",
+        "url": "https://www.indeed.com/jobs?q=AI+research+intern&jt=internship&l=remote",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Glassdoor — Machine Learning Intern Remote",
+        "url": "https://www.glassdoor.com/Job/remote-machine-learning-intern-jobs-SRCH_IL.0,6_IS11047_KO7,30.htm",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Builtin — ML Internships",
+        "url": "https://builtin.com/jobs/dev-engineering/machine-learning?type=internship",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium",
+        "notes": "Good US startup coverage."
+      },
+      {
+        "name": "Greenhouse Job Board Aggregator — AI",
+        "url": "https://boards.greenhouse.io/search?q=AI+intern",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Greenhouse is used by most YC and serious startups. Direct company job boards."
+      },
+      {
+        "name": "Lever Job Board Aggregator — ML Intern",
+        "url": "https://jobs.lever.co/search?q=ML+intern",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Lever is used by many top startups. Direct company postings."
+      },
+      {
+        "name": "Ashby Job Board Aggregator — AI Intern",
+        "url": "https://jobs.ashbyhq.com/search?q=AI+intern",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Ashby is growing fast among AI startups."
+      },
+      {
+        "name": "Simplify Jobs — ML Internships",
+        "url": "https://simplify.jobs/internships?search=machine+learning",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Aggregator specifically for CS internships. Very well maintained."
+      },
+      {
+        "name": "Handshake — AI Internships",
+        "url": "https://app.joinhandshake.com/stu/jobs?category=internship&query=AI",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium",
+        "notes": "May require login. Try public endpoint first."
+      },
+  
+      // ─────────────────────────────────────────
+      // 🔬 TIER 4 — RESEARCH LABS & ACADEMIC ORGS
+      // ─────────────────────────────────────────
+  
+      {
+        "name": "OpenAI Careers — Internships",
+        "url": "https://openai.com/careers/",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high",
+        "notes": "Check manually for intern postings. Very competitive but worth tracking."
+      },
+      {
+        "name": "Anthropic Careers",
+        "url": "https://www.anthropic.com/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "DeepMind Careers — Internships",
+        "url": "https://deepmind.google/about/careers/",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Mistral AI Careers",
+        "url": "https://mistral.ai/company/#careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Cohere Careers",
+        "url": "https://cohere.com/about/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Hugging Face Jobs",
+        "url": "https://apply.workable.com/huggingface/",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Stability AI Careers",
+        "url": "https://stability.ai/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Perplexity AI Careers",
+        "url": "https://www.perplexity.ai/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Runway ML Careers",
+        "url": "https://runwayml.com/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Inflection AI Careers",
+        "url": "https://inflection.ai/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "AI21 Labs Careers",
+        "url": "https://www.ai21.com/careers",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "weekly",
+        "expected_quality": "high"
+      },
+      {
+        "name": "Together AI Careers",
+        "url": "https://www.together.ai/about#careers",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "weekly",
+        "expected_quality": "high"
+      },
+      {
+        "name": "Replicate Careers",
+        "url": "https://replicate.com/careers",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "weekly",
+        "expected_quality": "high"
+      },
+      {
+        "name": "Scale AI Careers — Internships",
+        "url": "https://scale.com/careers",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "weekly",
+        "expected_quality": "very high"
+      },
+  
+      // ─────────────────────────────────────────
+      // 🐦 TIER 5 — COMMUNITY & NEWSLETTER BOARDS
+      // ─────────────────────────────────────────
+  
+      {
+        "name": "ML Jobs Board",
+        "url": "https://ml-jobs.io/",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Curated ML-specific job board."
+      },
+      {
+        "name": "AI Jobs — AIJobs.net",
+        "url": "https://aijobs.net/?type=internship",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "daily",
+        "expected_quality": "high"
+      },
+      {
+        "name": "Deep Learning Jobs",
+        "url": "https://www.deeplearningjobs.com/",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Jobspresso — Remote ML Jobs",
+        "url": "https://jobspresso.co/remote-work/?search=machine+learning",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Otta — ML Internships",
+        "url": "https://app.otta.com/jobs/search?query=machine+learning+intern",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "high",
+        "notes": "Strong European startup coverage. Also good for remote."
+      },
+      {
+        "name": "Pallet — ML Jobs",
+        "url": "https://pallet.xyz/list/mlops-jobs/jobs",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Paraform — AI Startup Jobs",
+        "url": "https://www.paraform.com/careers?role=engineering",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "daily",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "Contra — AI Freelance & Internship",
+        "url": "https://contra.com/opportunities?q=AI+internship",
+        "type": "dynamic",
+        "priority": "low",
+        "scrape_frequency": "weekly",
+        "expected_quality": "low",
+        "notes": "Mostly freelance but occasionally has part-time intern roles."
+      },
+  
+      // ─────────────────────────────────────────
+      // 🏫 TIER 6 — GOVERNMENT & RESEARCH PROGRAMS
+      // ─────────────────────────────────────────
+  
+      {
+        "name": "DRDO Internship Portal",
+        "url": "https://www.drdo.gov.in/careers/internship",
+        "type": "http",
+        "priority": "low",
+        "scrape_frequency": "weekly",
+        "expected_quality": "medium",
+        "notes": "India defence research. Rarely AI-specific but worth monitoring."
+      },
+      {
+        "name": "ISRO Internship",
+        "url": "https://www.isro.gov.in/InternshipEngagement.html",
+        "type": "http",
+        "priority": "low",
+        "scrape_frequency": "monthly",
+        "expected_quality": "medium"
+      },
+      {
+        "name": "IIT Research Internships — IITB",
+        "url": "https://www.iitb.ac.in/newacadhome/researchinternship.jsp",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "monthly",
+        "expected_quality": "high",
+        "notes": "IIT Bombay summer research internships. Check March-April for openings."
+      },
+      {
+        "name": "IISc Research Internships",
+        "url": "https://iisc.ac.in/research/",
+        "type": "http",
+        "priority": "medium",
+        "scrape_frequency": "monthly",
+        "expected_quality": "high"
+      },
+      {
+        "name": "Microsoft Research India — Internships",
+        "url": "https://www.microsoft.com/en-us/research/lab/microsoft-research-india/internships/",
+        "type": "http",
+        "priority": "high",
+        "scrape_frequency": "monthly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "Google Research India — Internships",
+        "url": "https://research.google/careers/",
+        "type": "dynamic",
+        "priority": "high",
+        "scrape_frequency": "monthly",
+        "expected_quality": "very high"
+      },
+      {
+        "name": "IBM Research — Internships",
+        "url": "https://research.ibm.com/careers",
+        "type": "dynamic",
+        "priority": "medium",
+        "scrape_frequency": "monthly",
+        "expected_quality": "high"
+      }
+    ],
+  
+    "scrape_config": {
+      "daily_sources_limit": 40,
+      "weekly_sources_limit": 15,
+      "monthly_sources_limit": 5,
+      "max_concurrent_workers": 8,
+      "delay_between_requests_sec": [2, 4],
+      "jitter_ms": [0, 1000],
+      "respect_robots_txt": true,
+      "user_agents": [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+      ],
+      "retry_on_status_codes": [429, 503, 502],
+      "skip_on_status_codes": [404, 403, 401]
+    }
+  }

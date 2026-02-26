@@ -1,44 +1,16 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
-
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import PlainTextResponse
-from twilio.request_validator import RequestValidator
-
-from core.config import settings
 from core.supabase_db import db, utcnow
+from approval.webhook_handler import validate_twilio_request
 
 router = APIRouter(prefix="/twilio")
 
 
-def _require_twilio_config() -> None:
-    missing = []
-    if not settings.twilio_auth_token:
-        missing.append("TWILIO_AUTH_TOKEN")
-    if not settings.public_base_url:
-        missing.append("PUBLIC_BASE_URL")
-    if missing:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Twilio webhook not configured (missing {', '.join(missing)})",
-        )
-
-
-async def _validate_twilio_signature(request: Request) -> None:
-    _require_twilio_config()
-
-    signature = request.headers.get("X-Twilio-Signature", "")
-    url = f"{settings.public_base_url}{request.url.path}"
-    form = await request.form()
-    validator = RequestValidator(settings.twilio_auth_token)
-    if not validator.validate(url, dict(form), signature):
-        raise HTTPException(status_code=403, detail="Invalid Twilio signature")
-
-
 @router.post("/webhook", response_class=PlainTextResponse)
 async def twilio_webhook(request: Request) -> str:
-    await _validate_twilio_signature(request)
+    await validate_twilio_request(request)
 
     form = await request.form()
     body = (form.get("Body") or "").strip().upper()

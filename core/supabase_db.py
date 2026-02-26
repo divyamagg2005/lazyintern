@@ -122,6 +122,16 @@ class SupabaseDB:
         )
         return res.data[0] if res.data else None
 
+    def list_discovered_internships(self, limit: int = 50) -> list[dict[str, Any]]:
+        res = (
+            self.client.table("internships")
+            .select("*")
+            .eq("status", "discovered")
+            .limit(limit)
+            .execute()
+        )
+        return list(res.data or [])
+
     def insert_lead(self, lead: dict[str, Any]) -> dict[str, Any]:
         res = self.client.table("leads").insert(lead).select("*").execute()
         return res.data[0]
