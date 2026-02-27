@@ -8,8 +8,9 @@ Thumbs.db
 # Frontend Dev Cache
 # =========================
 frontend/dev/
-.next/
-
+dashboard/.next/
+dashboard/node_modules/
+secrets
 # =========================
 # IDEs
 # =========================
@@ -24,3 +25,10 @@ frontend/dev/
 # =========================
 .env
 .env.*
+
+core/__pycache__
+
+approval/__pycache__
+
+api/__pycache__
+api/routes/__pycache__
