@@ -1,0 +1,94 @@
+{
+  "name": "Divyam Aggarwal",
+  "target_roles": ["AI Intern", "ML Intern", "Research Intern", "Data Intern"],
+  "skills": {
+    "languages": ["Python", "JavaScript", "TypeScript", "C++", "Java", "SQL", "PowerShell"],
+    "frameworks": ["TensorFlow", "Scikit-learn", "LangChain", "FastAPI", "Next.js", "React", "Django", "Node.js", "Three.js"],
+    "tools": ["Supabase", "Git", "GitHub Actions", "Groq API", "Google Gemini API", "ElevenLabs API", "Firebase", "Streamlit", "Docker", "FFmpeg", "Arduino", "Vercel", "Render"],
+    "domains": ["NLP", "LLM Integration", "RAG", "AI Agents", "Computer Vision", "Real-time Systems", "Chrome Extensions", "Full-Stack Development"]
+  },
+  "projects": [
+    {
+      "name": "BrainRot Learning (Insta AI Agent)",
+      "description": "Automated Instagram Reels creation pipeline transforming natural language prompts into viral educational content via multi-agent AI orchestration.",
+      "tech": ["Python", "Gemini 2.5 Flash", "ElevenLabs", "MoviePy", "FFmpeg", "Streamlit"],
+      "impact": "End-to-end pipeline covering script generation, voiceover synthesis, subtitle sync, and auto-posting with zero-code UI"
+    },
+    {
+      "name": "Confession ADG",
+      "description": "Dual-interface anonymous confession platform with public submission and password-protected admin moderation.",
+      "tech": ["React", "TypeScript", "Supabase PostgreSQL", "Vite", "TailwindCSS"],
+      "impact": "Handled 100-200 concurrent users during peak load with zero downtime"
+    },
+    {
+      "name": "TermiGenius",
+      "description": "AI-powered CLI that translates natural language into secure PowerShell commands with risk scoring and explain-before-execute.",
+      "tech": ["Python", "Google Gemini API", "PowerShell", "Rich TUI"],
+      "impact": "Static analysis and risk scoring layer for safe command execution"
+    },
+    {
+      "name": "MailMind – AI Email Assistant",
+      "description": "Privacy-focused Chrome extension that summarizes Gmail emails and drafts replies using Groq LLMs with client-side processing.",
+      "tech": ["JavaScript", "Chrome Extensions (Manifest V3)", "Gmail REST API", "Groq LLMs"],
+      "impact": "SHA-256 caching and FIFO rate-limiting reduced redundant LLM calls; exportable latency/throughput/token-usage metrics"
+    },
+    {
+      "name": "Web Gladiator",
+      "description": "Immersive 3D first-person combat game with dynamic day-night cycle, intelligent enemy AI, multiple weapon systems, and power-ups.",
+      "tech": ["Next.js", "Three.js", "TypeScript", "React"],
+      "impact": "Optimized Three.js rendering and React state management for smooth gameplay; deployed live on Vercel"
+    },
+    {
+      "name": "HostelGrid",
+      "description": "Complete hostel management system with student, room, and fee management, complaint tracking, and role-based access control.",
+      "tech": ["Django", "Supabase PostgreSQL", "Bootstrap 5"],
+      "impact": "Full admin dashboard with key metrics; deployed live on Render"
+    },
+    {
+      "name": "PDF Knowledge Assistant",
+      "description": "Intelligent chatbot enabling natural language queries on uploaded PDFs using embeddings, vector similarity search, and Gemini AI.",
+      "tech": ["LangChain", "Google Gemini API", "Streamlit", "Python"],
+      "impact": "Context-aware responses with conversation memory and source references"
+    },
+    {
+      "name": "Heart Rate Monitor & Analysis",
+      "description": "Arduino-based heart rate monitoring system with real-time visualization and AI-powered medical analysis.",
+      "tech": ["C++", "Python", "Google Gemini API", "Arduino"],
+      "impact": "Data filtering pipeline improved signal accuracy; generated detailed AI health assessments"
+    }
+  ],
+  "education": {
+    "degree": "B.Tech Computer Science",
+    "college": "Vellore Institute of Technology (VIT), Vellore",
+    "year": "2nd Year (Aug 2023 – Aug 2027)",
+    "gpa": "8.81/10.0"
+  },
+  "certifications": [
+    {
+      "name": "IBM Generative AI",
+      "issuer": "IBM",
+      "score": "97/100",
+      "year": 2025
+    }
+  ],
+  "leadership": [
+    {
+      "role": "Finance Head (Board Member)",
+      "org": "ADGVIT – Advanced Developers Group, VIT Vellore",
+      "duration": "Sep 2023 – Present",
+      "highlights": [
+        "Secured McDonald's as sponsor for Riviera 2026",
+        "Led sponsorship strategy for iOS Fusion 7.0 and 8.0",
+        "Coordinated keynote outreach for Yantra 2025 and Yantra 2026"
+      ]
+    }
+  ],
+  "contact": {
+    "email": "divyamagg2005@gmail.com",
+    "phone": "+91 9811394884",
+    "github": "github.com/divyamagg2005",
+    "linkedin": "linkedin.com/in/divyamagg2005"
+  },
+  "preferred_locations": ["Remote", "Bangalore", "Delhi NCR", "Mumbai"],
+  "preferred_company_types": ["startup", "AI lab", "YC", "research org", "product company"]
+}

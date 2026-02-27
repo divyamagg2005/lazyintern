@@ -1,32 +1,34 @@
 # =========================
-# Python
-# =========================
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.env
-.env.*
-venv/
-.venv/
-logs/
-*.log
-data/*.pdf
-secrets/
-
-# =========================
 # OS
 # =========================
 .DS_Store
 Thumbs.db
 
 # =========================
-# VS Code
+# Frontend Dev Cache
+# =========================
+frontend/dev/
+dashboard/.next/
+dashboard/node_modules/
+secrets
+# =========================
+# IDEs
 # =========================
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # =========================
-# Node (extra safety)
+# Environment
 # =========================
-node_modules/
-.next/
+.env
+.env.*
+
+core/__pycache__
+
+approval/__pycache__
+
+api/__pycache__
+api/routes/__pycache__
