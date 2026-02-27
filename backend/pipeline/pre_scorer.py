@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import json
+import re
 
 from core.supabase_db import db
 from core.logger import logger
@@ -33,6 +34,21 @@ def _load_keywords() -> dict[str, Any]:
     return {}
 
 
+def whole_word_match(keyword: str, text: str) -> bool:
+    """
+    Check if keyword matches as a whole word in text (case-insensitive).
+    Prevents false positives like 'pr' matching 'product', 'prior', 'research'.
+    
+    Examples:
+        whole_word_match('ml', 'ml engineer') -> True
+        whole_word_match('ml', 'html developer') -> False
+        whole_word_match('ai', 'ai research') -> True
+        whole_word_match('ai', 'email') -> False
+    """
+    pattern = r'\b' + re.escape(keyword.lower()) + r'\b'
+    return bool(re.search(pattern, text.lower()))
+
+
 def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     """
     Cheap, local pre-scoring on title + company + location only.
@@ -57,7 +73,7 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     disqualify_keywords = [kw.lower() for kw in role_keywords.get("disqualify", [])]
     
     for kw in disqualify_keywords:
-        if kw in role_title:
+        if whole_word_match(kw, role_title):
             logger.info(f"Pre-score DISQUALIFIED: '{role_title}' contains '{kw}'")
             return PreScoreResult(score=0, status="disqualified", breakdown={"disqualify": -100})
 
@@ -65,7 +81,7 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     high_priority_role = [kw.lower() for kw in role_keywords.get("high_priority", [])]
     role_match = False
     for kw in high_priority_role:
-        if kw in role_title:
+        if whole_word_match(kw, role_title):
             score += 40
             breakdown["high_priority_role"] = 40
             role_match = True
@@ -75,7 +91,7 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     if not role_match:
         medium_priority_role = [kw.lower() for kw in role_keywords.get("medium_priority", [])]
         for kw in medium_priority_role:
-            if kw in role_title:
+            if whole_word_match(kw, role_title):
                 score += 20
                 breakdown["medium_priority_role"] = 20
                 role_match = True
@@ -86,12 +102,13 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     high_priority_company = [kw.lower() for kw in company_keywords.get("high_priority", [])]
     
     for kw in high_priority_company:
-        if kw in company:
+        if whole_word_match(kw, company):
             score += 20
             breakdown["high_priority_company"] = 20
             break
 
     # Location match (+20)
+    # Check both the location field AND the role title (for LinkedIn/sources that embed location in title)
     location_keywords = keywords.get("location_keywords", {})
     all_preferred_locations = []
     all_preferred_locations.extend([loc.lower() for loc in location_keywords.get("preferred_remote", [])])
@@ -99,11 +116,24 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     all_preferred_locations.extend([loc.lower() for loc in location_keywords.get("preferred_cities_global", [])])
     all_preferred_locations.extend(list(preferred_locations))
     
+    location_found = False
     for loc_kw in all_preferred_locations:
-        if loc_kw in location:
+        # Check dedicated location field first
+        if whole_word_match(loc_kw, location):
             score += 20
             breakdown["location_match"] = 20
+            location_found = True
             break
+    
+    # If no location field match, scan the role title for location keywords
+    # Examples: "AI Internship in Mumbai", "ML Intern - (paid - india/remote)"
+    if not location_found:
+        for loc_kw in all_preferred_locations:
+            if whole_word_match(loc_kw, role_title):
+                score += 20
+                breakdown["location_match_from_title"] = 20
+                logger.info(f"Location '{loc_kw}' found in role title: '{role_title}'")
+                break
 
     # Historical success from company_domains.reply_history
     link = (internship.get("link") or "").lower()

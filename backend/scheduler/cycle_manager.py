@@ -14,7 +14,7 @@ from pipeline.full_scorer import full_score
 from pipeline.groq_client import generate_draft
 from pipeline.pre_scorer import _load_resume, pre_score  # type: ignore[attr-defined]
 from approval.twilio_sender import send_approval_sms
-from pipeline.hunter_client import extract_domain, search_domain_for_email
+from pipeline.hunter_client import extract_domain, find_company_domain, search_domain_for_email
 from scraper.scrape_router import discover_and_store
 
 PRE_SCORE_THRESHOLD_REGEX = 40
@@ -52,12 +52,16 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 db.log_event(iid, "no_email_low_score", {"pre_score": ps.score})
                 continue
 
-            domain = extract_domain(internship.get("link") or "")
+            # Extract company domain from company name, NOT from job board URL
+            company_name = internship.get("company") or ""
+            domain = find_company_domain(company_name)
             if not domain:
+                db.log_event(iid, "no_company_domain", {"company": company_name})
                 continue
+            
             hunter = search_domain_for_email(domain)
             if not hunter:
-                db.log_event(iid, "hunter_no_results", {"domain": domain})
+                db.log_event(iid, "hunter_no_results", {"domain": domain, "company": company_name})
                 continue
 
             lead = db.insert_lead(
@@ -69,7 +73,7 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                     "confidence": hunter.confidence,
                 }
             )
-            db.log_event(iid, "email_found_hunter", {"email": hunter.email, "domain": domain})
+            db.log_event(iid, "email_found_hunter", {"email": hunter.email, "domain": domain, "company": company_name})
         else:
             lead = db.insert_lead(
                 {
@@ -130,10 +134,14 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
 def run_cycle() -> None:
     """
     One complete cycle:
-    1) process existing discovered internships first
-    2) run new discovery
-    3) process newly discovered internships
+    1) Seed scoring_config if empty
+    2) process existing discovered internships first
+    3) run new discovery
+    4) process newly discovered internships
     """
+    # Ensure scoring_config is seeded before any scoring happens
+    db.seed_scoring_config_if_empty()
+    
     today = today_utc()
     db.get_or_create_daily_usage(today)
 

@@ -28,6 +28,59 @@ def extract_domain(url: str) -> str | None:
     return f"{ext.domain}.{ext.suffix}".lower()
 
 
+def find_company_domain(company_name: str) -> str | None:
+    """
+    Find the company's domain from the company name.
+    Uses Hunter's Company Search API or simple heuristics.
+    
+    Examples:
+        "Blitzenx" -> "blitzenx.com"
+        "Google" -> "google.com"
+        "Microsoft Research" -> "microsoft.com"
+    """
+    if not company_name:
+        return None
+    
+    # Clean company name
+    company_clean = company_name.lower().strip()
+    
+    # Remove common suffixes (order matters - longer first)
+    suffixes = [
+        " private limited", " pvt ltd", " pvt. ltd.", " pvt. ltd",
+        " inc.", " inc", " llc", " ltd.", " ltd", 
+        " corporation", " corp.", " corp", " company", " co."," co"
+    ]
+    for suffix in suffixes:
+        if company_clean.endswith(suffix):
+            company_clean = company_clean[:-len(suffix)].strip()
+            break  # Only remove one suffix
+    
+    # Remove special characters and spaces
+    company_clean = "".join(c for c in company_clean if c.isalnum())
+    
+    if not company_clean:
+        return None
+    
+    # Try common TLDs
+    common_tlds = [".com", ".ai", ".io", ".co", ".in"]
+    
+    # First, check if we have this domain cached in company_domains
+    for tld in common_tlds:
+        potential_domain = f"{company_clean}{tld}"
+        cached = (
+            db.client.table("company_domains")
+            .select("domain")
+            .eq("domain", potential_domain)
+            .limit(1)
+            .execute()
+        )
+        if cached.data:
+            return potential_domain
+    
+    # Default to .com
+    return f"{company_clean}.com"
+
+
 def _filter_emails(items: list[dict[str, Any]]) -> list[HunterEmail]:
     preferred_locals = ("hr@", "hiring@", "recruiter@", "talent@", "careers@")
     out: list[HunterEmail] = []
