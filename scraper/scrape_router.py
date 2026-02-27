@@ -17,12 +17,17 @@ SOURCES_PATH = PROJECT_ROOT / "data" / "job_source.json"
 
 SCRAPE_BATCH_LIMIT = 50
 
-PROXY_POOL: list[str] = []
-_proxy_cycle = itertools.cycle(PROXY_POOL)
+# Import proxy pool from config
+try:
+    from scraper.proxy_config import PROXY_POOL
+except ImportError:
+    PROXY_POOL: list[str] = []
+
+_proxy_cycle = itertools.cycle(PROXY_POOL) if PROXY_POOL else None
 
 
 def get_next_proxy() -> str | None:
-    if not PROXY_POOL:
+    if not PROXY_POOL or not _proxy_cycle:
         return None
     return next(_proxy_cycle)
 
@@ -57,16 +62,20 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
 
         if typ == "dynamic":
             res = fetch_dynamic(url, proxy=proxy)
+            tier = "tier2"
         else:
             res = fetch(url, proxy=proxy)
+            tier = "tier1"
 
         html = res.text
         if not html:
+            # Tier 3 fallback
             fc = fetch_firecrawl(url)
             html = fc.content if fc else ""
+            tier = "tier3" if html else tier
 
         if not html:
-            db.log_event(None, "scrape_failed", {"source_url": url})
+            db.log_event(None, "scrape_failed", {"source_url": url, "tier": tier})
             continue
 
         items = extract_internships_from_html(html, source_url=url)
@@ -80,7 +89,7 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
 
             row = db.upsert_internship(it)
             if row:
-                db.log_event(row["id"], "discovered", {"source_url": url})
+                db.log_event(row["id"], "discovered", {"source_url": url, "tier": tier})
                 inserted += 1
 
     return inserted

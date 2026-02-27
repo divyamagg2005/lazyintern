@@ -62,4 +62,3 @@ def extract_from_internship(internship: dict[str, Any]) -> ExtractedEmail | None
             best = candidate
 
     return best
-

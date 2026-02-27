@@ -132,9 +132,15 @@ def run_cycle() -> None:
     1) process existing discovered internships first
     2) run new discovery
     3) process newly discovered internships
+    4) update warmup schedule if needed
     """
+    from scheduler.warmup import update_daily_limit_if_needed
+
     today = today_utc()
     db.get_or_create_daily_usage(today)
+
+    # Update warmup schedule based on account age
+    update_daily_limit_if_needed()
 
     process_retry_queue()
     process_followups()

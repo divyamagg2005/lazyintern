@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes.health import router as health_router
 from api.routes.twilio_webhook import router as twilio_router
 from api.routes.dashboard import router as dashboard_router
+from api.routes.gmail_webhook import router as gmail_router
 
 app = FastAPI(title="LazyIntern API")
 
@@ -21,4 +22,5 @@ app.add_middleware(
 app.include_router(health_router)
 app.include_router(twilio_router)
 app.include_router(dashboard_router)
+app.include_router(gmail_router)
 

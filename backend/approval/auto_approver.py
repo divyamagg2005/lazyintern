@@ -21,7 +21,7 @@ def run_auto_approver() -> None:
 
     res = (
         db.client.table("email_drafts")
-        .select("*, leads!inner(internship_id), internships!inner(full_score)")
+        .select("*, leads!inner(internship_id)")
         .eq("status", "generated")
         .lte("approval_sent_at", cutoff.isoformat())
         .execute()
@@ -30,7 +30,20 @@ def run_auto_approver() -> None:
     today = today_utc()
 
     for row in rows:
-        full_score = int(row["internships"]["full_score"] or 0)
+        # Get the internship to check full_score
+        internship_id = row["leads"]["internship_id"]
+        internship_res = (
+            db.client.table("internships")
+            .select("full_score")
+            .eq("id", internship_id)
+            .limit(1)
+            .execute()
+        )
+        
+        if not internship_res.data:
+            continue
+            
+        full_score = int(internship_res.data[0].get("full_score") or 0)
         if full_score >= AUTO_APPROVE_THRESHOLD:
             db.client.table("email_drafts").update(
                 {"status": "auto_approved"}

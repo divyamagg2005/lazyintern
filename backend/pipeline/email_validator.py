@@ -140,16 +140,14 @@ def validate_email(email: str, confidence: int) -> ValidationResult:
         logger.warning(f"MX lookup failed for {domain}: {e}")
         return ValidationResult(valid=False, reason="mx_failure", mx_valid=False)
 
-    # Step 4: SMTP ping (only if enabled and confidence < 90%)
-    smtp_valid = False
-    if settings.enable_smtp_ping and confidence < 90:
-        # Use first MX record
-        mx_host = mx_records[0]
-        smtp_valid = _smtp_ping(email, mx_host)
-        
-        if not smtp_valid:
-            logger.info(f"SMTP ping failed for {email}")
-            return ValidationResult(valid=False, reason="smtp_failure", mx_valid=True, smtp_valid=False)
+    # Step 4: SMTP ping (ALWAYS runs - compulsory)
+    # Use first MX record
+    mx_host = mx_records[0]
+    smtp_valid = _smtp_ping(email, mx_host)
+    
+    if not smtp_valid:
+        logger.info(f"SMTP ping failed for {email}")
+        return ValidationResult(valid=False, reason="smtp_failure", mx_valid=True, smtp_valid=False)
     
     logger.info(f"Email validated successfully: {email}")
     return ValidationResult(valid=True, reason=None, mx_valid=mx_valid, smtp_valid=smtp_valid)

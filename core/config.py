@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     gmail_oauth_client_path: str = "secrets/gmail_oauth_client.json"
     gmail_token_path: str = "secrets/gmail_token.json"
     gmail_sender: str = "me"
+    gmail_account_created_date: str | None = None
 
     enable_smtp_ping: bool = False
 

@@ -12,6 +12,44 @@ from core.logger import logger
 router = APIRouter(prefix="/dashboard")
 
 
+def _calculate_tier_success_rate(tier: str) -> float:
+    """
+    Calculate scraping tier success rate from pipeline events.
+    Success = discovered event with tier metadata.
+    Failure = scrape_failed event with tier metadata.
+    """
+    week_start = today_utc() - timedelta(days=7)
+    
+    # Count successes
+    success_count = (
+        db.client.table("pipeline_events")
+        .select("id", count="exact")
+        .eq("event", "discovered")
+        .contains("metadata", {"tier": tier})
+        .gte("created_at", str(week_start))
+        .execute()
+    )
+    
+    # Count failures
+    failure_count = (
+        db.client.table("pipeline_events")
+        .select("id", count="exact")
+        .eq("event", "scrape_failed")
+        .contains("metadata", {"tier": tier})
+        .gte("created_at", str(week_start))
+        .execute()
+    )
+    
+    successes = success_count.count or 0
+    failures = failure_count.count or 0
+    total = successes + failures
+    
+    if total == 0:
+        return 0.0
+    
+    return round((successes / total) * 100, 1)
+
+
 def _get_discovery_metrics() -> dict[str, Any]:
     """Calculate discovery panel metrics."""
     today = today_utc()
@@ -30,10 +68,10 @@ def _get_discovery_metrics() -> dict[str, Any]:
     total_discovered = internships_today or 1
     pre_score_kill_rate = (usage.pre_score_kills / total_discovered) * 100 if total_discovered > 0 else 0
     
-    # Tier success rates (placeholder - would need event tracking)
-    tier1_success = 78.5
-    tier2_success = 92.3
-    tier3_success = 100.0
+    # Tier success rates from pipeline events
+    tier1_success = _calculate_tier_success_rate("tier1_success")
+    tier2_success = _calculate_tier_success_rate("tier2_success")
+    tier3_success = _calculate_tier_success_rate("tier3_success")
     
     return {
         "internshipsToday": internships_today,

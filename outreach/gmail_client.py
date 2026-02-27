@@ -41,7 +41,7 @@ def _build_service():
     return build("gmail", "v1", credentials=creds)
 
 
-def _create_message(*, to: str, subject: str, body: str) -> dict[str, Any]:
+def _create_message(*, to: str, subject: str, body: str, in_reply_to: str | None = None, references: str | None = None) -> dict[str, Any]:
     import base64
     from email.message import EmailMessage
 
@@ -49,6 +49,12 @@ def _create_message(*, to: str, subject: str, body: str) -> dict[str, Any]:
     message["To"] = to
     message["Subject"] = subject
     message.set_content(body)
+    
+    # Add threading headers for follow-ups
+    if in_reply_to:
+        message["In-Reply-To"] = in_reply_to
+    if references:
+        message["References"] = references
 
     raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
     return {"raw": raw}
@@ -57,6 +63,7 @@ def _create_message(*, to: str, subject: str, body: str) -> dict[str, Any]:
 def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
     """
     Sends a single email via Gmail API.
+    Stores message ID for threading follow-ups.
     """
     service = _build_service()
     msg = _create_message(
@@ -64,15 +71,54 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
         subject=draft["subject"],
         body=draft["body"],
     )
-    service.users().messages().send(userId=settings.gmail_sender, body=msg).execute()
+    result = service.users().messages().send(userId=settings.gmail_sender, body=msg).execute()
+    
+    # Store message ID for threading
+    message_id = result.get("id")
+    if message_id:
+        from core.supabase_db import db
+        db.client.table("email_drafts").update(
+            {"status": "sent", "sent_at": datetime.now().isoformat()}
+        ).eq("id", draft["id"]).execute()
+        
+        # Store message ID in metadata for follow-up threading
+        db.log_event(
+            draft.get("internship_id"),
+            "email_sent",
+            {"draft_id": draft["id"], "message_id": message_id}
+        )
 
 
 def send_followup(followup: dict[str, Any]) -> None:
+    """
+    Sends follow-up email with threading headers.
+    """
+    from core.supabase_db import db
+    
     service = _build_service()
+    
+    # Get original message ID for threading
+    draft_id = followup.get("draft_id")
+    original_message_id = None
+    
+    if draft_id:
+        events = (
+            db.client.table("pipeline_events")
+            .select("metadata")
+            .eq("event", "email_sent")
+            .contains("metadata", {"draft_id": draft_id})
+            .limit(1)
+            .execute()
+        )
+        if events.data:
+            original_message_id = events.data[0].get("metadata", {}).get("message_id")
+    
     msg = _create_message(
         to=followup["email"],
-        subject=f"Following up on your internship application",
+        subject=f"Re: Following up on your internship application",
         body=followup["followup_body"],
+        in_reply_to=f"<{original_message_id}>" if original_message_id else None,
+        references=f"<{original_message_id}>" if original_message_id else None,
     )
     service.users().messages().send(userId=settings.gmail_sender, body=msg).execute()
 

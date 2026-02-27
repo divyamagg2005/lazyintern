@@ -3,13 +3,18 @@ from __future__ import annotations
 from scrapling.fetchers import DynamicFetcher
 
 from scraper.http_fetcher import FetchResult
+from scraper.domain_rate_limiter import wait_for_domain
 
 
 def fetch_dynamic(url: str, *, proxy: str | None = None) -> FetchResult:
     """
     Tier 2 — Scrapling DynamicFetcher (Playwright).
     Uses headless browser for JS-rendered pages.
+    Includes global domain rate limiting to prevent 403 errors.
     """
+    # Global domain rate limiting (6-8 second gap between same-domain requests)
+    wait_for_domain(url)
+
     try:
         page = DynamicFetcher.fetch(
             url,

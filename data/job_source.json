@@ -54,7 +54,7 @@
       },
       {
         "name": "HackerNews — Who is Hiring (Monthly Thread)",
-        "url": "https://news.ycombinator.com/item?id=REPLACE_WITH_CURRENT_MONTH_ID",
+        "url": "https://news.ycombinator.com/item?id=42931219",
         "type": "http",
         "priority": "high",
         "scrape_frequency": "monthly",
@@ -63,7 +63,7 @@
       },
       {
         "name": "HackerNews — Who Wants to be Hired (Monthly Thread)",
-        "url": "https://news.ycombinator.com/item?id=REPLACE_WITH_CURRENT_MONTH_ID_HIRED",
+        "url": "https://news.ycombinator.com/item?id=42947535",
         "type": "http",
         "priority": "medium",
         "scrape_frequency": "monthly",

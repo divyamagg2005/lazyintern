@@ -7,6 +7,7 @@ from core.guards import process_retry_queue
 from core.supabase_db import db, today_utc, utcnow
 from outreach.queue_manager import process_email_queue, process_followups
 from outreach.quarantine_manager import process_quarantine_re_evaluations
+from approval.auto_approver import run_auto_approver
 from pipeline.email_extractor import extract_from_internship
 from pipeline.email_validator import validate_email
 from pipeline.full_scorer import full_score
@@ -139,6 +140,7 @@ def run_cycle() -> None:
     process_retry_queue()
     process_followups()
     process_quarantine_re_evaluations()
+    run_auto_approver()  # Auto-approve drafts after 2h timeout if score >= 90
 
     resume = _load_resume()
     _process_discovered_internships(resume, limit=200)

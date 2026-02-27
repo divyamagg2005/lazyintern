@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import random
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from core.supabase_db import db, today_utc, utcnow
 from outreach import gmail_client
@@ -19,6 +19,29 @@ def process_email_queue() -> None:
     if usage.emails_sent >= daily_limit:
         return
 
+    # Get last sent timestamp to enforce spacing
+    last_sent = (
+        db.client.table("email_drafts")
+        .select("sent_at")
+        .eq("status", "sent")
+        .order("sent_at", desc=True)
+        .limit(1)
+        .execute()
+    )
+
+    now = utcnow()
+    if last_sent.data:
+        last_sent_at = datetime.fromisoformat(
+            last_sent.data[0]["sent_at"].replace("Z", "+00:00")
+        )
+        # 45 minutes + random jitter (0-10 minutes)
+        min_gap = timedelta(minutes=45 + random.randint(0, 10))
+        time_since_last = now - last_sent_at
+
+        if time_since_last < min_gap:
+            # Not enough time has passed, skip this cycle
+            return
+
     # Very simple queue: all drafts with status 'approved' or 'auto_approved'
     res = (
         db.client.table("email_drafts")
@@ -35,10 +58,12 @@ def process_email_queue() -> None:
         if usage.emails_sent >= daily_limit:
             break
 
-        # spacing + jitter is handled at scheduler layer for now
         gmail_client.send_email(draft, lead)
         usage = db.get_or_create_daily_usage(today)
         db.bump_daily_usage(today, emails_sent=1)
+        
+        # Only send one email per cycle to maintain spacing
+        break
 
 
 def process_followups() -> None:
@@ -66,4 +91,5 @@ def process_followups() -> None:
         db.client.table("followup_queue").update(
             {"sent": True, "sent_at": now.isoformat()}
         ).eq("id", row["id"]).execute()
+
 

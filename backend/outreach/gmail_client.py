@@ -111,6 +111,16 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
             "message_id": result.get("id")
         })
         
+        # Schedule follow-up for day 5
+        followup_date = (today_utc() + timedelta(days=5)).isoformat()
+        db.insert_followup({
+            "draft_id": draft["id"],
+            "lead_id": lead.get("id"),
+            "send_after": followup_date,
+            "sent": False
+        })
+        logger.info(f"Follow-up scheduled for {followup_date}")
+        
         logger.info(f"Email sent successfully to {lead['email']}")
         
     except Exception as e:
