@@ -1,0 +1,214 @@
+{
+    "role_keywords": {
+      "high_priority": [
+        "AI", "ML", "machine learning", "artificial intelligence",
+        "NLP", "natural language processing", "LLM", "large language model",
+        "deep learning", "computer vision", "research", "data science",
+        "generative AI", "RAG", "retrieval augmented generation",
+        "transformer", "diffusion", "multimodal", "foundation model",
+        "reinforcement learning", "RL", "RLHF", "fine-tuning",
+        "embeddings", "vector database", "semantic search",
+        "speech recognition", "text to speech", "TTS", "ASR",
+        "object detection", "image segmentation", "image classification",
+        "recommendation system", "ranking", "information retrieval",
+        "knowledge graph", "graph neural network", "GNN",
+        "autonomous", "robotics", "perception", "planning",
+        "AI safety", "alignment", "interpretability", "explainability",
+        "prompt engineering", "AI research", "ML research",
+        "AI engineer", "ML engineer", "research engineer",
+        "research scientist", "applied scientist", "applied ML",
+        "data scientist", "quantitative researcher",
+        "computational linguistics", "language model",
+        "neural network", "CNN", "RNN", "LSTM", "attention mechanism",
+        "model optimization", "model compression", "quantization",
+        "MLOps", "ML platform", "AI infrastructure",
+        "AI product", "AI assistant", "conversational AI", "chatbot"
+      ],
+  
+      "medium_priority": [
+        "data analyst", "data engineer", "analytics engineer",
+        "backend engineer", "backend developer", "software engineer",
+        "full stack", "platform engineer", "infrastructure engineer",
+        "Python developer", "developer", "software developer",
+        "cloud engineer", "DevOps", "site reliability",
+        "database engineer", "API developer", "systems engineer"
+      ],
+  
+      "low_priority": [
+        "frontend developer", "UI developer", "web developer",
+        "mobile developer", "iOS", "Android", "React Native",
+        "business analyst", "product manager", "project manager",
+        "QA engineer", "test engineer", "technical writer"
+      ],
+  
+      "disqualify": [
+        "sales", "marketing", "digital marketing", "social media",
+        "finance", "accounting", "financial analyst", "tax",
+        "HR", "human resources", "recruitment", "talent acquisition",
+        "customer support", "customer success", "customer service",
+        "content writer", "copywriter", "SEO", "SEM", "growth hacker",
+        "graphic designer", "UI/UX designer", "visual designer",
+        "supply chain", "logistics", "operations manager",
+        "legal", "compliance", "paralegal",
+        "event manager", "brand manager", "PR", "public relations",
+        "teaching assistant", "tutor", "education",
+        "real estate", "insurance", "retail"
+      ]
+    },
+  
+    "tech_stack": {
+      "languages": {
+        "primary": ["Python", "C++", "CUDA", "Julia"],
+        "secondary": ["JavaScript", "TypeScript", "SQL", "R", "Scala", "Go", "Rust"],
+        "bonus": ["Bash", "Shell", "MATLAB", "Haskell"]
+      },
+  
+      "ml_frameworks": {
+        "primary": ["PyTorch", "TensorFlow", "JAX", "Keras"],
+        "secondary": ["scikit-learn", "XGBoost", "LightGBM", "CatBoost"],
+        "llm_specific": [
+          "HuggingFace", "Transformers", "PEFT", "LoRA", "QLoRA",
+          "LangChain", "LlamaIndex", "Haystack", "Guidance",
+          "vLLM", "TGI", "Ollama", "llama.cpp"
+        ],
+        "cv_specific": [
+          "OpenCV", "Detectron2", "MMDetection", "Albumentations",
+          "torchvision", "timm", "CLIP", "SAM"
+        ],
+        "nlp_specific": [
+          "spaCy", "NLTK", "Gensim", "SentenceTransformers",
+          "FastText", "BERTopic", "Whisper"
+        ]
+      },
+  
+      "mlops_tools": [
+        "MLflow", "Weights & Biases", "WandB", "Neptune",
+        "DVC", "Airflow", "Prefect", "Dagster", "Kubeflow",
+        "Seldon", "BentoML", "Ray", "Dask", "Spark"
+      ],
+  
+      "vector_databases": [
+        "Pinecone", "Weaviate", "Qdrant", "Chroma", "Milvus",
+        "FAISS", "pgvector", "Vespa"
+      ],
+  
+      "cloud_platforms": [
+        "AWS", "GCP", "Azure", "Lambda", "SageMaker",
+        "Vertex AI", "Bedrock", "RunPod", "Modal", "Replicate"
+      ],
+  
+      "databases": [
+        "PostgreSQL", "MySQL", "MongoDB", "Redis",
+        "Supabase", "Firebase", "DynamoDB", "Cassandra"
+      ],
+  
+      "devtools": [
+        "Docker", "Kubernetes", "Git", "GitHub", "GitLab",
+        "FastAPI", "Flask", "Django", "gRPC", "REST",
+        "Terraform", "Ansible", "CI/CD", "GitHub Actions"
+      ],
+  
+      "data_tools": [
+        "Pandas", "NumPy", "Polars", "Spark", "dbt",
+        "Tableau", "Power BI", "Looker", "Metabase",
+        "Snowflake", "BigQuery", "Redshift", "Databricks"
+      ]
+    },
+  
+    "company_keywords": {
+      "high_priority": [
+        "YC", "Y Combinator", "AI lab", "research lab", "AI research",
+        "stealth startup", "pre-seed", "seed stage",
+        "AGI", "frontier AI", "foundation model company",
+        "AI-first", "ML-first", "research-driven",
+        "nonprofit research", "open source AI"
+      ],
+      "medium_priority": [
+        "startup", "early stage", "series A", "series B",
+        "deep tech", "tech company", "product company",
+        "SaaS", "developer tools", "developer platform",
+        "venture backed", "backed by"
+      ],
+      "low_priority": [
+        "MNC", "enterprise", "fortune 500", "large corporation",
+        "consulting", "IT services", "outsourcing", "BPO",
+        "staffing", "body shopping"
+      ],
+      "disqualify": [
+        "MLM", "crypto trading", "forex", "gambling",
+        "adult content", "tobacco", "weapons"
+      ]
+    },
+  
+    "location_keywords": {
+      "preferred_remote": [
+        "remote", "work from home", "WFH", "fully remote",
+        "remote friendly", "distributed", "async"
+      ],
+      "preferred_cities_india": [
+        "Bangalore", "Bengaluru", "Mumbai", "Delhi", "Hyderabad",
+        "Pune", "Chennai", "Noida", "Gurgaon", "Gurugram"
+      ],
+      "preferred_cities_global": [
+        "San Francisco", "New York", "London", "Berlin",
+        "Singapore", "Toronto", "Amsterdam", "Zurich"
+      ],
+      "disqualify": []
+    },
+  
+    "recruiter_email_keywords": [
+      "hr", "hiring", "talent", "recruiter", "careers",
+      "people", "jobs", "apply", "opportunities", "team",
+      "recruit", "join", "work", "contact", "info",
+      "hello", "hey", "general"
+    ],
+  
+    "scoring_weights": {
+      "high_priority_role_match": 40,
+      "medium_priority_role_match": 20,
+      "low_priority_role_match": 10,
+      "disqualify_role_match": -100,
+      "high_priority_company": 20,
+      "medium_priority_company": 10,
+      "low_priority_company": 5,
+      "preferred_location_match": 20,
+      "remote_available": 15,
+      "past_success_company": 20,
+      "tech_stack_primary_match": 15,
+      "tech_stack_secondary_match": 8,
+      "tech_stack_bonus_match": 3
+    },
+  
+    "email_subject_keywords": {
+      "positive_signals": [
+        "internship", "intern", "hiring", "opportunity",
+        "joining", "position", "role", "opening"
+      ],
+      "negative_signals": [
+        "unsubscribe", "remove", "stop", "not interested",
+        "no openings", "not hiring", "automated"
+      ]
+    },
+  
+    "reply_classification": {
+      "positive": [
+        "interested", "let's connect", "can you send",
+        "interview", "would love to", "tell me more",
+        "sounds great", "let's talk", "schedule a call",
+        "please share", "your resume", "available for",
+        "we'd like to", "move forward", "next steps",
+        "impressed", "strong fit", "great background"
+      ],
+      "negative": [
+        "not hiring", "no openings", "position filled",
+        "not a fit", "not interested", "unsubscribe",
+        "remove me", "stop emailing", "do not contact",
+        "not accepting", "closed", "on hold", "paused hiring"
+      ],
+      "neutral": [
+        "out of office", "on vacation", "auto reply",
+        "automatic response", "will be back", "OOO",
+        "away from", "not available until", "on leave"
+      ]
+    }
+  }

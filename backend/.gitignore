@@ -1,14 +1,30 @@
 # =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.env.*
+venv/
+.venv/
+logs/
+*.log
+data/*.pdf
+secrets/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# =========================
 # OS
 # =========================
 .DS_Store
 Thumbs.db
-
-# =========================
-# Frontend Dev Cache
-# =========================
-frontend/dev/
-.next/
 
 # =========================
 # IDEs
@@ -20,7 +36,7 @@ frontend/dev/
 *~
 
 # =========================
-# Environment
+# Node (extra safety)
 # =========================
-.env
-.env.*
+node_modules/
+.next/
