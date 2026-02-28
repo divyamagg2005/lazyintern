@@ -1,91 +1,90 @@
-# Quick Fix for OAuth Error
+# 🚨 QUICK FIX: Permission Denied Error
 
-You got the error: **"Error 400: redirect_uri_mismatch"**
+## The Problem
 
-## Fastest Solution (5 minutes)
+Your scheduler is failing with:
+```
+permission denied for schema public
+```
 
-### Option 1: Add Redirect URI to Existing Credentials ⚡
+## The Solution (5 Minutes)
 
-1. **Open Google Cloud Console:**
-   - Go to: https://console.cloud.google.com/apis/credentials
-   - Project: **mailmind-471211**
+### 1. Open Supabase SQL Editor
 
-2. **Click on your OAuth 2.0 Client ID:**
-   - Look for: `491999044903-b38fuutfmg31n2kllhou9fpaiofe0tuv.apps.googleusercontent.com`
-   - Click on it to edit
+Go to: https://supabase.com/dashboard/project/kjnksjxsnennhtwjtkdr/sql
 
-3. **Add These Redirect URIs:**
-   Under "Authorized redirect URIs", click **"+ ADD URI"** and add:
-   ```
-   http://localhost:8080/
-   http://localhost:8090/
-   http://localhost/
-   ```
+### 2. Run Permission Fix
 
-4. **Click SAVE** at the bottom
+Copy and paste this into SQL Editor and click **Run**:
 
-5. **Wait 5 minutes** for Google to update
+```sql
+-- Grant schema permissions
+GRANT USAGE ON SCHEMA public TO service_role;
+GRANT ALL ON SCHEMA public TO service_role;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO service_role;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO service_role;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO service_role;
 
-6. **Run this command:**
-   ```bash
-   python generate_gmail_token.py
-   ```
+-- Future tables
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO service_role;
 
----
+-- Grant to postgres
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO postgres;
+```
 
-### Option 2: Create Desktop App Credentials (Recommended) ✅
+### 3. Create Tables
 
-1. **Go to:** https://console.cloud.google.com/apis/credentials
+Open `backend/db/fresh_setup_quick.sql` in your editor, copy ALL contents, paste into SQL Editor, and click **Run**.
 
-2. **Click:** "+ CREATE CREDENTIALS" → "OAuth client ID"
+### 4. Verify
 
-3. **Select:** Application type = **"Desktop app"**
+Run this query:
 
-4. **Name it:** "LazyIntern Desktop"
+```sql
+SELECT * FROM scoring_config;
+```
 
-5. **Click CREATE**
+Should return 5 rows. If yes, you're done! ✅
 
-6. **Download JSON** and save as: `secrets/gmail_oauth_client.json`
+### 5. Restart Scheduler
 
-7. **Update .env file:**
-   ```env
-   GMAIL_OAUTH_CLIENT_PATH="secrets/gmail_oauth_client.json"
-   ```
+Go to your scheduler window, press Ctrl+C to stop, then run:
 
-8. **Run:**
-   ```bash
-   python generate_gmail_token.py
-   ```
+```bash
+cd backend
+python run_scheduler_24_7.py
+```
 
----
-
-## Which Option Should I Choose?
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **Option 1** (Add URIs) | Quick, uses existing credentials | Not the intended use case |
-| **Option 2** (Desktop App) | ✅ Proper solution, cleaner | Need to download new file |
-
-**Recommendation:** Go with **Option 2** - it's the correct way and takes the same amount of time.
+Should now work without errors! 🎉
 
 ---
 
-## After Fixing
+## Files to Use
 
-Once you complete either option:
-1. Run: `python generate_gmail_token.py`
-2. Browser opens → Log in → Click "Allow"
-3. Token saved to `secrets/gmail_token.json`
-4. Done! ✅
+1. **Permission fix**: `backend/db/fix_permissions.sql` (or copy from above)
+2. **Create tables**: `backend/db/fresh_setup_quick.sql`
+3. **Detailed guide**: `SUPABASE_SETUP_STEPS.md`
 
 ---
 
-## Still Having Issues?
+## Expected Result
 
-Make sure:
-- ✅ Gmail API is enabled in your project
-- ✅ OAuth consent screen is configured
-- ✅ Your email (divyamagg2005@gmail.com) is added as a test user
-- ✅ You're using the correct Google account
+After fix, scheduler should show:
 
-Check these at: https://console.cloud.google.com/apis/dashboard?project=mailmind-471211
+```
+LazyIntern 24/7 Scheduler Started
+Starting scheduled pipeline cycle
+Discovery complete: 26 sources scraped, 15 internships inserted
+✓ No more permission errors
+```
+
+---
+
+## Need More Help?
+
+See `SUPABASE_SETUP_STEPS.md` for detailed troubleshooting.
