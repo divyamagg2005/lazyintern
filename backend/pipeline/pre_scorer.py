@@ -53,6 +53,7 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     """
     Cheap, local pre-scoring on title + company + location only.
     Uses keywords from data/keywords.json with case-insensitive matching.
+    Filters out non-India locations before scoring.
     """
     resume = _load_resume()
     keywords = _load_keywords()
@@ -64,6 +65,31 @@ def pre_score(internship: dict[str, Any]) -> PreScoreResult:
     role_title = (internship.get("role") or "").lower()
     company = (internship.get("company") or "").lower()
     location = (internship.get("location") or "").lower()
+
+    # REGION FILTER: Check for non-India locations BEFORE scoring
+    # Disqualify if location contains non-India indicators
+    non_india_indicators = [
+        "usa", "us only", "united states", "uk", "united kingdom",
+        "london", "new york", "san francisco", "canada", "australia",
+        "europe", "germany", "singapore", "uae"
+    ]
+    
+    # Combine role title and location for checking
+    combined_text = f"{role_title} {location}"
+    
+    for indicator in non_india_indicators:
+        if whole_word_match(indicator, combined_text):
+            # Check if it also mentions India or remote (exception)
+            has_india = whole_word_match("india", combined_text)
+            has_remote = whole_word_match("remote", combined_text)
+            
+            if not (has_india or has_remote):
+                logger.info(f"Disqualified: non-India location detected: {indicator} in '{role_title}' / '{location}'")
+                return PreScoreResult(
+                    score=0, 
+                    status="disqualified", 
+                    breakdown={"non_india_location": -100}
+                )
 
     score = 0
     breakdown = {}

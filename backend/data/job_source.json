@@ -29,16 +29,16 @@
       },
       {
         "name": "Wellfound — ML Engineer Internships",
-        "url": "https://wellfound.com/jobs?role=Machine+Learning+Engineer&jobType=internship",
+        "url": "https://wellfound.com/jobs?role=Machine+Learning+Engineer&jobType=internship&location=India",
         "type": "dynamic",
         "priority": "high",
         "scrape_frequency": "daily",
         "expected_quality": "very high",
-        "notes": "Formerly AngelList. Strong startup coverage."
+        "notes": "Formerly AngelList. Strong startup coverage. India location added."
       },
       {
         "name": "Wellfound — AI Internships",
-        "url": "https://wellfound.com/jobs?role=Artificial+Intelligence&jobType=internship",
+        "url": "https://wellfound.com/jobs?role=Artificial+Intelligence&jobType=internship&location=India",
         "type": "dynamic",
         "priority": "high",
         "scrape_frequency": "daily",
@@ -46,7 +46,7 @@
       },
       {
         "name": "Wellfound — Data Science Internships",
-        "url": "https://wellfound.com/jobs?role=Data+Scientist&jobType=internship",
+        "url": "https://wellfound.com/jobs?role=Data+Scientist&jobType=internship&location=India",
         "type": "dynamic",
         "priority": "high",
         "scrape_frequency": "daily",
@@ -220,16 +220,16 @@
   
       {
         "name": "LinkedIn — AI Internships Remote",
-        "url": "https://www.linkedin.com/jobs/search/?keywords=AI+intern&f_WT=2&f_JT=I",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=AI+intern&location=India&f_WT=2&f_JT=I",
         "type": "dynamic",
         "priority": "high",
         "scrape_frequency": "daily",
         "expected_quality": "high",
-        "notes": "f_WT=2 = remote only. f_JT=I = internship."
+        "notes": "f_WT=2 = remote only. f_JT=I = internship. India location added."
       },
       {
         "name": "LinkedIn — LLM Engineer Internships",
-        "url": "https://www.linkedin.com/jobs/search/?keywords=LLM+engineer+intern&f_JT=I",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=LLM+engineer+intern&location=India&f_JT=I",
         "type": "dynamic",
         "priority": "high",
         "scrape_frequency": "daily",
@@ -237,7 +237,7 @@
       },
       {
         "name": "LinkedIn — Generative AI Internships",
-        "url": "https://www.linkedin.com/jobs/search/?keywords=generative+AI+intern&f_JT=I",
+        "url": "https://www.linkedin.com/jobs/search/?keywords=generative+AI+intern&location=India&f_JT=I",
         "type": "dynamic",
         "priority": "high",
         "scrape_frequency": "daily",
