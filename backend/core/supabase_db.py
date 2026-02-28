@@ -29,6 +29,7 @@ class DailyUsage:
     pre_score_kills: int
     validation_fails: int
     auto_approvals: int
+    twilio_sms_sent: int
 
 
 class SupabaseDB:
@@ -62,6 +63,7 @@ class SupabaseDB:
                 pre_score_kills=int(row.get("pre_score_kills") or 0),
                 validation_fails=int(row.get("validation_fails") or 0),
                 auto_approvals=int(row.get("auto_approvals") or 0),
+                twilio_sms_sent=int(row.get("twilio_sms_sent") or 0),
             )
 
         ins = self.client.table("daily_usage_stats").insert({"date": str(d)}).execute()
@@ -77,6 +79,7 @@ class SupabaseDB:
             pre_score_kills=int(row.get("pre_score_kills") or 0),
             validation_fails=int(row.get("validation_fails") or 0),
             auto_approvals=int(row.get("auto_approvals") or 0),
+            twilio_sms_sent=int(row.get("twilio_sms_sent") or 0),
         )
 
     def bump_daily_usage(self, d: date, **increments: int) -> None:

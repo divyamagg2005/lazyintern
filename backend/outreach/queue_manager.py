@@ -6,9 +6,18 @@ from datetime import datetime, timedelta
 from core.supabase_db import db, today_utc, utcnow
 from outreach import gmail_client
 from scheduler.warmup import get_daily_limit
+from core.logger import logger
 
 
 def process_email_queue() -> None:
+    """
+    Process approved and auto-approved email drafts.
+    Enforces:
+    - Daily email limit
+    - 45-55 minute spacing between emails
+    - Respects approved_at timestamp (for delayed auto-approvals)
+    - Only sends one email per cycle
+    """
     today = today_utc()
     usage = db.get_or_create_daily_usage(today)
 
@@ -42,18 +51,35 @@ def process_email_queue() -> None:
             # Not enough time has passed, skip this cycle
             return
 
-    # Very simple queue: all drafts with status 'approved' or 'auto_approved'
+    # Get drafts with status 'approved' or 'auto_approved'
+    # For auto-approved drafts, only include those where approved_at <= now (delay has passed)
     res = (
         db.client.table("email_drafts")
-        .select("*, leads!inner(email)")
+        .select("*, leads!inner(email, internship_id)")
         .in_("status", ["approved", "auto_approved"])
-        .limit(5)
+        .order("approved_at", desc=False)  # Send oldest approvals first
+        .limit(10)
         .execute()
     )
     drafts = res.data or []
+    
     for row in drafts:
         draft = row
-        lead = {"email": row["leads"]["email"]}
+        
+        # Check if approved_at timestamp has passed (for delayed auto-approvals)
+        approved_at = draft.get("approved_at")
+        if approved_at:
+            approved_at_dt = datetime.fromisoformat(approved_at.replace("Z", "+00:00"))
+            if approved_at_dt > now:
+                # Delay hasn't passed yet, skip this draft
+                logger.info(f"Skipping draft {draft['id']} - delay not passed yet (approved_at: {approved_at})")
+                continue
+        
+        lead = {
+            "email": row["leads"]["email"],
+            "id": row["leads"].get("id"),
+            "internship_id": row["leads"].get("internship_id")
+        }
 
         if usage.emails_sent >= daily_limit:
             break
@@ -61,6 +87,10 @@ def process_email_queue() -> None:
         gmail_client.send_email(draft, lead)
         usage = db.get_or_create_daily_usage(today)
         db.bump_daily_usage(today, emails_sent=1)
+        
+        # Log whether this was manual or auto-approved
+        approval_type = "auto" if draft["status"] == "auto_approved" else "manual"
+        logger.info(f"Email sent ({approval_type} approval) to {lead['email']} [{usage.emails_sent}/{daily_limit}]")
         
         # Only send one email per cycle to maintain spacing
         break

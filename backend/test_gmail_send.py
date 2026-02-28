@@ -32,15 +32,12 @@ def test_gmail():
         print(f"   ❌ Failed to build service: {e}")
         return
     
-    # Get user's email
-    print("\n3. Getting your email address...")
-    try:
-        profile = service.users().getProfile(userId='me').execute()
-        user_email = profile.get('emailAddress')
-        print(f"   ✓ Sending from: {user_email}")
-    except Exception as e:
-        print(f"   ❌ Failed to get profile: {e}")
-        return
+    # Get user's email from settings or use 'me'
+    print("\n3. Using Gmail sender...")
+    user_email = settings.approver_to_number  # Send test to your phone's email
+    if not user_email or not '@' in str(user_email):
+        user_email = input("   Enter your email address: ").strip()
+    print(f"   ✓ Sending test to: {user_email}")
     
     # Check for resume
     resume_path = Path(__file__).resolve().parent / "data" / "resume.pdf"

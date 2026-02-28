@@ -1,0 +1,8 @@
+{
+  "sources": {
+    "https://example.com/weekly": {
+      "last_scraped_at": "2026-02-28T21:41:32.204815+00:00",
+      "last_scraped_success": true
+    }
+  }
+}

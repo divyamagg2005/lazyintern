@@ -1,11 +1,13 @@
 """
 LazyIntern 24/7 Scheduler
 Runs pipeline cycles automatically every 2 hours
+Resets daily usage stats at midnight UTC
 """
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from scheduler.cycle_manager import run_cycle
-from datetime import datetime
+from core.supabase_db import db, today_utc
+from datetime import datetime, time
 import logging
 
 # Set up logging
@@ -27,10 +29,31 @@ def scheduled_cycle():
         logger.error(f"Cycle failed with error: {e}", exc_info=True)
     logger.info("=" * 60)
 
+
+def reset_daily_stats():
+    """
+    Reset daily usage stats at midnight UTC.
+    Creates a new row for the new date (keeps historical data).
+    """
+    logger.info("=" * 60)
+    logger.info("Midnight UTC: Resetting daily usage stats")
+    logger.info("=" * 60)
+    try:
+        today = today_utc()
+        # get_or_create_daily_usage will create a new row for today if it doesn't exist
+        # Old rows are preserved for historical tracking
+        usage = db.get_or_create_daily_usage(today)
+        logger.info(f"Daily stats initialized for {today}: emails_sent=0, hunter_calls=0, etc.")
+        logger.info("Historical data preserved in previous date rows")
+    except Exception as e:
+        logger.error(f"Failed to reset daily stats: {e}", exc_info=True)
+    logger.info("=" * 60)
+
+
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
     
-    # Run every 2 hours
+    # Run pipeline every 2 hours
     scheduler.add_job(
         scheduled_cycle, 
         'interval', 
@@ -38,9 +61,19 @@ if __name__ == "__main__":
         next_run_time=datetime.now()  # Run immediately on start
     )
     
+    # Reset daily stats at midnight UTC (00:00)
+    scheduler.add_job(
+        reset_daily_stats,
+        'cron',
+        hour=0,
+        minute=0,
+        timezone='UTC'
+    )
+    
     logger.info("=" * 60)
     logger.info("LazyIntern 24/7 Scheduler Started")
     logger.info("Pipeline will run every 2 hours")
+    logger.info("Daily stats reset at 00:00 UTC")
     logger.info("Press Ctrl+C to stop")
     logger.info("=" * 60)
     

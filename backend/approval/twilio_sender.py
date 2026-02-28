@@ -6,7 +6,7 @@ from typing import Any
 from twilio.rest import Client
 
 from core.config import settings
-from core.supabase_db import db, utcnow
+from core.supabase_db import db, today_utc, utcnow
 from core.logger import logger
 
 
@@ -25,12 +25,26 @@ def _twilio_client() -> Client | None:
 def send_approval_sms(draft: dict[str, Any], lead: dict[str, Any], internship: dict[str, Any], full_score: int) -> None:
     """
     Phase 9 — send human approval via Twilio SMS.
+    Enforces daily SMS limit of 15 messages.
     If Twilio is not configured, we just log an event and skip.
     """
     client = _twilio_client()
     if not client or not settings.twilio_from_number or not settings.approver_to_number:
         logger.warning("Twilio not configured, skipping approval SMS")
         db.log_event(internship.get("id"), "approval_skipped_no_twilio", {})
+        return
+
+    # Check daily SMS limit
+    today = today_utc()
+    usage = db.get_or_create_daily_usage(today)
+    SMS_DAILY_LIMIT = 15
+    
+    if usage.twilio_sms_sent >= SMS_DAILY_LIMIT:
+        logger.warning(f"SMS daily limit reached ({usage.twilio_sms_sent}/{SMS_DAILY_LIMIT}), skipping approval SMS")
+        db.log_event(internship.get("id"), "approval_skipped_sms_limit", {
+            "sms_sent_today": usage.twilio_sms_sent,
+            "limit": SMS_DAILY_LIMIT
+        })
         return
 
     score_pct = f"{full_score}%"
@@ -72,11 +86,15 @@ def send_approval_sms(draft: dict[str, Any], lead: dict[str, Any], internship: d
             {"approval_sent_at": utcnow().isoformat()}
         ).eq("id", draft_id).execute()
         
+        # Increment SMS counter
+        db.bump_daily_usage(today, twilio_sms_sent=1)
+        
         db.log_event(internship.get("id"), "approval_sent", {
             "draft_id": draft_id,
-            "short_code": short_code
+            "short_code": short_code,
+            "sms_count_today": usage.twilio_sms_sent + 1
         })
-        logger.info(f"SMS approval sent for draft {draft_id} (code: {short_code})")
+        logger.info(f"SMS approval sent for draft {draft_id} (code: {short_code}) [{usage.twilio_sms_sent + 1}/{SMS_DAILY_LIMIT}]")
         
     except Exception as e:
         logger.error(f"Twilio SMS send failed: {e}")

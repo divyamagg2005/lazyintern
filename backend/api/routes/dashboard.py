@@ -140,7 +140,9 @@ def _get_outreach_metrics() -> dict[str, Any]:
         "dailyEmailLimit": usage.daily_limit or 15,
         "isWarmupPhase": is_warmup,
         "warmupProgressPct": round(warmup_progress, 1),
-        "pendingFollowups": followups_count.count or 0
+        "pendingFollowups": followups_count.count or 0,
+        "smsSentToday": usage.twilio_sms_sent,
+        "smsDailyLimit": 15
     }
 
 
