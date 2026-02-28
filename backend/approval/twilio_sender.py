@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from typing import Any
 
 from twilio.rest import Client
@@ -7,6 +8,12 @@ from twilio.rest import Client
 from core.config import settings
 from core.supabase_db import db, utcnow
 from core.logger import logger
+
+
+def _generate_short_code(draft_id: str) -> str:
+    """Generate a 6-character short code from draft ID."""
+    # Use first 6 chars of MD5 hash for consistency
+    return hashlib.md5(draft_id.encode()).hexdigest()[:6].upper()
 
 
 def _twilio_client() -> Client | None:
@@ -17,7 +24,7 @@ def _twilio_client() -> Client | None:
 
 def send_approval_sms(draft: dict[str, Any], lead: dict[str, Any], internship: dict[str, Any], full_score: int) -> None:
     """
-    Phase 9 — send human approval via Twilio WhatsApp.
+    Phase 9 — send human approval via Twilio SMS.
     If Twilio is not configured, we just log an event and skip.
     """
     client = _twilio_client()
@@ -27,32 +34,32 @@ def send_approval_sms(draft: dict[str, Any], lead: dict[str, Any], internship: d
         return
 
     score_pct = f"{full_score}%"
+    draft_id = draft.get("id", "")
+    short_code = _generate_short_code(draft_id)
     
-    # WhatsApp-formatted message with emojis
+    # SMS message (160 chars limit, keep it concise)
+    company = internship.get('company', 'Unknown')[:30]
+    role = internship.get('role', 'Unknown')[:40]
+    email = lead.get('email', '')[:40]
+    
     body = (
-        "🎯 *LazyIntern - New Lead*\n\n"
-        f"*Company:* {internship.get('company')}\n"
-        f"*Role:* {internship.get('role')}\n"
-        f"*Score:* {score_pct}\n"
-        f"*Email:* {lead.get('email')}\n"
-        f"*Source:* {lead.get('source')}\n\n"
-        "*Reply:*\n"
-        "✅ YES - Approve & send\n"
-        "❌ NO - Reject & quarantine\n"
-        "👁️ PREVIEW - See full email\n\n"
-        f"DRAFT:{draft.get('id')}"
+        f"LazyIntern ({score_pct})\n"
+        f"{role} at {company}\n"
+        f"{email}\n"
+        f"Reply: YES {short_code}\n"
+        f"or NO {short_code}"
     )
 
     try:
-        # Send via WhatsApp (format: whatsapp:+1234567890)
+        # Send via regular SMS (no whatsapp: prefix)
         from_number = settings.twilio_from_number
         to_number = settings.approver_to_number
         
-        # Ensure WhatsApp format
-        if not from_number.startswith("whatsapp:"):
-            from_number = f"whatsapp:{from_number}"
-        if not to_number.startswith("whatsapp:"):
-            to_number = f"whatsapp:{to_number}"
+        # Remove whatsapp: prefix if present (use regular SMS)
+        if from_number.startswith("whatsapp:"):
+            from_number = from_number.replace("whatsapp:", "")
+        if to_number.startswith("whatsapp:"):
+            to_number = to_number.replace("whatsapp:", "")
         
         client.messages.create(
             from_=from_number,
@@ -60,19 +67,23 @@ def send_approval_sms(draft: dict[str, Any], lead: dict[str, Any], internship: d
             body=body,
         )
         
+        # Update approval_sent_at timestamp
         db.client.table("email_drafts").update(
             {"approval_sent_at": utcnow().isoformat()}
-        ).eq("id", draft["id"]).execute()
+        ).eq("id", draft_id).execute()
         
-        db.log_event(internship.get("id"), "approval_sent", {"draft_id": draft["id"]})
-        logger.info(f"WhatsApp approval sent for draft {draft['id']}")
+        db.log_event(internship.get("id"), "approval_sent", {
+            "draft_id": draft_id,
+            "short_code": short_code
+        })
+        logger.info(f"SMS approval sent for draft {draft_id} (code: {short_code})")
         
     except Exception as e:
-        logger.error(f"Twilio WhatsApp send failed: {e}")
+        logger.error(f"Twilio SMS send failed: {e}")
         # On failure, log to retry_queue
         db.insert_retry(
             phase="twilio",
-            payload={"draft_id": draft["id"]},
+            payload={"draft_id": draft_id},
             next_retry_at=utcnow(),
             last_error=str(e),
         )

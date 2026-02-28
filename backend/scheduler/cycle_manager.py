@@ -148,12 +148,15 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
             db.client.table("internships").update(
                 {"status": "email_invalid"}
             ).eq("id", iid).execute()
-            continue
+            
+            # CHANGED: Continue to scoring even if validation fails (user wants to send to unverified emails)
+            # Don't skip - just log the validation failure and continue
 
-        db.client.table("leads").update(
-            {"verified": True, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
-        ).eq("id", lead["id"]).execute()
-        db.log_event(iid, "email_valid", {})
+        else:
+            db.client.table("leads").update(
+                {"verified": True, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
+            ).eq("id", lead["id"]).execute()
+            db.log_event(iid, "email_valid", {})
 
         # Phase 7 — full scoring
         fs = full_score(internship, resume)
