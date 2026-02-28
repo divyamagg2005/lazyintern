@@ -20,6 +20,22 @@ from scraper.scrape_router import discover_and_store
 PRE_SCORE_THRESHOLD_REGEX = 40
 PRE_SCORE_THRESHOLD_HUNTER = 60
 
+# Job board domains that should never be searched via Hunter
+JOB_BOARD_DOMAINS = {
+    "linkedin.com",
+    "internshala.com",
+    "wellfound.com",
+    "angellist.com",  # Old name for Wellfound
+    "unstop.com",
+    "workatastartup.com",
+    "remoteok.com",
+    "indeed.com",
+    "glassdoor.com",
+    "naukri.com",
+    "monster.com",
+    "dice.com",
+}
+
 
 def _process_discovered_internships(resume: dict[str, object], *, limit: int = 200) -> None:
     today = today_utc()
@@ -59,6 +75,18 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 db.log_event(iid, "no_company_domain", {"company": company_name})
                 continue
             
+            # CRITICAL: Never call Hunter for job board domains
+            if domain in JOB_BOARD_DOMAINS:
+                db.log_event(iid, "hunter_blocked_job_board", {
+                    "domain": domain, 
+                    "company": company_name,
+                    "reason": "Company domain is a job board platform"
+                })
+                db.client.table("internships").update(
+                    {"status": "no_email"}
+                ).eq("id", iid).execute()
+                continue
+            
             hunter = search_domain_for_email(domain)
             if not hunter:
                 db.log_event(iid, "hunter_no_results", {"domain": domain, "company": company_name})
@@ -94,6 +122,12 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 {"verified": False, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
             ).eq("id", lead["id"]).execute()
             db.log_event(iid, "email_invalid", {"reason": v.reason})
+            
+            # CRITICAL: Mark internship as 'email_invalid' to prevent re-processing
+            # This stops leads like test-ai-startup.com from being re-created every cycle
+            db.client.table("internships").update(
+                {"status": "email_invalid"}
+            ).eq("id", iid).execute()
             continue
 
         db.client.table("leads").update(
