@@ -101,6 +101,16 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                     "confidence": hunter.confidence,
                 }
             )
+            
+            # If lead is None, it means a duplicate was skipped
+            if not lead:
+                db.log_event(iid, "lead_duplicate_skipped", {
+                    "email": hunter.email, 
+                    "source": "hunter",
+                    "reason": "Lead already exists for this internship_id"
+                })
+                continue
+            
             db.log_event(iid, "email_found_hunter", {"email": hunter.email, "domain": domain, "company": company_name})
         else:
             lead = db.insert_lead(
@@ -112,6 +122,16 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                     "confidence": extracted.confidence,
                 }
             )
+            
+            # If lead is None, it means a duplicate was skipped
+            if not lead:
+                db.log_event(iid, "lead_duplicate_skipped", {
+                    "email": extracted.email,
+                    "source": "regex",
+                    "reason": "Lead already exists for this internship_id"
+                })
+                continue
+            
             db.log_event(iid, "email_found_regex", {"email": extracted.email})
 
         # Phase 5 — validation

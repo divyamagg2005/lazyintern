@@ -129,7 +129,31 @@ class SupabaseDB:
         )
         return list(res.data or [])
 
-    def insert_lead(self, lead: dict[str, Any]) -> dict[str, Any]:
+    def insert_lead(self, lead: dict[str, Any]) -> dict[str, Any] | None:
+        """
+        Insert a new lead, but only if no lead exists for this internship_id.
+        Returns the lead if inserted, None if skipped (duplicate).
+        """
+        internship_id = lead.get("internship_id")
+        if not internship_id:
+            # No internship_id, insert normally (shouldn't happen)
+            res = self.client.table("leads").insert(lead).execute()
+            return res.data[0]
+        
+        # Check if a lead already exists for this internship
+        existing = (
+            self.client.table("leads")
+            .select("id")
+            .eq("internship_id", internship_id)
+            .limit(1)
+            .execute()
+        )
+        
+        if existing.data:
+            # Lead already exists, skip insert to prevent duplicates
+            return None
+        
+        # No existing lead, safe to insert
         res = self.client.table("leads").insert(lead).execute()
         return res.data[0]
 
