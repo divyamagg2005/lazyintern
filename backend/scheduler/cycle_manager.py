@@ -3,17 +3,16 @@ from __future__ import annotations
 import argparse
 from datetime import timedelta
 
+from approval.twilio_sender import send_notification_sms
 from core.guards import process_retry_queue
 from core.supabase_db import db, today_utc, utcnow
 from outreach.queue_manager import process_email_queue, process_followups
 from outreach.quarantine_manager import process_quarantine_re_evaluations
-from approval.auto_approver import run_auto_approver
 from pipeline.email_extractor import extract_from_internship
 from pipeline.email_validator import validate_email
 from pipeline.full_scorer import full_score
 from pipeline.groq_client import generate_draft
 from pipeline.pre_scorer import _load_resume, pre_score  # type: ignore[attr-defined]
-from approval.twilio_sender import send_approval_sms
 from pipeline.hunter_client import extract_domain, find_company_domain, search_domain_for_email
 from scraper.scrape_router import discover_and_store
 
@@ -171,24 +170,37 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 "subject": draft_obj.subject,
                 "body": draft_obj.body,
                 "followup_body": draft_obj.followup_body,
-                "status": "generated",
+                "status": "approved",
+                "approved_at": utcnow().isoformat(),
             }
         )
         db.log_event(iid, "draft_generated", {"draft_id": draft["id"]})
 
-        # Phase 9 — Twilio human approval (send SMS immediately after draft generation)
-        send_approval_sms(draft, lead, internship, int(fs.score))
+        # Phase 9 — Immediate sending (no approval delay)
+        # Send email IMMEDIATELY after draft generation
+        try:
+            from outreach import gmail_client
+            gmail_client.send_email(draft, lead)
+            db.bump_daily_usage(today, emails_sent=1)
+            db.log_event(iid, "email_sent_immediately", {"draft_id": draft["id"]})
+            logger.info(f"✓ Email sent immediately to {lead['email']}")
+        except Exception as e:
+            logger.error(f"Failed to send email immediately: {e}")
+            # Email will be retried in next cycle via process_email_queue
         
-        # Mark internship as processed to prevent duplicate processing in next cycle
+        # Mark internship as processed
         db.client.table("internships").update(
-            {"status": "pending_approval"}
+            {"status": "email_sent"}
         ).eq("id", iid).execute()
-        db.log_event(iid, "approval_sent", {"draft_id": draft["id"]})
+        
+        # Send notification SMS to inform user that email was sent
+        send_notification_sms(draft, lead, internship, int(fs.score))
 
 
 def run_cycle() -> None:
     """
     One complete cycle:
+    0) Recovery: Process any pending approved drafts from previous interrupted runs
     1) Seed scoring_config if empty
     2) process existing discovered internships first
     3) run new discovery
@@ -196,14 +208,67 @@ def run_cycle() -> None:
     """
     # Ensure scoring_config is seeded before any scoring happens
     db.seed_scoring_config_if_empty()
-    
+
     today = today_utc()
     db.get_or_create_daily_usage(today)
+
+    # RECOVERY PHASE: Check for pending approved drafts before starting new discovery
+    # This ensures continuity if the program was terminated mid-cycle
+    print("\n" + "=" * 70)
+    print("RECOVERY PHASE: Checking for pending approved drafts...")
+    print("=" * 70)
+
+    # Count pending approved drafts
+    pending_drafts = (
+        db.client.table("email_drafts")
+        .select("id", count="exact")
+        .in_("status", ["approved", "auto_approved"])
+        .execute()
+    )
+    pending_count = pending_drafts.count or 0
+
+    if pending_count > 0:
+        print(f"Found {pending_count} pending approved draft(s) from previous run")
+        print("Processing pending drafts before starting new discovery...")
+
+        # Process all pending drafts (respecting daily limits and spacing)
+        drafts_sent = 0
+        while True:
+            # Check if we've hit daily limit
+            usage = db.get_or_create_daily_usage(today)
+            daily_limit = usage.daily_limit or 15
+
+            if usage.emails_sent >= daily_limit:
+                print(f"Daily email limit reached ({usage.emails_sent}/{daily_limit})")
+                break
+
+            # Try to send one email
+            initial_count = usage.emails_sent
+            process_email_queue()
+
+            # Check if an email was sent
+            usage = db.get_or_create_daily_usage(today)
+            if usage.emails_sent > initial_count:
+                drafts_sent += 1
+                print(f"✓ Sent pending email {drafts_sent} [{usage.emails_sent}/{daily_limit}]")
+            else:
+                # No email sent (likely due to spacing constraint)
+                print("Spacing constraint active - will resume in next cycle")
+                break
+
+        if drafts_sent > 0:
+            print(f"✓ Recovery complete: {drafts_sent} pending email(s) sent")
+        else:
+            print("No emails sent (spacing constraint or daily limit)")
+    else:
+        print("No pending drafts found - starting fresh cycle")
+
+    print("=" * 70 + "\n")
 
     process_retry_queue()
     process_followups()
     process_quarantine_re_evaluations()
-    run_auto_approver()  # Auto-approve drafts after 2h timeout if score >= 90
+    # run_auto_approver() removed - immediate approval in _process_discovered_internships makes this obsolete
 
     resume = _load_resume()
     _process_discovered_internships(resume, limit=200)
@@ -214,6 +279,8 @@ def run_cycle() -> None:
 
     # Phase 11 / 12 — email queue + follow-ups
     process_email_queue()
+
+
 
 
 def main() -> None:

@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\pipeline\groq_client.py
+# hypothesis_version: 6.151.9
+
+[0.7, 30.0, 300, 500, ', ', 'Authorization', 'Candidate', 'Content-Type', 'Groq API', 'Hiring Team', 'application/json', 'body', 'choices', 'company', 'content', 'description', 'education', 'followup', 'frameworks', 'groq', 'id', 'intern', 'internship_id', 'json_object', 'languages', 'lead_id', 'max_tokens', 'message', 'messages', 'model', 'name', 'projects', 'recruiter_name', 'response_format', 'role', 'skills', 'subject', 'system', 'temperature', 'the company', 'total_tokens', 'type', 'usage', 'user']

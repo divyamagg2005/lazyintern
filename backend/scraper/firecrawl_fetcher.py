@@ -94,6 +94,14 @@ def fetch_firecrawl(url: str) -> FirecrawlResult | None:
 
         return FirecrawlResult(url=url, content=content)
     except Exception as e:
+        # Send error notification
+        from core.guards import send_error_notification
+        send_error_notification(
+            error_type="Firecrawl API",
+            error_message=str(e),
+            context={"url": url}
+        )
+        
         db.insert_retry(
             phase="firecrawl",
             payload={"url": url},

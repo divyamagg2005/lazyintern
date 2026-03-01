@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\pipeline\pre_scorer.py
+# hypothesis_version: 6.151.9
+
+[-100, '/', '//', '@', '\\b', 'australia', 'canada', 'company', 'company_domains', 'company_keywords', 'data', 'discovered', 'disqualified', 'disqualify', 'domain', 'europe', 'germany', 'high_priority', 'high_priority_role', 'historical_success', 'india', 'keywords.json', 'link', 'location', 'location_keywords', 'location_match', 'london', 'low_priority', 'medium_priority', 'medium_priority_role', 'new york', 'non_india_location', 'positive', 'preferred_locations', 'preferred_remote', 'remote', 'reply_history', 'resume.json', 'role', 'role_keywords', 'san francisco', 'singapore', 'uae', 'uk', 'united kingdom', 'united states', 'us only', 'usa', 'utf-8']

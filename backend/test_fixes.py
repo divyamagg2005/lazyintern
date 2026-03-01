@@ -11,7 +11,7 @@ from pathlib import Path
 
 from core.supabase_db import db, today_utc, utcnow
 from scraper.scrape_router import _load_tracking, _should_scrape_source, _update_tracking
-from approval.twilio_sender import send_approval_sms
+from approval.twilio_sender import send_notification_sms
 from core.logger import logger
 
 PROJECT_ROOT = Path(__file__).resolve().parent

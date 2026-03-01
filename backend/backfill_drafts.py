@@ -12,7 +12,7 @@ from core.supabase_db import db
 from core.logger import logger
 from pipeline.groq_client import generate_draft
 from pipeline.pre_scorer import _load_resume
-from approval.twilio_sender import send_approval_sms
+from approval.twilio_sender import send_notification_sms
 
 
 def backfill_existing_leads() -> None:
@@ -117,8 +117,8 @@ def backfill_existing_leads() -> None:
                     "email": email
                 })
                 
-                # Send Twilio SMS for approval
-                send_approval_sms(draft, lead, internship, full_score)
+                # Send Twilio SMS notification
+                send_notification_sms(draft, lead, internship, full_score)
                 
                 logger.info(f"[{idx}/{total_leads}] ✓ Backfill draft created for {email} at {company}")
                 success_count += 1

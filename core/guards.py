@@ -104,8 +104,8 @@ def _retry_groq(payload: dict) -> None:
 
 
 def _retry_twilio(payload: dict) -> None:
-    """Re-execute Twilio approval SMS."""
-    from approval.twilio_sender import send_approval_sms
+    """Re-execute Twilio notification SMS."""
+    from approval.twilio_sender import send_notification_sms
 
     draft_id = payload.get("draft_id")
     if not draft_id:
@@ -128,7 +128,7 @@ def _retry_twilio(payload: dict) -> None:
     internship = lead["internships"]
     full_score = int(internship.get("full_score") or 0)
 
-    send_approval_sms(draft, lead, internship, full_score)
+    send_notification_sms(draft, lead, internship, full_score)
 
 
 def _retry_gmail(payload: dict) -> None:

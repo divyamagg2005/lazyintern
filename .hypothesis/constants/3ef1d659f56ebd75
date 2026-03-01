@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\pipeline\full_scorer.py
+# hypothesis_version: 6.151.9
+
+[0.0, 8.0, 10.0, 40.0, 50.0, 60.0, 100.0, '/', '//', '@', 'company_domains', 'description', 'domain', 'link', 'location', 'location_score', 'negative', 'positive', 'preferred_locations', 'relevance_score', 'reply_history', 'resume_overlap_score', 'role', 'skills', 'target_roles', 'tech_stack_score']

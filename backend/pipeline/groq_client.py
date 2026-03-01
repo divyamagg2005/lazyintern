@@ -23,20 +23,26 @@ SYSTEM_PROMPT = """You are an expert cold email writer for internship outreach.
 
 Candidate Profile:
 Name: {name}
-Education: {education}
-Skills: {skills}
-Projects: {projects}
+Current Education: {education}
+Technical Skills: {skills}
+Key Projects: {projects}
 
-Tone: professional, concise, genuine. Never sound like a template.
-Be specific about relevant experience. Show you researched the company.
+Writing Guidelines:
+- Tone: professional, concise, genuine
+- Never sound like a template or generic
+- Be specific about relevant experience
+- Show you researched the company
+- Highlight concrete achievements
 
-Format:
-  - Subject line (max 8 words)
+Output Format:
+  - Subject line (max 8 words, compelling)
   - Email body (150-200 words, 3 paragraphs)
-  - Follow-up template (75 words, day 5 if no reply)
+  - Follow-up template (75 words, for day 5 if no reply)
 
 Output ONLY valid JSON with this exact structure:
 {{"subject": "...", "body": "...", "followup": "..."}}
+
+IMPORTANT: Use the EXACT education year specified in the candidate profile above.
 """
 
 
@@ -44,7 +50,14 @@ def _build_system_prompt(resume: dict[str, Any]) -> str:
     """Build system prompt with resume context for caching."""
     name = resume.get("name", "Candidate")
     education = resume.get("education", {})
-    edu_str = f"{education.get('degree', '')} at {education.get('college', '')}, {education.get('year', '')}"
+    
+    # Build education string with explicit year
+    year = education.get("year", "")
+    current_year = education.get("current_year", year)
+    degree = education.get("degree", "")
+    college = education.get("college", "")
+    
+    edu_str = f"{degree} at {college}, {current_year}"
     
     skills = resume.get("skills", {})
     skills_str = ", ".join([
@@ -133,6 +146,18 @@ def generate_draft(lead: dict[str, Any], internship: dict[str, Any], resume: dic
         
     except Exception as e:
         logger.error(f"Groq API failed: {e}")
+        
+        # Send error notification
+        from core.guards import send_error_notification
+        send_error_notification(
+            error_type="Groq API",
+            error_message=str(e),
+            context={
+                "lead_id": lead.get("id"),
+                "internship_id": internship.get("id")
+            }
+        )
+        
         # Add to retry queue
         db.insert_retry(
             phase="groq",

@@ -19,58 +19,21 @@ AUTO_APPROVE_MAX_DELAY_MINUTES = 30
 
 def run_auto_approver() -> None:
     """
-    Phase 9 auto-approver:
-    - Finds drafts with status 'generated' and approval_sent_at older than 2h.
-    - Auto-approves ALL drafts (no score threshold) - user wants all leads to get emails.
-    - Adds random delay (10-30 min) via approved_at timestamp to avoid spam detection.
+    DEPRECATED: This function is no longer needed as of the immediate-send fix.
+    
+    The system now approves and sends emails immediately after draft generation,
+    eliminating the need for delayed auto-approval. This function is kept for
+    backward compatibility but performs no operations.
+    
+    Previous behavior (now obsolete):
+    - Found drafts with status 'generated' and approval_sent_at older than 2h
+    - Auto-approved ALL drafts (no score threshold)
+    - Added random delay (10-30 min) via approved_at timestamp
+    
+    The immediate approval flow (implemented in cycle_manager.py) makes this
+    2-hour timeout mechanism obsolete. Drafts are now marked as 'approved'
+    immediately upon creation with approved_at set to current time.
     """
-    now = utcnow()
-    cutoff = now - timedelta(hours=TIMEOUT_HOURS)
-
-    res = (
-        db.client.table("email_drafts")
-        .select("*, leads!inner(internship_id)")
-        .eq("status", "generated")
-        .lte("approval_sent_at", cutoff.isoformat())
-        .execute()
-    )
-    rows = res.data or []
-    today = today_utc()
-
-    for row in rows:
-        internship_id = row["leads"]["internship_id"]
-        
-        # Get full_score for logging purposes only (not for filtering)
-        internship_res = (
-            db.client.table("internships")
-            .select("full_score")
-            .eq("id", internship_id)
-            .limit(1)
-            .execute()
-        )
-        
-        full_score = 0
-        if internship_res.data:
-            full_score = int(internship_res.data[0].get("full_score") or 0)
-        
-        # Auto-approve ALL drafts regardless of score
-        # Add random delay to approved_at timestamp
-        # This makes auto-approved emails wait 10-30 minutes before sending
-        delay_minutes = random.randint(AUTO_APPROVE_MIN_DELAY_MINUTES, AUTO_APPROVE_MAX_DELAY_MINUTES)
-        approved_at = now + timedelta(minutes=delay_minutes)
-        
-        db.client.table("email_drafts").update({
-            "status": "auto_approved",
-            "approved_at": approved_at.isoformat()
-        }).eq("id", row["id"]).execute()
-        
-        db.bump_daily_usage(today, auto_approvals=1)
-        db.log_event(internship_id, "auto_approved", {
-            "draft_id": row["id"],
-            "full_score": full_score,
-            "delay_minutes": delay_minutes,
-            "will_send_after": approved_at.isoformat()
-        })
-        
-        logger.info(f"Auto-approved draft {row['id']} (score: {full_score}) - will send after {delay_minutes} min delay")
+    # No-op: immediate approval in cycle_manager.py makes this function obsolete
+    return
 

@@ -11,69 +11,30 @@ from core.logger import logger
 
 def process_email_queue() -> None:
     """
-    Process approved and auto-approved email drafts.
-    Enforces:
-    - Daily email limit
-    - 45-55 minute spacing between emails
-    - Respects approved_at timestamp (for delayed auto-approvals)
-    - Only sends one email per cycle
+    Process approved and auto-approved email drafts IMMEDIATELY.
+    
+    NO spacing constraints, NO daily limits.
+    Sends all approved drafts as fast as possible.
     """
     today = today_utc()
-    usage = db.get_or_create_daily_usage(today)
-
-    # In this minimal version we don't persist account_created_date;
-    # assume warmup is already complete and use the configured daily_limit.
-    daily_limit = usage.daily_limit or 15
-
-    if usage.emails_sent >= daily_limit:
-        return
-
-    # Get last sent timestamp to enforce spacing
-    last_sent = (
-        db.client.table("email_drafts")
-        .select("sent_at")
-        .eq("status", "sent")
-        .order("sent_at", desc=True)
-        .limit(1)
-        .execute()
-    )
-
-    now = utcnow()
-    if last_sent.data:
-        last_sent_at = datetime.fromisoformat(
-            last_sent.data[0]["sent_at"].replace("Z", "+00:00")
-        )
-        # 45 minutes + random jitter (0-10 minutes)
-        min_gap = timedelta(minutes=45 + random.randint(0, 10))
-        time_since_last = now - last_sent_at
-
-        if time_since_last < min_gap:
-            # Not enough time has passed, skip this cycle
-            return
-
-    # Get drafts with status 'approved' or 'auto_approved'
-    # For auto-approved drafts, only include those where approved_at <= now (delay has passed)
+    
+    # Get ALL approved drafts (no limit)
     res = (
         db.client.table("email_drafts")
-        .select("*, leads!inner(email, internship_id)")
+        .select("*, leads!inner(id, email, internship_id)")
         .in_("status", ["approved", "auto_approved"])
         .order("approved_at", desc=False)  # Send oldest approvals first
-        .limit(10)
         .execute()
     )
     drafts = res.data or []
     
+    if not drafts:
+        return
+    
+    logger.info(f"Processing {len(drafts)} approved draft(s) - sending immediately")
+    
     for row in drafts:
         draft = row
-        
-        # Check if approved_at timestamp has passed (for delayed auto-approvals)
-        approved_at = draft.get("approved_at")
-        if approved_at:
-            approved_at_dt = datetime.fromisoformat(approved_at.replace("Z", "+00:00"))
-            if approved_at_dt > now:
-                # Delay hasn't passed yet, skip this draft
-                logger.info(f"Skipping draft {draft['id']} - delay not passed yet (approved_at: {approved_at})")
-                continue
         
         lead = {
             "email": row["leads"]["email"],
@@ -81,19 +42,18 @@ def process_email_queue() -> None:
             "internship_id": row["leads"].get("internship_id")
         }
 
-        if usage.emails_sent >= daily_limit:
-            break
-
-        gmail_client.send_email(draft, lead)
-        usage = db.get_or_create_daily_usage(today)
-        db.bump_daily_usage(today, emails_sent=1)
-        
-        # Log whether this was manual or auto-approved
-        approval_type = "auto" if draft["status"] == "auto_approved" else "manual"
-        logger.info(f"Email sent ({approval_type} approval) to {lead['email']} [{usage.emails_sent}/{daily_limit}]")
-        
-        # Only send one email per cycle to maintain spacing
-        break
+        try:
+            gmail_client.send_email(draft, lead)
+            db.bump_daily_usage(today, emails_sent=1)
+            
+            # Log success
+            approval_type = "auto" if draft["status"] == "auto_approved" else "manual"
+            logger.info(f"✓ Email sent ({approval_type}) to {lead['email']}")
+            
+        except Exception as e:
+            logger.error(f"Failed to send email to {lead['email']}: {e}")
+            # Continue to next email instead of stopping
+            continue
 
 
 def process_followups() -> None:

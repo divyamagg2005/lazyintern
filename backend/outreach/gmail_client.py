@@ -103,13 +103,14 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
             {"status": "sent", "sent_at": utcnow().isoformat()}
         )
         
-        # Log event
-        internship_id = db.client.table("leads").select("internship_id").eq("id", lead.get("id")).execute().data[0]["internship_id"]
-        db.log_event(internship_id, "email_sent", {
-            "draft_id": draft["id"],
-            "email": lead["email"],
-            "message_id": result.get("id")
-        })
+        # Log event - use internship_id from lead object (already available)
+        internship_id = lead.get("internship_id")
+        if internship_id:
+            db.log_event(internship_id, "email_sent", {
+                "draft_id": draft["id"],
+                "email": lead["email"],
+                "message_id": result.get("id")
+            })
         
         # Schedule follow-up for day 5
         followup_date = (today_utc() + timedelta(days=5)).isoformat()
@@ -125,6 +126,18 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
         
     except Exception as e:
         logger.error(f"Gmail send failed for {lead['email']}: {e}")
+        
+        # Send error notification
+        from core.guards import send_error_notification
+        send_error_notification(
+            error_type="Gmail",
+            error_message=str(e),
+            context={
+                "draft_id": draft["id"],
+                "email": lead.get("email")
+            }
+        )
+        
         # Add to retry queue
         db.insert_retry(
             phase="gmail",

@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\core\supabase_db.py
+# hypothesis_version: 6.151.9
+
+[0.1, 0.2, 0.25, 0.35, '*', 'Tech stack alignment', 'attempts', 'auto_approvals', 'daily_limit', 'daily_usage_stats', 'date', 'description', 'discovered', 'email_drafts', 'emails_sent', 'event', 'firecrawl_calls', 'followup_queue', 'generated', 'groq_calls', 'groq_tokens_used', 'hunter_calls', 'id', 'internship_id', 'internships', 'key', 'key,weight', 'last_error', 'leads', 'link', 'location_score', 'max_attempts', 'metadata', 'next_retry_at', 'payload', 'phase', 'pipeline_events', 'pre_score_kills', 'relevance_score', 'resolved', 'resume_overlap_score', 'retry_queue', 'scoring_config', 'status', 'tech_stack_score', 'twilio_sms_sent', 'validation_fails', 'weight']

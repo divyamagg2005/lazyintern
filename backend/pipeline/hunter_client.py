@@ -160,6 +160,14 @@ def search_domain_for_email(domain: str) -> HunterEmail | None:
         db.bump_daily_usage(today_utc(), hunter_calls=1)
         return filtered[0] if filtered else None
     except Exception as e:
+        # Send error notification
+        from core.guards import send_error_notification
+        send_error_notification(
+            error_type="Hunter API",
+            error_message=str(e),
+            context={"domain": domain}
+        )
+        
         db.insert_retry(
             phase="hunter",
             payload={"domain": domain},

@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\outreach\gmail_client.py
+# hypothesis_version: 6.151.9
+
+[8080, 'Content-Disposition', 'Gmail', 'Subject', 'To', 'application', 'body', 'data', 'draft_id', 'email', 'email_sent', 'followup_body', 'gmail', 'id', 'internship_id', 'lead_id', 'leads', 'message_id', 'pdf', 'plain', 'raw', 'rb', 'resume.pdf', 'send_after', 'sent', 'sent_at', 'status', 'subject', 'utf-8', 'v1']

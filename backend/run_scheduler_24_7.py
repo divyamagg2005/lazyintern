@@ -53,11 +53,11 @@ def reset_daily_stats():
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
     
-    # Run pipeline every 2 hours
+    # Run pipeline every 90 minutes (balanced discovery rate)
     scheduler.add_job(
         scheduled_cycle, 
         'interval', 
-        hours=2,
+        minutes=90,
         next_run_time=datetime.now()  # Run immediately on start
     )
     
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     
     logger.info("=" * 60)
     logger.info("LazyIntern 24/7 Scheduler Started")
-    logger.info("Pipeline will run every 2 hours")
+    logger.info("Pipeline will run every 90 minutes")
     logger.info("Daily stats reset at 00:00 UTC")
     logger.info("Press Ctrl+C to stop")
     logger.info("=" * 60)

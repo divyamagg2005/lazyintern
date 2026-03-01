@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\pipeline\email_validator.py
+# hypothesis_version: 6.151.9
+
+[20.0, 86400.0, 250, 251, 550, 553, '#', '.', '.tmp', '@', 'MX', 'data', 'disposable_domain', 'format_invalid', 'mx_failure', 'smtp_failure', 'utf-8']

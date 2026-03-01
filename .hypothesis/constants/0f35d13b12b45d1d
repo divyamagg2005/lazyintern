@@ -1,0 +1,4 @@
+# file: C:\Users\DIVYAM\Desktop\lazyintern\backend\outreach\queue_manager.py
+# hypothesis_version: 6.151.9
+
+['+00:00', 'Z', 'approved', 'approved_at', 'auto', 'auto_approved', 'email', 'email_drafts', 'followup_body', 'followup_queue', 'id', 'internship_id', 'leads', 'manual', 'replied_negative', 'replied_positive', 'send_after', 'sent', 'sent_at', 'status']

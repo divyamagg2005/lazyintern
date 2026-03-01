@@ -60,7 +60,9 @@
   "education": {
     "degree": "B.Tech Computer Science",
     "college": "Vellore Institute of Technology (VIT), Vellore",
-    "year": "2nd Year (Aug 2023 – Aug 2027)",
+    "year": "3rd Year",
+    "duration": "Aug 2023 – Aug 2027",
+    "current_year": "Currently in 3rd Year (2025-2026 academic year)",
     "gpa": "8.81/10.0"
   },
   "certifications": [
@@ -75,7 +77,7 @@
     {
       "role": "Finance Head (Board Member)",
       "org": "ADGVIT – Advanced Developers Group, VIT Vellore",
-      "duration": "Sep 2023 – Present",
+      "duration": "August 2024 – Present",
       "highlights": [
         "Secured McDonald's as sponsor for Riviera 2026",
         "Led sponsorship strategy for iOS Fusion 7.0 and 8.0",

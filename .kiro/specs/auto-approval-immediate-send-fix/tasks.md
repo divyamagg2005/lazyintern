@@ -1,0 +1,150 @@
+# Implementation Plan
+
+- [x] 1. Write bug condition exploration test
+  - **Property 1: Fault Condition** - Approval Delay Prevents Immediate Email Sending
+  - **CRITICAL**: This test MUST FAIL on unfixed code - failure confirms the bug exists
+  - **DO NOT attempt to fix the test or the code when it fails**
+  - **NOTE**: This test encodes the expected behavior - it will validate the fix when it passes after implementation
+  - **GOAL**: Surface counterexamples that demonstrate the 2-hour approval delay bug
+  - **Scoped PBT Approach**: Scope the property to concrete failing cases - insert 5 test leads and verify only 0-1 emails are sent within one scheduler cycle (not all 5)
+  - Test that when multiple leads are inserted and drafts generated, emails are NOT sent immediately due to approval delays (from Fault Condition in design)
+  - The test assertions should verify:
+    - Draft status remains 'generated' (not 'approved') immediately after generation
+    - approved_at is either NULL or set to future time (current time + 10-30 minutes)
+    - Only 0-1 out of N leads get emails sent within first scheduler cycle
+    - Remaining drafts wait for 2+ hour auto-approval timeout
+  - Run test on UNFIXED code
+  - **EXPECTED OUTCOME**: Test FAILS (this is correct - it proves the bug exists)
+  - Document counterexamples found:
+    - How many leads were inserted vs how many emails were sent
+    - Draft status values observed
+    - approved_at timestamps observed
+    - Time delays measured
+  - Mark task complete when test is written, run, and failure is documented
+  - _Requirements: 2.1, 2.2_
+
+- [x] 2. Write preservation property tests (BEFORE implementing fix)
+  - **Property 2: Preservation** - Non-Approval Pipeline Behavior
+  - **IMPORTANT**: Follow observation-first methodology
+  - Observe behavior on UNFIXED code for non-approval operations:
+    - Lead scoring (pre_score and full_score calculations)
+    - Email validation (MX/SMTP checks)
+    - Draft generation (Groq API calls and templates)
+    - Email spacing (45-55 minute gaps between sends)
+    - Daily email limits (max emails per day enforcement)
+  - Write property-based tests capturing observed behavior patterns from Preservation Requirements:
+    - Test 1: For all leads with same attributes, scoring produces same results
+    - Test 2: For all email addresses, validation logic produces same results
+    - Test 3: For all draft generation inputs, Groq produces same template structure
+    - Test 4: For all email sending sequences, 45-55 minute spacing is maintained
+    - Test 5: For all daily runs, email limit is enforced at same threshold
+  - Property-based testing generates many test cases for stronger guarantees
+  - Run tests on UNFIXED code
+  - **EXPECTED OUTCOME**: Tests PASS (this confirms baseline behavior to preserve)
+  - Mark task complete when tests are written, run, and passing on unfixed code
+  - _Requirements: 3.1, 3.2, 3.3, 3.4_
+
+- [x] 3. Fix for approval delay and SMS approval blocking
+
+  - [x] 3.1 Remove approval delay in cycle_manager.py
+    - Open `backend/scheduler/cycle_manager.py`
+    - Locate `_process_discovered_internships` function
+    - Change draft status from "generated" to "approved" immediately after draft creation
+    - Set `approved_at` to current timestamp (no delay)
+    - Remove call to `send_approval_sms()`
+    - Update internship status from 'pending_approval' to 'email_queued'
+    - _Bug_Condition: isBugCondition(input) where input.lead_inserted = true AND input.draft_generated = true AND input.email_sent = false AND (currentTime - input.draft_created_at) > 2 hours_
+    - _Expected_Behavior: Draft status = "approved" immediately, approved_at <= currentTime, email sent within one scheduler cycle_
+    - _Preservation: Lead scoring, email validation, draft generation, email spacing, daily limits must remain unchanged_
+    - _Requirements: 2.1, 2.2, 3.1, 3.2, 3.3, 3.4_
+
+  - [x] 3.2 Convert SMS approval to notification-only in twilio_sender.py
+    - Open `backend/approval/twilio_sender.py`
+    - Rename function `send_approval_sms` to `send_notification_sms`
+    - Remove yes/no reply logic from SMS body
+    - Change message format to: "LazyIntern: Email queued for {role} at {company} ({email}). Email will send automatically."
+    - Remove database update that sets approval_sent_at timestamp
+    - Keep company, role, email, and score information in message
+    - _Bug_Condition: SMS approval requires Twilio paid tier for yes/no replies which blocks approval flow_
+    - _Expected_Behavior: Notification-only SMS sent after email queued, no reply required_
+    - _Preservation: Twilio authentication and connection logic must remain unchanged_
+    - _Requirements: 2.1, 2.2, 3.1_
+
+  - [x] 3.3 Deprecate auto-approver in auto_approver.py
+    - Open `backend/approval/auto_approver.py`
+    - Add deprecation comment to `run_auto_approver` function explaining it's no longer needed
+    - Convert function to no-op (return immediately without processing)
+    - Open `backend/scheduler/cycle_manager.py`
+    - Remove call to `run_auto_approver()` from scheduler cycle
+    - _Bug_Condition: Auto-approver introduces 2-hour delay plus 10-30 minute random delay_
+    - _Expected_Behavior: Auto-approver no longer runs, drafts are immediately approved_
+    - _Preservation: Existing scheduler timing and cycle logic must remain unchanged_
+    - _Requirements: 2.1, 2.2_
+
+  - [x] 3.4 Add error notification system in guards.py
+    - Open `backend/core/guards.py`
+    - Create new function `send_error_notification(error_type, error_message, context)`
+    - Function should send SMS to approver_to_number with format: "LazyIntern ERROR: {error_type} - {error_message}"
+    - Integrate error notifications into existing error handlers:
+      - Groq API failures in `_retry_groq`
+      - Hunter API failures in `_retry_hunter`
+      - Gmail sending failures in email sending logic
+      - Twilio sending failures in `_retry_twilio`
+      - Database errors in retry queue processing
+    - _Bug_Condition: API errors occur but no notification sent to user_
+    - _Expected_Behavior: SMS notification sent immediately when any API error occurs_
+    - _Preservation: Existing retry logic and error logging must remain unchanged_
+    - _Requirements: 2.3_
+
+  - [x] 3.5 Remove approved_at delay check in queue_manager.py
+    - Open `backend/outreach/queue_manager.py`
+    - Locate `process_email_queue` function
+    - Remove logic that skips drafts where approved_at > now
+    - Simplify query to select all drafts with status='approved'
+    - _Bug_Condition: approved_at delay check prevents immediate email sending_
+    - _Expected_Behavior: All approved drafts are immediately eligible for sending_
+    - _Preservation: Email spacing (45-55 minutes) and daily limits must remain unchanged_
+    - _Requirements: 2.1, 2.2, 3.3, 3.4_
+
+  - [x] 3.6 Update notification SMS call in cycle_manager.py
+    - Open `backend/scheduler/cycle_manager.py`
+    - After email is queued (status='email_queued'), call `send_notification_sms()` instead of `send_approval_sms()`
+    - Pass same parameters (company, role, email, score)
+    - _Bug_Condition: Old approval SMS blocks flow, new notification SMS informs user_
+    - _Expected_Behavior: Notification SMS sent after email queued, no approval required_
+    - _Preservation: SMS sending timing and frequency must remain unchanged_
+    - _Requirements: 2.1, 2.2_
+
+  - [x] 3.7 Verify bug condition exploration test now passes
+    - **Property 1: Expected Behavior** - Immediate Email Sending Without Delays
+    - **IMPORTANT**: Re-run the SAME test from task 1 - do NOT write a new test
+    - The test from task 1 encodes the expected behavior
+    - When this test passes, it confirms the expected behavior is satisfied
+    - Run bug condition exploration test from step 1
+    - **EXPECTED OUTCOME**: Test PASSES (confirms bug is fixed)
+    - Verify that:
+      - All N leads get emails sent within one scheduler cycle (not just 0-1)
+      - Draft status is 'approved' immediately after generation
+      - approved_at is set to current time (not future time)
+      - No 2-hour delay observed
+    - _Requirements: 2.1, 2.2_
+
+  - [x] 3.8 Verify preservation tests still pass
+    - **Property 2: Preservation** - Non-Approval Pipeline Behavior
+    - **IMPORTANT**: Re-run the SAME tests from task 2 - do NOT write new tests
+    - Run preservation property tests from step 2
+    - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
+    - Confirm all tests still pass after fix:
+      - Lead scoring produces same results
+      - Email validation produces same results
+      - Draft generation produces same template structure
+      - Email spacing maintains 45-55 minute gaps
+      - Daily email limits enforced at same threshold
+    - _Requirements: 3.1, 3.2, 3.3, 3.4_
+
+- [x] 4. Checkpoint - Ensure all tests pass
+  - Run all exploration tests - verify they now pass (bug is fixed)
+  - Run all preservation tests - verify they still pass (no regressions)
+  - Run integration tests - verify full pipeline works end-to-end
+  - Check for any unexpected errors or warnings in logs
+  - If any issues arise, document them and ask the user for guidance
