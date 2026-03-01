@@ -300,6 +300,8 @@ score = (
 | **24/7 Scheduler** | ✅ Working | Runs every 90 minutes automatically |
 | **Retry Queue** | ✅ Working | Exponential backoff for failures |
 | **Recovery System** | ✅ Working | Resumes interrupted cycles |
+| **Email Deduplication** | ✅ Working | Prevents duplicate sends to same email |
+| **Domain Check** | ✅ Working | Skips Hunter calls for contacted domains |
 | **Real-time Dashboard** | ✅ Working | Next.js with live metrics |
 | **Quarantine System** | ✅ Working | Re-evaluates rejected leads |
 | **Event Logging** | ✅ Working | Complete audit trail |
@@ -311,7 +313,6 @@ score = (
 |---------|--------|-------|
 | **Follow-up Emails** | 🚧 Disabled | Code exists, currently disabled by user |
 | **Reply Detection** | 🚧 Partial | Gmail Pub/Sub webhook ready, needs setup |
-| **Email-level Deduplication** | 📋 Planned | Prevent duplicate sends to same email |
 | **Warmup Schedule** | 📋 Planned | Gradual email volume increase |
 | **45-min Spacing** | 📋 Planned | Anti-spam email spacing |
 | **Proxy Rotation** | 📋 Planned | Advanced scraping with proxy pool |
@@ -584,7 +585,8 @@ All services offer generous free tiers:
 - [x] Quarantine re-evaluation
 
 ### Phase 2 🚧 (In Progress)
-- [ ] Email-level deduplication (prevent duplicate sends to same email)
+- [x] Email-level deduplication (prevent duplicate sends to same email) ✅
+- [x] Domain-level check (optimize Hunter API calls) ✅
 - [ ] Follow-up automation (currently disabled)
 - [ ] Reply detection (Gmail Pub/Sub setup)
 - [ ] Warmup schedule (gradual email volume increase)

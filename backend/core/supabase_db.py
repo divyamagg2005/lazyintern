@@ -134,17 +134,26 @@ class SupabaseDB:
 
     def insert_lead(self, lead: dict[str, Any]) -> dict[str, Any] | None:
         """
-        Insert a new lead, but only if no lead exists for this internship_id.
+        Insert a new lead with email-level deduplication.
+        
+        Deduplication logic:
+        1. Check if lead exists for this internship_id → skip
+        2. Check if email was already contacted (sent status) → skip
+        3. Otherwise → insert
+        
         Returns the lead if inserted, None if skipped (duplicate).
         """
         internship_id = lead.get("internship_id")
+        email = lead.get("email")
+        
         if not internship_id:
             # No internship_id, insert normally (shouldn't happen)
             res = self.client.table("leads").insert(lead).execute()
             return res.data[0]
         
+        # CHECK 1: Internship-level deduplication
         # Check if a lead already exists for this internship
-        existing = (
+        existing_internship = (
             self.client.table("leads")
             .select("id")
             .eq("internship_id", internship_id)
@@ -152,13 +161,74 @@ class SupabaseDB:
             .execute()
         )
         
-        if existing.data:
-            # Lead already exists, skip insert to prevent duplicates
+        if existing_internship.data:
+            # Lead already exists for this internship, skip
             return None
         
-        # No existing lead, safe to insert
+        # CHECK 2: Email-level deduplication
+        # Check if this email was already contacted (sent status)
+        if email:
+            existing_email = (
+                self.client.table("leads")
+                .select("id, internship_id, email_drafts(status)")
+                .eq("email", email)
+                .execute()
+            )
+            
+            if existing_email.data:
+                # Check if any of these leads have sent emails
+                for existing_lead in existing_email.data:
+                    drafts = existing_lead.get("email_drafts", [])
+                    for draft in drafts:
+                        draft_status = draft.get("status")
+                        if draft_status in ("approved", "auto_approved", "sent"):
+                            # Email was already sent to this person
+                            from core.logger import logger
+                            logger.info(
+                                f"Skipped duplicate email contact: {email} "
+                                f"(already contacted via internship {existing_lead.get('internship_id')})"
+                            )
+                            return None
+        
+        # No duplicates found, safe to insert
         res = self.client.table("leads").insert(lead).execute()
         return res.data[0]
+    
+    def check_domain_already_contacted(self, domain: str) -> bool:
+        """
+        Check if any email from this domain was already successfully contacted.
+        Used to optimize Hunter API calls - skip domains we've already emailed.
+        
+        Returns True if domain was contacted, False otherwise.
+        """
+        if not domain:
+            return False
+        
+        # Find all leads with emails from this domain
+        domain_pattern = f"%@{domain}"
+        existing_leads = (
+            self.client.table("leads")
+            .select("id, email, email_drafts(status)")
+            .like("email", domain_pattern)
+            .execute()
+        )
+        
+        if not existing_leads.data:
+            return False
+        
+        # Check if any have sent emails
+        for lead in existing_leads.data:
+            drafts = lead.get("email_drafts", [])
+            for draft in drafts:
+                draft_status = draft.get("status")
+                if draft_status in ("approved", "auto_approved", "sent"):
+                    from core.logger import logger
+                    logger.info(
+                        f"Domain {domain} already contacted (email: {lead.get('email')})"
+                    )
+                    return True
+        
+        return False
 
     def insert_email_draft(self, draft: dict[str, Any]) -> dict[str, Any]:
         res = self.client.table("email_drafts").insert(draft).execute()

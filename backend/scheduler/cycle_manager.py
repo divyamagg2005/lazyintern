@@ -89,6 +89,19 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 ).eq("id", iid).execute()
                 continue
             
+            # EMAIL-LEVEL DEDUPLICATION: Check if domain was already contacted
+            # This saves Hunter API calls for domains we've already emailed
+            if db.check_domain_already_contacted(domain):
+                db.log_event(iid, "hunter_skipped_domain_contacted", {
+                    "domain": domain,
+                    "company": company_name,
+                    "reason": "Domain already contacted (email-level deduplication)"
+                })
+                db.client.table("internships").update(
+                    {"status": "no_email"}
+                ).eq("id", iid).execute()
+                continue
+            
             hunter = search_domain_for_email(domain)
             if not hunter:
                 db.log_event(iid, "hunter_no_results", {"domain": domain, "company": company_name})
@@ -109,7 +122,7 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 db.log_event(iid, "lead_duplicate_skipped", {
                     "email": hunter.email, 
                     "source": "hunter",
-                    "reason": "Lead already exists for this internship_id"
+                    "reason": "Email already contacted or internship duplicate"
                 })
                 continue
             
@@ -130,7 +143,7 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 db.log_event(iid, "lead_duplicate_skipped", {
                     "email": extracted.email,
                     "source": "regex",
-                    "reason": "Lead already exists for this internship_id"
+                    "reason": "Email already contacted or internship duplicate"
                 })
                 continue
             

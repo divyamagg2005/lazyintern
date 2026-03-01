@@ -32,21 +32,30 @@ def scheduled_cycle():
 
 def reset_daily_stats():
     """
-    Reset daily usage stats at midnight UTC.
-    Creates a new row for the new date (keeps historical data).
+    Verify daily usage stats for new day at midnight UTC.
+    
+    Note: Stats are automatically reset because each date gets its own row.
+    When midnight hits, get_or_create_daily_usage() creates a fresh row
+    with all counters at zero for the new date.
+    
+    This function just logs the transition and verifies the new row exists.
     """
     logger.info("=" * 60)
-    logger.info("Midnight UTC: Resetting daily usage stats")
+    logger.info("Midnight UTC: New day transition")
     logger.info("=" * 60)
     try:
         today = today_utc()
-        # get_or_create_daily_usage will create a new row for today if it doesn't exist
-        # Old rows are preserved for historical tracking
+        # This will create a new row for today if it doesn't exist
+        # (which it won't at midnight, so counters start at zero)
         usage = db.get_or_create_daily_usage(today)
-        logger.info(f"Daily stats initialized for {today}: emails_sent=0, hunter_calls=0, etc.")
-        logger.info("Historical data preserved in previous date rows")
+        logger.info(f"Daily stats for {today}:")
+        logger.info(f"  - emails_sent: {usage.emails_sent}/{usage.daily_limit}")
+        logger.info(f"  - hunter_calls: {usage.hunter_calls}")
+        logger.info(f"  - groq_calls: {usage.groq_calls}")
+        logger.info(f"  - twilio_sms_sent: {usage.twilio_sms_sent}")
+        logger.info("Previous day's data preserved in database for analytics")
     except Exception as e:
-        logger.error(f"Failed to reset daily stats: {e}", exc_info=True)
+        logger.error(f"Failed to verify daily stats: {e}", exc_info=True)
     logger.info("=" * 60)
 
 
