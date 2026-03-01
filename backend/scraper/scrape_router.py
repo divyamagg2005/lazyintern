@@ -62,21 +62,33 @@ def _save_tracking(tracking: dict[str, Any]) -> None:
 
 def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> bool:
     """
-    Check if source should be scraped based on scrape_frequency.
+    Check if source should be scraped based on day_rotation and scrape_frequency.
     
     Rules:
-    - daily: scrape every cycle
+    - day_rotation: 1, 2, or 3 - only scrape on matching day of 3-day cycle
+    - daily: scrape every cycle (if day_rotation matches)
     - weekly: only if last_scraped_at > 7 days ago
     - monthly: only if last_scraped_at > 30 days ago
     """
+    from datetime import date
+    
     url = source.get("url", "")
     frequency = source.get("scrape_frequency", "daily").lower()
     
-    # Daily sources always scrape
+    # Check day rotation first (if specified)
+    day_rotation = source.get("day_rotation")
+    if day_rotation:
+        # Calculate current day of 3-day cycle (1, 2, or 3)
+        day_of_cycle = (date.today().toordinal() % 3) + 1
+        if day_rotation != day_of_cycle:
+            # Not this source's day
+            return False
+    
+    # Check frequency-based rules
     if frequency == "daily":
         return True
     
-    # Check last scraped timestamp
+    # Check last scraped timestamp for weekly/monthly
     source_data = tracking.get("sources", {}).get(url, {})
     last_scraped = source_data.get("last_scraped_at")
     
@@ -175,10 +187,37 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
     - extracts internship-like links heuristically
     - upserts into `internships`
     """
+    import threading
+    from contextlib import contextmanager
+    from datetime import date
+    
+    @contextmanager
+    def timeout_context(seconds: int):
+        """Cross-platform timeout context manager using threading"""
+        result = {"completed": False, "exception": None, "html": None, "allow_firecrawl": False}
+        
+        def target(result_dict):
+            try:
+                # This will be replaced by the actual scraping code
+                result_dict["completed"] = True
+            except Exception as e:
+                result_dict["exception"] = e
+        
+        # We'll handle timeout at the call site instead
+        yield result
+    
     sources = load_sources()
     tracking = _load_tracking()
     inserted = 0
     sources_scraped = 0
+    PER_SOURCE_TIMEOUT = 300  # Maximum 5 minutes per source
+    
+    # Calculate and display current day of rotation cycle
+    day_of_cycle = (date.today().toordinal() % 3) + 1
+    logger.info("=" * 80)
+    logger.info(f"🔄 3-DAY ROTATION: Today is DAY {day_of_cycle} of the cycle")
+    logger.info(f"📅 Date: {date.today()}")
+    logger.info("=" * 80)
 
     for src in sources:
         if inserted >= limit:
@@ -193,40 +232,73 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
             continue
 
         sources_scraped += 1
-        logger.info(f"Scraping source ({sources_scraped}): {src.get('name')} [{src.get('scrape_frequency', 'daily')}]")
+        source_name = src.get('name', url)
+        logger.info(f"🌐 Scraping source ({sources_scraped}): {source_name} [{src.get('scrape_frequency', 'daily')}]")
 
-        proxy = get_next_proxy()
-        typ = (src.get("type") or "http").lower()
+        try:
+            # Use threading for cross-platform timeout
+            import threading
+            result = {"html": None, "allow_firecrawl": False, "exception": None}
+            
+            def scrape_with_timeout():
+                try:
+                    proxy = get_next_proxy()
+                    typ = (src.get("type") or "http").lower()
+                    html, allow_firecrawl = _fetch_with_remoteok_handling(url, typ, proxy)
+                    result["html"] = html
+                    result["allow_firecrawl"] = allow_firecrawl
+                except Exception as e:
+                    result["exception"] = e
+            
+            thread = threading.Thread(target=scrape_with_timeout, daemon=True)
+            thread.start()
+            thread.join(timeout=PER_SOURCE_TIMEOUT)
+            
+            if thread.is_alive():
+                # Timeout occurred
+                logger.warning(f"⏱️ Timeout scraping {source_name} (exceeded {PER_SOURCE_TIMEOUT}s)")
+                db.log_event(None, "scrape_timeout", {"source_url": url, "source_name": source_name, "timeout_seconds": PER_SOURCE_TIMEOUT})
+                continue
+            
+            if result["exception"]:
+                raise result["exception"]
+            
+            html = result["html"]
+            allow_firecrawl = result["allow_firecrawl"]
 
-        # Fetch with RemoteOK-specific handling
-        html, allow_firecrawl = _fetch_with_remoteok_handling(url, typ, proxy)
+            # Firecrawl fallback only if allowed (not RemoteOK)
+            if not html and allow_firecrawl:
+                fc = fetch_firecrawl(url)
+                html = fc.content if fc else ""
 
-        # Firecrawl fallback only if allowed (not RemoteOK)
-        if not html and allow_firecrawl:
-            fc = fetch_firecrawl(url)
-            html = fc.content if fc else ""
-
-        if not html:
-            db.log_event(None, "scrape_failed", {"source_url": url})
-            continue
-
-        # Update tracking after successful fetch
-        _update_tracking(url, tracking)
-
-        items = extract_internships_from_html(html, source_url=url)
-        for it in items:
-            if inserted >= limit:
-                break
-
-            dup = check_duplicate(it)
-            if dup.is_duplicate:
+            if not html:
+                db.log_event(None, "scrape_failed", {"source_url": url, "source_name": source_name})
                 continue
 
-            row = db.upsert_internship(it)
-            if row:
-                db.log_event(row["id"], "discovered", {"source_url": url})
-                inserted += 1
+            # Update tracking after successful fetch
+            _update_tracking(url, tracking)
 
-    logger.info(f"Discovery complete: {sources_scraped} sources scraped, {inserted} internships inserted")
+            items = extract_internships_from_html(html, source_url=url)
+            for it in items:
+                if inserted >= limit:
+                    break
+
+                dup = check_duplicate(it)
+                if dup.is_duplicate:
+                    continue
+
+                row = db.upsert_internship(it)
+                if row:
+                    db.log_event(row["id"], "discovered", {"source_url": url})
+                    inserted += 1
+        
+        except Exception as e:
+            logger.error(f"❌ Error scraping {source_name}: {e}")
+            db.log_event(None, "scrape_error", {"source_url": url, "source_name": source_name, "error": str(e)})
+            continue
+
+    logger.info("=" * 80)
+    logger.info(f"✅ DISCOVERY COMPLETE: {sources_scraped} sources scraped, {inserted} internships inserted")
+    logger.info("=" * 80)
     return inserted
 

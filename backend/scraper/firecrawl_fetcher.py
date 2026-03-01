@@ -28,7 +28,9 @@ def _domain(url: str) -> str | None:
 
 
 def _week_start(d: date) -> date:
-    return d.replace(day=d.day - (d.weekday()))  # Monday
+    """Get the Monday of the week containing date d"""
+    from datetime import timedelta
+    return d - timedelta(days=d.weekday())  # Monday
 
 
 def fetch_firecrawl(url: str) -> FirecrawlResult | None:

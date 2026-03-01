@@ -141,7 +141,7 @@ def generate_draft(lead: dict[str, Any], internship: dict[str, Any], resume: dic
         tokens_used = usage.get("total_tokens", 0)
         db.bump_daily_usage(today_utc(), groq_calls=1, groq_tokens_used=tokens_used)
         
-        logger.info(f"Groq draft generated. Tokens: {tokens_used}")
+        logger.info(f"🤖 Groq draft generated successfully (Tokens: {tokens_used})")
         
         return GroqDraft(
             subject=parsed.get("subject", "Application for internship"),

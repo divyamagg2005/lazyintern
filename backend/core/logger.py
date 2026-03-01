@@ -10,6 +10,11 @@ def setup_logging() -> None:
         level=level,
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
     )
+    
+    # Suppress noisy third-party library logs
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 logger = logging.getLogger("lazyintern")

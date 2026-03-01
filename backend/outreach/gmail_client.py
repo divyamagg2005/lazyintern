@@ -73,9 +73,9 @@ def _create_message_with_attachment(*, to: str, subject: str, body: str, attachm
                 f"attachment; filename={attachment_path.name}"
             )
             message.attach(part)
-            logger.info(f"Attached resume: {attachment_path.name}")
+            logger.info(f"📎 Attached resume: {attachment_path.name}")
     else:
-        logger.warning(f"Resume not found at {attachment_path}, sending without attachment")
+        logger.warning(f"⚠️  Resume not found at {attachment_path}, sending without attachment")
     
     raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
     return {"raw": raw}
@@ -120,12 +120,12 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
             "send_after": followup_date,
             "sent": False
         })
-        logger.info(f"Follow-up scheduled for {followup_date}")
+        logger.info(f"📅 Follow-up scheduled for {followup_date}")
         
-        logger.info(f"Email sent successfully to {lead['email']}")
+        logger.info(f"✅ Email sent successfully to {lead['email']}")
         
     except Exception as e:
-        logger.error(f"Gmail send failed for {lead['email']}: {e}")
+        logger.error(f"❌ Gmail send failed for {lead['email']}: {e}")
         
         # Send error notification
         from core.guards import send_error_notification

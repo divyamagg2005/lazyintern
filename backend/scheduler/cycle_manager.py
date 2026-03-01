@@ -42,6 +42,14 @@ JOB_BOARD_DOMAINS = {
 def _process_discovered_internships(resume: dict[str, object], *, limit: int = 200) -> None:
     today = today_utc()
     internships = db.list_discovered_internships(limit=limit)
+    
+    if not internships:
+        logger.info("📭 No new internships to process")
+        return
+    
+    logger.info("=" * 80)
+    logger.info(f"🔍 PROCESSING {len(internships)} DISCOVERED INTERNSHIPS")
+    logger.info("=" * 80)
 
     for internship in internships:
         iid = internship["id"]
@@ -126,6 +134,8 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 })
                 continue
             
+            logger.info(f"✉️  EMAIL FOUND (Hunter): {hunter.email}")
+            logger.info(f"🎯 LEAD CREATED & INSERTED IN SUPABASE")
             db.log_event(iid, "email_found_hunter", {"email": hunter.email, "domain": domain, "company": company_name})
         else:
             lead = db.insert_lead(
@@ -147,6 +157,8 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 })
                 continue
             
+            logger.info(f"✉️  EMAIL FOUND (regex): {extracted.email}")
+            logger.info(f"🎯 LEAD CREATED & INSERTED IN SUPABASE")
             db.log_event(iid, "email_found_regex", {"email": extracted.email})
 
         # Phase 5 — validation
@@ -156,6 +168,7 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
             db.client.table("leads").update(
                 {"verified": False, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
             ).eq("id", lead["id"]).execute()
+            logger.warning(f"⚠️  Email validation failed: {v.reason}")
             db.log_event(iid, "email_invalid", {"reason": v.reason})
             
             # NOTE: Don't change internship status here - let it continue to scoring
@@ -166,6 +179,7 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
             db.client.table("leads").update(
                 {"verified": True, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
             ).eq("id", lead["id"]).execute()
+            logger.info(f"✅ Email validated successfully")
             db.log_event(iid, "email_valid", {})
 
         # Phase 7 — full scoring
@@ -173,12 +187,14 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
         db.client.table("internships").update(
             {"full_score": int(fs.score)}
         ).eq("id", iid).execute()
+        logger.info(f"📊 FULL SCORE: {int(fs.score)}% - {internship.get('company')} - {internship.get('role')[:50]}")
         db.log_event(iid, "full_scored", {"score": fs.score, "breakdown": fs.breakdown})
 
         # Generate drafts for all scored internships (no minimum threshold)
         # User wants to reach out to all opportunities
 
         # Phase 8 — Groq personalization
+        logger.info(f"🤖 Generating personalized email draft...")
         draft_obj = generate_draft(lead, internship, resume)
         draft = db.insert_email_draft(
             {
@@ -190,18 +206,20 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 "approved_at": utcnow().isoformat(),
             }
         )
+        logger.info(f"✅ DRAFT GENERATED: '{draft_obj.subject}'")
         db.log_event(iid, "draft_generated", {"draft_id": draft["id"]})
 
         # Phase 9 — Immediate sending (no approval delay)
         # Send email IMMEDIATELY after draft generation
+        logger.info(f"📧 Sending email to {lead['email']}...")
         try:
             from outreach import gmail_client
             gmail_client.send_email(draft, lead)
             db.bump_daily_usage(today, emails_sent=1)
             db.log_event(iid, "email_sent_immediately", {"draft_id": draft["id"]})
-            logger.info(f"✓ Email sent immediately to {lead['email']}")
+            logger.info(f"✅ EMAIL SENT to {lead['email']}")
         except Exception as e:
-            logger.error(f"Failed to send email immediately: {e}")
+            logger.error(f"❌ Failed to send email immediately: {e}")
             # Email will be retried in next cycle via process_email_queue
         
         # Mark internship as processed
@@ -210,7 +228,10 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
         ).eq("id", iid).execute()
         
         # Send notification SMS to inform user that email was sent
+        logger.info(f"📱 Sending SMS notification...")
         send_notification_sms(draft, lead, internship, int(fs.score))
+        logger.info(f"✅ SMS NOTIFICATION SENT")
+        logger.info("=" * 80)
 
 
 def run_cycle() -> None:
@@ -222,17 +243,37 @@ def run_cycle() -> None:
     3) run new discovery
     4) process newly discovered internships
     """
+    from datetime import date
+    
+    # Print cycle start banner
+    logger.info("\n" + "=" * 80)
+    logger.info("🚀 LAZYINTERN CYCLE STARTED")
+    logger.info("=" * 80)
+    
+    # Calculate and display rotation day
+    day_of_cycle = (date.today().toordinal() % 3) + 1
+    logger.info(f"📅 Date: {date.today()}")
+    logger.info(f"🔄 3-Day Rotation: DAY {day_of_cycle} of 3")
+    logger.info("=" * 80)
+    
     # Ensure scoring_config is seeded before any scoring happens
     db.seed_scoring_config_if_empty()
 
     today = today_utc()
-    db.get_or_create_daily_usage(today)
+    usage = db.get_or_create_daily_usage(today)
+    
+    # Display current usage stats
+    logger.info(f"📊 Today's Stats:")
+    logger.info(f"   📧 Emails sent: {usage.emails_sent}/{usage.daily_limit or 15}")
+    logger.info(f"   📱 SMS sent: {usage.twilio_sms_sent}/15")
+    logger.info(f"   🤖 Groq calls: {usage.groq_calls}")
+    logger.info("=" * 80 + "\n")
 
     # RECOVERY PHASE: Check for pending approved drafts before starting new discovery
     # This ensures continuity if the program was terminated mid-cycle
-    print("\n" + "=" * 70)
-    print("RECOVERY PHASE: Checking for pending approved drafts...")
-    print("=" * 70)
+    logger.info("=" * 80)
+    logger.info("🔄 RECOVERY PHASE: Checking for pending approved drafts...")
+    logger.info("=" * 80)
 
     # Count pending approved drafts
     pending_drafts = (
@@ -244,8 +285,8 @@ def run_cycle() -> None:
     pending_count = pending_drafts.count or 0
 
     if pending_count > 0:
-        print(f"Found {pending_count} pending approved draft(s) from previous run")
-        print("Processing pending drafts before starting new discovery...")
+        logger.info(f"📬 Found {pending_count} pending approved draft(s) from previous run")
+        logger.info("🔄 Processing pending drafts before starting new discovery...")
 
         # Process all pending drafts (respecting daily limits and spacing)
         drafts_sent = 0
@@ -255,7 +296,7 @@ def run_cycle() -> None:
             daily_limit = usage.daily_limit or 15
 
             if usage.emails_sent >= daily_limit:
-                print(f"Daily email limit reached ({usage.emails_sent}/{daily_limit})")
+                logger.info(f"⚠️  Daily email limit reached ({usage.emails_sent}/{daily_limit})")
                 break
 
             # Try to send one email
@@ -266,20 +307,20 @@ def run_cycle() -> None:
             usage = db.get_or_create_daily_usage(today)
             if usage.emails_sent > initial_count:
                 drafts_sent += 1
-                print(f"✓ Sent pending email {drafts_sent} [{usage.emails_sent}/{daily_limit}]")
+                logger.info(f"✅ Sent pending email {drafts_sent} [{usage.emails_sent}/{daily_limit}]")
             else:
                 # No email sent (likely due to spacing constraint)
-                print("Spacing constraint active - will resume in next cycle")
+                logger.info("⏸️  Spacing constraint active - will resume in next cycle")
                 break
 
         if drafts_sent > 0:
-            print(f"✓ Recovery complete: {drafts_sent} pending email(s) sent")
+            logger.info(f"✅ Recovery complete: {drafts_sent} pending email(s) sent")
         else:
-            print("No emails sent (spacing constraint or daily limit)")
+            logger.info("⏸️  No emails sent (spacing constraint or daily limit)")
     else:
-        print("No pending drafts found - starting fresh cycle")
+        logger.info("✅ No pending drafts found - starting fresh cycle")
 
-    print("=" * 70 + "\n")
+    logger.info("=" * 80 + "\n")
 
     process_retry_queue()
     # process_followups()  # DISABLED: No follow-ups for now
@@ -295,6 +336,19 @@ def run_cycle() -> None:
 
     # Phase 11 / 12 — email queue + follow-ups
     process_email_queue()
+    
+    # Print cycle completion summary
+    final_usage = db.get_or_create_daily_usage(today)
+    logger.info("\n" + "=" * 80)
+    logger.info("🏁 CYCLE COMPLETE")
+    logger.info("=" * 80)
+    logger.info(f"📊 Final Stats:")
+    logger.info(f"   📧 Emails sent today: {final_usage.emails_sent}/{final_usage.daily_limit or 15}")
+    logger.info(f"   📱 SMS sent today: {final_usage.twilio_sms_sent}/15")
+    logger.info(f"   🤖 Groq calls today: {final_usage.groq_calls}")
+    logger.info(f"   🔍 Pre-score kills: {final_usage.pre_score_kills}")
+    logger.info(f"   ❌ Validation fails: {final_usage.validation_fails}")
+    logger.info("=" * 80 + "\n")
 
 
 

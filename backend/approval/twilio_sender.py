@@ -30,7 +30,7 @@ def send_notification_sms(draft: dict[str, Any], lead: dict[str, Any], internshi
     """
     client = _twilio_client()
     if not client or not settings.twilio_from_number or not settings.approver_to_number:
-        logger.warning("Twilio not configured, skipping notification SMS")
+        logger.warning("⚠️  Twilio not configured, skipping notification SMS")
         db.log_event(internship.get("id"), "notification_skipped_no_twilio", {})
         return
 
@@ -40,7 +40,7 @@ def send_notification_sms(draft: dict[str, Any], lead: dict[str, Any], internshi
     SMS_DAILY_LIMIT = 15
 
     if usage.twilio_sms_sent >= SMS_DAILY_LIMIT:
-        logger.warning(f"SMS daily limit reached ({usage.twilio_sms_sent}/{SMS_DAILY_LIMIT}), skipping notification SMS")
+        logger.warning(f"⚠️  SMS daily limit reached ({usage.twilio_sms_sent}/{SMS_DAILY_LIMIT}), skipping notification SMS")
         db.log_event(internship.get("id"), "notification_skipped_sms_limit", {
             "sms_sent_today": usage.twilio_sms_sent,
             "limit": SMS_DAILY_LIMIT
@@ -84,10 +84,10 @@ def send_notification_sms(draft: dict[str, Any], lead: dict[str, Any], internshi
             "draft_id": draft_id,
             "sms_count_today": usage.twilio_sms_sent + 1
         })
-        logger.info(f"SMS notification sent for draft {draft_id} [{usage.twilio_sms_sent + 1}/{SMS_DAILY_LIMIT}]")
+        logger.info(f"✅ SMS notification sent for draft {draft_id} [{usage.twilio_sms_sent + 1}/{SMS_DAILY_LIMIT}]")
 
     except Exception as e:
-        logger.error(f"Twilio SMS send failed: {e}")
+        logger.error(f"❌ Twilio SMS send failed: {e}")
         
         # Send error notification (avoid recursion - only notify for non-error-notification failures)
         from core.guards import send_error_notification
