@@ -143,14 +143,9 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
             ).eq("id", lead["id"]).execute()
             db.log_event(iid, "email_invalid", {"reason": v.reason})
             
-            # CRITICAL: Mark internship as 'email_invalid' to prevent re-processing
-            # This stops leads like test-ai-startup.com from being re-created every cycle
-            db.client.table("internships").update(
-                {"status": "email_invalid"}
-            ).eq("id", iid).execute()
-            
-            # CHANGED: Continue to scoring even if validation fails (user wants to send to unverified emails)
-            # Don't skip - just log the validation failure and continue
+            # NOTE: Don't change internship status here - let it continue to scoring
+            # The lead is marked as unverified, but we still want to score and generate drafts
+            # Status will be updated after scoring (low_priority if score < 60, or after draft generation)
 
         else:
             db.client.table("leads").update(
@@ -165,13 +160,10 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
         ).eq("id", iid).execute()
         db.log_event(iid, "full_scored", {"score": fs.score, "breakdown": fs.breakdown})
 
-        if fs.score < 60:
-            db.client.table("internships").update(
-                {"status": "low_priority"}
-            ).eq("id", iid).execute()
-            continue
+        # Generate drafts for all scored internships (no minimum threshold)
+        # User wants to reach out to all opportunities
 
-        # Phase 8 — Groq personalization (stub)
+        # Phase 8 — Groq personalization
         draft_obj = generate_draft(lead, internship, resume)
         draft = db.insert_email_draft(
             {
@@ -184,8 +176,14 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
         )
         db.log_event(iid, "draft_generated", {"draft_id": draft["id"]})
 
-        # Phase 9 — Twilio human approval (send SMS, wait for webhook / auto-approver)
+        # Phase 9 — Twilio human approval (send SMS immediately after draft generation)
         send_approval_sms(draft, lead, internship, int(fs.score))
+        
+        # Mark internship as processed to prevent duplicate processing in next cycle
+        db.client.table("internships").update(
+            {"status": "pending_approval"}
+        ).eq("id", iid).execute()
+        db.log_event(iid, "approval_sent", {"draft_id": draft["id"]})
 
 
 def run_cycle() -> None:

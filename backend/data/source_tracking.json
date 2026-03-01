@@ -3,6 +3,94 @@
     "https://example.com/weekly": {
       "last_scraped_at": "2026-02-28T21:41:32.204815+00:00",
       "last_scraped_success": true
+    },
+    "https://www.workatastartup.com/jobs?role=eng&jobType=intern": {
+      "last_scraped_at": "2026-03-01T07:56:48.025561+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.workatastartup.com/jobs?role=ds&jobType=intern": {
+      "last_scraped_at": "2026-03-01T07:56:56.337122+00:00",
+      "last_scraped_success": true
+    },
+    "https://wellfound.com/jobs?role=Machine+Learning+Engineer&jobType=internship&location=India": {
+      "last_scraped_at": "2026-03-01T07:57:40.906881+00:00",
+      "last_scraped_success": true
+    },
+    "https://wellfound.com/jobs?role=Artificial+Intelligence&jobType=internship&location=India": {
+      "last_scraped_at": "2026-03-01T07:57:51.793572+00:00",
+      "last_scraped_success": true
+    },
+    "https://wellfound.com/jobs?role=Data+Scientist&jobType=internship&location=India": {
+      "last_scraped_at": "2026-03-01T07:58:01.643269+00:00",
+      "last_scraped_success": true
+    },
+    "https://news.ycombinator.com/item?id=42931219": {
+      "last_scraped_at": "2026-02-28T22:33:12.928717+00:00",
+      "last_scraped_success": true
+    },
+    "https://news.ycombinator.com/item?id=42947535": {
+      "last_scraped_at": "2026-02-28T22:33:20.528892+00:00",
+      "last_scraped_success": true
+    },
+    "https://internshala.com/internships/machine-learning-internship": {
+      "last_scraped_at": "2026-03-01T07:58:39.701107+00:00",
+      "last_scraped_success": true
+    },
+    "https://internshala.com/internships/artificial-intelligence-internship": {
+      "last_scraped_at": "2026-03-01T07:58:46.733001+00:00",
+      "last_scraped_success": true
+    },
+    "https://internshala.com/internships/data-science-internship": {
+      "last_scraped_at": "2026-03-01T07:58:53.159048+00:00",
+      "last_scraped_success": true
+    },
+    "https://internshala.com/internships/python-internship": {
+      "last_scraped_at": "2026-03-01T07:58:59.316759+00:00",
+      "last_scraped_success": true
+    },
+    "https://internshala.com/internships/deep-learning-internship": {
+      "last_scraped_at": "2026-03-01T07:59:06.570231+00:00",
+      "last_scraped_success": true
+    },
+    "https://unstop.com/internships?domain=Engineering&opportunity=Internships": {
+      "last_scraped_at": "2026-03-01T07:59:28.627260+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.linkedin.com/jobs/search/?keywords=AI+intern&location=India&f_JT=I": {
+      "last_scraped_at": "2026-03-01T07:59:43.937524+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.linkedin.com/jobs/search/?keywords=machine+learning+intern&location=India&f_JT=I": {
+      "last_scraped_at": "2026-03-01T08:00:18.282605+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.linkedin.com/jobs/search/?keywords=data+science+intern&location=India&f_JT=I": {
+      "last_scraped_at": "2026-03-01T08:00:53.813096+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.linkedin.com/jobs/search/?keywords=AI+intern&location=India&f_WT=2&f_JT=I": {
+      "last_scraped_at": "2026-03-01T08:01:20.813867+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.linkedin.com/jobs/search/?keywords=LLM+engineer+intern&location=India&f_JT=I": {
+      "last_scraped_at": "2026-03-01T04:02:53.286502+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.linkedin.com/jobs/search/?keywords=generative+AI+intern&location=India&f_JT=I": {
+      "last_scraped_at": "2026-03-01T04:03:05.439097+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.naukri.com/machine-learning-internship-jobs": {
+      "last_scraped_at": "2026-03-01T02:05:31.439896+00:00",
+      "last_scraped_success": true
+    },
+    "https://in.indeed.com/jobs?q=AI+intern&jt=internship": {
+      "last_scraped_at": "2026-03-01T02:05:37.921137+00:00",
+      "last_scraped_success": true
+    },
+    "https://www.glassdoor.co.in/Job/india-machine-learning-intern-jobs-SRCH_IL.0,5_IN115_KO6,29.htm": {
+      "last_scraped_at": "2026-03-01T02:06:19.901065+00:00",
+      "last_scraped_success": true
     }
   }
 }
