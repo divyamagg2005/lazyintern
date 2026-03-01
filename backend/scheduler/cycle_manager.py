@@ -269,7 +269,7 @@ def run_cycle() -> None:
     print("=" * 70 + "\n")
 
     process_retry_queue()
-    process_followups()
+    # process_followups()  # DISABLED: No follow-ups for now
     process_quarantine_re_evaluations()
     # run_auto_approver() removed - immediate approval in _process_discovered_internships makes this obsolete
 
