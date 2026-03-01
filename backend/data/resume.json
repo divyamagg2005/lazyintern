@@ -4,10 +4,16 @@
   "skills": {
     "languages": ["Python", "JavaScript", "TypeScript", "C++", "Java", "SQL", "PowerShell"],
     "frameworks": ["TensorFlow", "Scikit-learn", "LangChain", "FastAPI", "Next.js", "React", "Django", "Node.js", "Three.js"],
-    "tools": ["Supabase", "Git", "GitHub Actions", "Groq API", "Google Gemini API", "ElevenLabs API", "Firebase", "Streamlit", "Docker", "FFmpeg", "Arduino", "Vercel", "Render"],
-    "domains": ["NLP", "LLM Integration", "RAG", "AI Agents", "Computer Vision", "Real-time Systems", "Chrome Extensions", "Full-Stack Development"]
+    "tools": ["Supabase", "Git", "GitHub Actions", "Groq API", "Google Gemini API", "ElevenLabs API", "Firebase", "Streamlit", "Docker", "FFmpeg", "Arduino", "Vercel", "Render", "Twilio", "Hunter.io", "Gmail API", "Playwright", "Firecrawl", "Scrapling"],
+    "domains": ["NLP", "LLM Integration", "RAG", "AI Agents", "Computer Vision", "Real-time Systems", "Chrome Extensions", "Full-Stack Development", "Web Scraping", "Automation Pipelines", "Email Deliverability", "Scheduler Systems"]
   },
   "projects": [
+    {
+      "name": "LazyIntern – AI-Powered Internship Automation Platform",
+      "description": "Production-ready end-to-end automation platform that discovers, scores, and applies to internships 24/7 using a 3-tier scraping strategy (HTTP → Playwright → Firecrawl) across 60+ curated sources including YC, Wellfound, LinkedIn, and AI labs.",
+      "tech": ["Python", "FastAPI", "Next.js", "TypeScript", "Groq (Llama 3.1 70B)", "Supabase PostgreSQL", "Twilio", "Gmail API", "Hunter.io", "Scrapling", "Playwright", "Firecrawl"],
+      "impact": "Multi-gate filtering pipeline (keyword pre-score → MX+SMTP validation → weighted full score) eliminates 90% of low-quality leads before API spend; Groq system prompt caching cuts AI costs by 90%; 10-table DB schema with retry queues, quarantine re-evaluation, and a Next.js real-time analytics dashboard"
+    },
     {
       "name": "BrainRot Learning (Insta AI Agent)",
       "description": "Automated Instagram Reels creation pipeline transforming natural language prompts into viral educational content via multi-agent AI orchestration.",
@@ -19,12 +25,6 @@
       "description": "Dual-interface anonymous confession platform with public submission and password-protected admin moderation.",
       "tech": ["React", "TypeScript", "Supabase PostgreSQL", "Vite", "TailwindCSS"],
       "impact": "Handled 100-200 concurrent users during peak load with zero downtime"
-    },
-    {
-      "name": "TermiGenius",
-      "description": "AI-powered CLI that translates natural language into secure PowerShell commands with risk scoring and explain-before-execute.",
-      "tech": ["Python", "Google Gemini API", "PowerShell", "Rich TUI"],
-      "impact": "Static analysis and risk scoring layer for safe command execution"
     },
     {
       "name": "MailMind – AI Email Assistant",

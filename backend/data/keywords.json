@@ -22,7 +22,9 @@
         "neural network", "CNN", "RNN", "LSTM", "attention mechanism",
         "model optimization", "model compression", "quantization",
         "MLOps", "ML platform", "AI infrastructure",
-        "AI product", "AI assistant", "conversational AI", "chatbot"
+        "AI product", "AI assistant", "conversational AI", "chatbot",
+        "AI agent", "multi-agent", "agent orchestration",
+        "automation", "pipeline", "real-time systems"
       ],
   
       "medium_priority": [
@@ -31,7 +33,9 @@
         "full stack", "platform engineer", "infrastructure engineer",
         "Python developer", "developer", "software developer",
         "cloud engineer", "DevOps", "site reliability",
-        "database engineer", "API developer", "systems engineer"
+        "database engineer", "API developer", "systems engineer",
+        "web scraping", "automation engineer", "scheduler systems",
+        "email deliverability", "Chrome extension"
       ],
   
       "low_priority": [
@@ -69,7 +73,8 @@
         "llm_specific": [
           "HuggingFace", "Transformers", "PEFT", "LoRA", "QLoRA",
           "LangChain", "LlamaIndex", "Haystack", "Guidance",
-          "vLLM", "TGI", "Ollama", "llama.cpp"
+          "vLLM", "TGI", "Ollama", "llama.cpp",
+          "Groq", "Gemini", "ElevenLabs"
         ],
         "cv_specific": [
           "OpenCV", "Detectron2", "MMDetection", "Albumentations",
@@ -105,7 +110,10 @@
       "devtools": [
         "Docker", "Kubernetes", "Git", "GitHub", "GitLab",
         "FastAPI", "Flask", "Django", "gRPC", "REST",
-        "Terraform", "Ansible", "CI/CD", "GitHub Actions"
+        "Terraform", "Ansible", "CI/CD", "GitHub Actions",
+        "Scrapling", "Playwright", "Firecrawl", "Selenium",
+        "Twilio", "Hunter.io", "Gmail API", "Supabase",
+        "Vercel", "Render", "Streamlit", "FFmpeg"
       ],
   
       "data_tools": [

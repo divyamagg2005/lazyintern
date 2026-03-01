@@ -25,14 +25,16 @@ Candidate Profile:
 Name: {name}
 Current Education: {education}
 Technical Skills: {skills}
+Flagship Project: LazyIntern - AI-Powered Internship Automation Platform (Python, FastAPI, Next.js, Groq AI, PostgreSQL)
 Key Projects: {projects}
 
 Writing Guidelines:
 - Tone: professional, concise, genuine
 - Never sound like a template or generic
-- Be specific about relevant experience
+- Be specific about relevant experience (especially LazyIntern if relevant to the role)
 - Show you researched the company
-- Highlight concrete achievements
+- Highlight concrete achievements and technical depth
+- Emphasize hands-on experience with production systems, APIs, and full-stack development
 
 Output Format:
   - Subject line (max 8 words, compelling)
@@ -42,7 +44,10 @@ Output Format:
 Output ONLY valid JSON with this exact structure:
 {{"subject": "...", "body": "...", "followup": "..."}}
 
-IMPORTANT: Use the EXACT education year specified in the candidate profile above.
+IMPORTANT: 
+- Use the EXACT education year specified in the candidate profile above
+- If the role involves AI/ML/automation/full-stack, mention LazyIntern project
+- Keep it natural and conversational, not robotic
 """
 
 
@@ -181,24 +186,28 @@ def _generate_fallback_draft(lead: dict[str, Any], internship: dict[str, Any], r
     
     skills = resume.get("skills", {})
     languages = ", ".join(skills.get("languages", [])[:3])
+    frameworks = ", ".join(skills.get("frameworks", [])[:3])
     
-    projects = resume.get("projects", [])
-    project_names = ", ".join([p.get("name", "") for p in projects[:2]])
+    education = resume.get("education", {})
+    current_year = education.get("current_year", "3rd Year")
+    college = education.get("college", "VIT Vellore")
 
     subject = f"Application for {role} at {company}"
     body = (
         f"Hi {recruiter},\n\n"
-        f"My name is {name} and I'm writing to express my interest "
-        f"in the {role} role at {company}. I have experience with {languages} "
-        f"and have worked on projects including {project_names}.\n\n"
-        "I'd love the opportunity to discuss how I can contribute to your team this internship season.\n\n"
+        f"My name is {name}, a {current_year} student at {college}. "
+        f"I'm writing to express my interest in the {role} role at {company}.\n\n"
+        f"I have hands-on experience with {languages} and {frameworks}, "
+        f"and recently built LazyIntern—an AI-powered automation platform using FastAPI, Next.js, and Groq AI. "
+        f"I'd love to bring this technical depth to your team.\n\n"
+        "Looking forward to discussing how I can contribute.\n\n"
         "Best regards,\n"
         f"{name}"
     )
     followup = (
         f"Hi {recruiter},\n\n"
-        f"Just following up on my application for the {role} role at {company}. "
-        "I'd still be excited to explore whether there might be a fit.\n\n"
+        f"Following up on my application for the {role} role at {company}. "
+        "I'm still very interested and would love to explore whether there's a fit.\n\n"
         "Best,\n"
         f"{name}"
     )
