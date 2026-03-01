@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import logging
 from datetime import timedelta
 
 from approval.twilio_sender import send_notification_sms
@@ -15,6 +16,8 @@ from pipeline.groq_client import generate_draft
 from pipeline.pre_scorer import _load_resume, pre_score  # type: ignore[attr-defined]
 from pipeline.hunter_client import extract_domain, find_company_domain, search_domain_for_email
 from scraper.scrape_router import discover_and_store
+
+logger = logging.getLogger("lazyintern")
 
 PRE_SCORE_THRESHOLD_REGEX = 40
 PRE_SCORE_THRESHOLD_HUNTER = 60
