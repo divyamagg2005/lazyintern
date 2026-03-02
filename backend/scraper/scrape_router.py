@@ -60,7 +60,7 @@ def _save_tracking(tracking: dict[str, Any]) -> None:
         logger.error(f"Failed to save source tracking: {e}")
 
 
-def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> bool:
+def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> tuple[bool, str]:
     """
     Check if source should be scraped based on day_rotation and scrape_frequency.
     
@@ -69,10 +69,14 @@ def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> b
     - daily: scrape every cycle (if day_rotation matches)
     - weekly: only if last_scraped_at > 7 days ago
     - monthly: only if last_scraped_at > 30 days ago
+    
+    Returns:
+        (should_scrape: bool, skip_reason: str)
     """
     from datetime import date
     
     url = source.get("url", "")
+    source_name = source.get("name", url)
     frequency = source.get("scrape_frequency", "daily").lower()
     
     # Check day rotation first (if specified)
@@ -82,11 +86,11 @@ def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> b
         day_of_cycle = (date.today().toordinal() % 3) + 1
         if day_rotation != day_of_cycle:
             # Not this source's day
-            return False
+            return False, f"day_rotation={day_rotation}, today={day_of_cycle}"
     
     # Check frequency-based rules
     if frequency == "daily":
-        return True
+        return True, ""
     
     # Check last scraped timestamp for weekly/monthly
     source_data = tracking.get("sources", {}).get(url, {})
@@ -94,7 +98,7 @@ def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> b
     
     if not last_scraped:
         # Never scraped before, scrape now
-        return True
+        return True, ""
     
     try:
         last_scraped_dt = datetime.fromisoformat(last_scraped.replace("Z", "+00:00"))
@@ -104,21 +108,21 @@ def _should_scrape_source(source: dict[str, Any], tracking: dict[str, Any]) -> b
         if frequency == "weekly":
             should_scrape = days_since_scrape >= 7
             if not should_scrape:
-                logger.info(f"Skipping weekly source (scraped {days_since_scrape} days ago): {source.get('name')}")
-            return should_scrape
+                return False, f"weekly, last scraped {days_since_scrape} days ago"
+            return True, ""
         
         elif frequency == "monthly":
             should_scrape = days_since_scrape >= 30
             if not should_scrape:
-                logger.info(f"Skipping monthly source (scraped {days_since_scrape} days ago): {source.get('name')}")
-            return should_scrape
+                return False, f"monthly, last scraped {days_since_scrape} days ago"
+            return True, ""
         
         # Unknown frequency, default to daily
-        return True
+        return True, ""
         
     except Exception as e:
         logger.warning(f"Error checking scrape frequency for {url}: {e}")
-        return True  # Scrape on error to be safe
+        return True, ""  # Scrape on error to be safe
 
 
 def _update_tracking(url: str, tracking: dict[str, Any]) -> None:
@@ -131,6 +135,11 @@ def _update_tracking(url: str, tracking: dict[str, Any]) -> None:
         "last_scraped_success": True
     }
     _save_tracking(tracking)
+
+
+def _is_linkedin_url(url: str) -> bool:
+    """Check if URL is from LinkedIn"""
+    return "linkedin.com" in url.lower()
 
 
 def _is_remoteok_url(url: str) -> bool:
@@ -210,6 +219,7 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
     tracking = _load_tracking()
     inserted = 0
     sources_scraped = 0
+    sources_skipped = 0
     PER_SOURCE_TIMEOUT = 300  # Maximum 5 minutes per source
     
     # Calculate and display current day of rotation cycle
@@ -218,6 +228,16 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
     logger.info(f"🔄 3-DAY ROTATION: Today is DAY {day_of_cycle} of the cycle")
     logger.info(f"📅 Date: {date.today()}")
     logger.info("=" * 80)
+    
+    # Separate LinkedIn sources for randomization
+    linkedin_sources = [s for s in sources if _is_linkedin_url(s.get("url", ""))]
+    other_sources = [s for s in sources if not _is_linkedin_url(s.get("url", ""))]
+    
+    # Randomize LinkedIn sources to avoid predictable patterns
+    random.shuffle(linkedin_sources)
+    
+    # Combine: other sources first, then randomized LinkedIn sources
+    sources = other_sources + linkedin_sources
 
     for src in sources:
         if inserted >= limit:
@@ -227,13 +247,23 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
         if not url:
             continue
 
-        # Check if source should be scraped based on frequency
-        if not _should_scrape_source(src, tracking):
+        # Check if source should be scraped based on frequency and rotation
+        should_scrape, skip_reason = _should_scrape_source(src, tracking)
+        if not should_scrape:
+            source_name = src.get('name', url)
+            logger.info(f"⏭️  Skipped {source_name} ({skip_reason})")
+            sources_skipped += 1
             continue
 
         sources_scraped += 1
         source_name = src.get('name', url)
         logger.info(f"🌐 Scraping source ({sources_scraped}): {source_name} [{src.get('scrape_frequency', 'daily')}]")
+        
+        # LinkedIn-specific delay: 8-15 seconds before scraping
+        if _is_linkedin_url(url):
+            linkedin_delay = random.uniform(8.0, 15.0)
+            logger.info(f"⏳ LinkedIn delay: {linkedin_delay:.1f}s")
+            time.sleep(linkedin_delay)
 
         try:
             # Use threading for cross-platform timeout
@@ -298,7 +328,7 @@ def discover_and_store(*, limit: int = SCRAPE_BATCH_LIMIT) -> int:
             continue
 
     logger.info("=" * 80)
-    logger.info(f"✅ DISCOVERY COMPLETE: {sources_scraped} sources scraped, {inserted} internships inserted")
+    logger.info(f"✅ DISCOVERY COMPLETE: {sources_scraped} sources scraped, {sources_skipped} skipped, {inserted} internships inserted")
     logger.info("=" * 80)
     return inserted
 

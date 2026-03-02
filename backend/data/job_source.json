@@ -1,630 +1,855 @@
 {
   "meta": {
-    "last_updated": "2026-03-01",
-    "total_sources": 127,
-    "notes": "type: http = Scrapling Tier 1 first. type: dynamic = Scrapling Tier 2 first. Update HackerNews item IDs monthly. India-focused + remote-only international sources. Covers AI/ML/DS + Full Stack/Web Dev roles. 3-day rotation implemented: day_rotation field (1/2/3) distributes sources across 3-day cycle to reduce rate limiting and cycle time."
+    "last_updated": "2026-03-02",
+    "total_sources": 97,
+    "notes": "type: http = Scrapling Tier 1 first. type: dynamic = Scrapling Tier 2 first. day_rotation: 1/2/3 = which day in 3-day cycle to scrape. Same domain never appears twice on same day. Monthly sources only run on 1st of month. Weekly sources only run if 7 days since last scraped."
   },
   "sources": [
     {
-      "name": "YC Work at a Startup — Engineering Internships",
+      "name": "YC Work at a Startup \u2014 Engineering Internships",
       "url": "https://www.workatastartup.com/jobs?role=eng&jobType=intern",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "YC Work at a Startup — Data Science Internships",
+      "name": "YC Work at a Startup \u2014 Data Science Internships",
       "url": "https://www.workatastartup.com/jobs?role=ds&jobType=intern",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "very high"
     },
     {
-      "name": "Wellfound — ML Engineer Internships",
+      "name": "YC Work at a Startup \u2014 Full Stack Internships",
+      "url": "https://www.workatastartup.com/jobs?role=eng&jobType=intern&skill=full+stack",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high"
+    },
+    {
+      "name": "Wellfound \u2014 ML Engineer Internships",
       "url": "https://wellfound.com/jobs?role=Machine+Learning+Engineer&jobType=internship&location=India",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "Wellfound — AI Internships",
+      "name": "Wellfound \u2014 AI Internships",
       "url": "https://wellfound.com/jobs?role=Artificial+Intelligence&jobType=internship&location=India",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "very high"
     },
     {
-      "name": "Wellfound — Data Science Internships",
+      "name": "Wellfound \u2014 Data Science Internships",
       "url": "https://wellfound.com/jobs?role=Data+Scientist&jobType=internship&location=India",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "high"
     },
     {
-      "name": "HackerNews — Who is Hiring (Monthly Thread)",
+      "name": "Wellfound \u2014 Full Stack Engineer Internships",
+      "url": "https://wellfound.com/jobs?role=Full+Stack+Engineer&jobType=internship&location=India",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "very high"
+    },
+    {
+      "name": "Wellfound \u2014 Frontend Engineer Internships",
+      "url": "https://wellfound.com/jobs?role=Frontend+Engineer&jobType=internship&location=India",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "very high"
+    },
+    {
+      "name": "Wellfound \u2014 Backend Engineer Internships",
+      "url": "https://wellfound.com/jobs?role=Backend+Engineer&jobType=internship&location=India",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high"
+    },
+    {
+      "name": "HackerNews \u2014 Who is Hiring (Monthly Thread)",
       "url": "https://news.ycombinator.com/item?id=42931219",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "HackerNews — Who Wants to be Hired (Monthly Thread)",
+      "name": "HackerNews \u2014 Who Wants to be Hired (Monthly Thread)",
       "url": "https://news.ycombinator.com/item?id=42947535",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "RemoteOK — AI & ML Jobs",
+      "name": "RemoteOK \u2014 AI & ML Jobs",
       "url": "https://remoteok.com/remote-ai+ml-jobs",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "RemoteOK — Machine Learning Jobs",
+      "name": "RemoteOK \u2014 Machine Learning Jobs",
       "url": "https://remoteok.com/remote-machine-learning-jobs",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "RemoteOK — Data Science Jobs",
+      "name": "RemoteOK \u2014 Data Science Jobs",
       "url": "https://remoteok.com/remote-data-science-jobs",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "RemoteOK — Deep Learning Jobs",
+      "name": "RemoteOK \u2014 Deep Learning Jobs",
       "url": "https://remoteok.com/remote-deep-learning-jobs",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "RemoteOK — Python Jobs",
+      "name": "RemoteOK \u2014 Python Jobs",
       "url": "https://remoteok.com/remote-python-jobs",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Machine Learning",
+      "name": "RemoteOK \u2014 Full Stack Remote Jobs",
+      "url": "https://remoteok.com/remote-fullstack-jobs",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "high"
+    },
+    {
+      "name": "RemoteOK \u2014 React Remote Jobs",
+      "url": "https://remoteok.com/remote-react-jobs",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "RemoteOK \u2014 Node.js Remote Jobs",
+      "url": "https://remoteok.com/remote-node-jobs",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Internshala \u2014 Machine Learning",
       "url": "https://internshala.com/internships/machine-learning-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Artificial Intelligence",
+      "name": "Internshala \u2014 Artificial Intelligence",
       "url": "https://internshala.com/internships/artificial-intelligence-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Data Science",
+      "name": "Internshala \u2014 Data Science",
       "url": "https://internshala.com/internships/data-science-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Python",
+      "name": "Internshala \u2014 Python",
       "url": "https://internshala.com/internships/python-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Deep Learning",
+      "name": "Internshala \u2014 Deep Learning",
       "url": "https://internshala.com/internships/deep-learning-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Natural Language Processing",
+      "name": "Internshala \u2014 Natural Language Processing",
       "url": "https://internshala.com/internships/natural-language-processing-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Computer Vision",
+      "name": "Internshala \u2014 Computer Vision",
       "url": "https://internshala.com/internships/computer-vision-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Research Internships",
+      "name": "Internshala \u2014 Research Internships",
       "url": "https://internshala.com/internships/research-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "Internshala — Work From Home ML",
+      "name": "Internshala \u2014 Work From Home ML",
       "url": "https://internshala.com/internships/work-from-home-machine-learning-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internshala — Work From Home AI",
+      "name": "Internshala \u2014 Work From Home AI",
       "url": "https://internshala.com/internships/work-from-home-artificial-intelligence-internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Unstop — Engineering Internships",
-      "url": "https://unstop.com/internships?domain=Engineering&opportunity=Internships",
-      "type": "dynamic",
+      "name": "Internshala \u2014 Web Development",
+      "url": "https://internshala.com/internships/web-development-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Internshala \u2014 Full Stack Development",
+      "url": "https://internshala.com/internships/full-stack-development-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Internshala \u2014 React JS",
+      "url": "https://internshala.com/internships/reactjs-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Internshala \u2014 Node JS",
+      "url": "https://internshala.com/internships/nodejs-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Internshala \u2014 JavaScript",
+      "url": "https://internshala.com/internships/javascript-internship",
+      "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "Unstop — Data Science Internships",
-      "url": "https://unstop.com/internships?domain=Data+Science&opportunity=Internships",
-      "type": "dynamic",
-      "priority": "medium",
+      "name": "Internshala \u2014 Work From Home Web Dev",
+      "url": "https://internshala.com/internships/work-from-home-web-development-internship",
+      "type": "http",
+      "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "LinkedIn — AI Internships India",
+      "name": "Internshala \u2014 Work From Home Full Stack",
+      "url": "https://internshala.com/internships/work-from-home-full-stack-development-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "LinkedIn \u2014 AI Internships India",
       "url": "https://www.linkedin.com/jobs/search/?keywords=AI+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "LinkedIn — Machine Learning Internships India",
+      "name": "LinkedIn \u2014 Machine Learning Internships India",
       "url": "https://www.linkedin.com/jobs/search/?keywords=machine+learning+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "LinkedIn — Data Science Internships India",
+      "name": "LinkedIn \u2014 Data Science Internships India",
       "url": "https://www.linkedin.com/jobs/search/?keywords=data+science+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "high"
     },
     {
-      "name": "LinkedIn — AI Internships Remote",
+      "name": "LinkedIn \u2014 AI Internships Remote",
       "url": "https://www.linkedin.com/jobs/search/?keywords=AI+intern&location=India&f_WT=2&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "LinkedIn — LLM Engineer Internships",
+      "name": "LinkedIn \u2014 LLM Engineer Internships",
       "url": "https://www.linkedin.com/jobs/search/?keywords=LLM+engineer+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 2,
+      "expected_quality": "very high"
     },
     {
-      "name": "LinkedIn — Generative AI Internships",
+      "name": "LinkedIn \u2014 Generative AI Internships",
       "url": "https://www.linkedin.com/jobs/search/?keywords=generative+AI+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 3,
+      "expected_quality": "very high"
     },
     {
-      "name": "LinkedIn — NLP Internships India",
+      "name": "LinkedIn \u2014 NLP Internships India",
       "url": "https://www.linkedin.com/jobs/search/?keywords=NLP+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "LinkedIn — Computer Vision Internships India",
+      "name": "LinkedIn \u2014 Computer Vision Internships India",
       "url": "https://www.linkedin.com/jobs/search/?keywords=computer+vision+intern&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "LinkedIn — Research Intern India",
+      "name": "LinkedIn \u2014 Research Intern India",
       "url": "https://www.linkedin.com/jobs/search/?keywords=research+intern+AI&location=India&f_JT=I",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "very high"
     },
     {
-      "name": "Naukri — ML Internships",
-      "url": "https://www.naukri.com/machine-learning-internship-jobs",
-      "type": "http",
-      "priority": "medium",
+      "name": "LinkedIn \u2014 Full Stack Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=full+stack+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Naukri — AI Internships",
-      "url": "https://www.naukri.com/artificial-intelligence-internship-jobs",
-      "type": "http",
-      "priority": "medium",
+      "name": "LinkedIn \u2014 Web Developer Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=web+developer+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "Naukri — Data Science Internships",
-      "url": "https://www.naukri.com/data-science-internship-jobs",
-      "type": "http",
-      "priority": "medium",
+      "name": "LinkedIn \u2014 React Developer Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=react+developer+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "high"
     },
     {
-      "name": "Naukri — Deep Learning Internships",
-      "url": "https://www.naukri.com/deep-learning-internship-jobs",
-      "type": "http",
-      "priority": "medium",
+      "name": "LinkedIn \u2014 Full Stack Remote Internships",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=full+stack+intern&location=India&f_WT=2&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Indeed India — AI Intern",
+      "name": "Indeed India \u2014 AI Intern",
       "url": "https://in.indeed.com/jobs?q=AI+intern&jt=internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Indeed India — ML Intern",
+      "name": "Indeed India \u2014 ML Intern",
       "url": "https://in.indeed.com/jobs?q=machine+learning+intern&jt=internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Indeed India — Data Science Intern",
+      "name": "Indeed India \u2014 Data Science Intern",
       "url": "https://in.indeed.com/jobs?q=data+science+intern&jt=internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "Glassdoor India — ML Internships",
+      "name": "Indeed India \u2014 Full Stack Intern",
+      "url": "https://in.indeed.com/jobs?q=full+stack+intern&jt=internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Indeed India \u2014 Web Developer Intern",
+      "url": "https://in.indeed.com/jobs?q=web+developer+intern&jt=internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Glassdoor India \u2014 ML Internships",
       "url": "https://www.glassdoor.co.in/Job/india-machine-learning-intern-jobs-SRCH_IL.0,5_IN115_KO6,29.htm",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Glassdoor India — AI Internships",
+      "name": "Glassdoor India \u2014 AI Internships",
       "url": "https://www.glassdoor.co.in/Job/india-artificial-intelligence-intern-jobs-SRCH_IL.0,5_IN115_KO6,36.htm",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Foundit — ML Internships",
+      "name": "Unstop \u2014 Engineering Internships",
+      "url": "https://unstop.com/internships?domain=Engineering&opportunity=Internships",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Unstop \u2014 Data Science Internships",
+      "url": "https://unstop.com/internships?domain=Data+Science&opportunity=Internships",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Foundit \u2014 ML Internships",
       "url": "https://www.foundit.in/srp/results?searchId=&query=machine+learning+intern&experienceRanges=0~1",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Foundit — AI Internships",
+      "name": "Foundit \u2014 AI Internships",
       "url": "https://www.foundit.in/srp/results?query=artificial+intelligence+intern&experienceRanges=0~1",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Foundit — Data Science Internships",
+      "name": "Foundit \u2014 Data Science Internships",
       "url": "https://www.foundit.in/srp/results?query=data+science+intern&experienceRanges=0~1",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "Hirist — AI Jobs India",
+      "name": "Foundit \u2014 Full Stack Internships",
+      "url": "https://www.foundit.in/srp/results?query=full+stack+developer+intern&experienceRanges=0~1",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Hirist \u2014 AI Jobs India",
       "url": "https://www.hirist.tech/search?q=AI+intern",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Hirist — ML Jobs India",
+      "name": "Hirist \u2014 ML Jobs India",
       "url": "https://www.hirist.tech/search?q=machine+learning+intern",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "Instahyre — AI Internships",
+      "name": "Hirist \u2014 Full Stack Jobs India",
+      "url": "https://www.hirist.tech/search?q=full+stack+intern",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "high"
+    },
+    {
+      "name": "Instahyre \u2014 AI Internships",
       "url": "https://www.instahyre.com/search-jobs/?q=AI+internship",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Instahyre — ML Internships",
+      "name": "Instahyre \u2014 ML Internships",
       "url": "https://www.instahyre.com/search-jobs/?q=machine+learning+internship",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "CutShort — AI Internships",
+      "name": "Instahyre \u2014 Full Stack Internships",
+      "url": "https://www.instahyre.com/search-jobs/?q=full+stack+internship",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "high"
+    },
+    {
+      "name": "CutShort \u2014 AI Internships",
       "url": "https://cutshort.io/jobs/ai-machine-learning-jobs-in-india?experience=0-1",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "CutShort — Data Science Internships",
+      "name": "CutShort \u2014 Data Science Internships",
       "url": "https://cutshort.io/jobs/data-science-jobs-in-india?experience=0-1",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "IIMJobs — Data Science Internship",
-      "url": "https://www.iimjobs.com/search/data-science-internship",
-      "type": "http",
-      "priority": "low",
-      "scrape_frequency": "weekly",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "name": "CutShort \u2014 Full Stack Internships India",
+      "url": "https://cutshort.io/jobs/full-stack-developer-jobs-in-india?experience=0-1",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "IIMJobs — AI Internship",
-      "url": "https://www.iimjobs.com/search/artificial-intelligence-internship",
-      "type": "http",
-      "priority": "low",
-      "scrape_frequency": "weekly",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "HelloIntern — ML Internships",
+      "name": "HelloIntern \u2014 ML Internships",
       "url": "https://hellointern.in/internships/machine-learning-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "HelloIntern — AI Internships",
+      "name": "HelloIntern \u2014 AI Internships",
       "url": "https://hellointern.in/internships/artificial-intelligence-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Twenty19 — ML Internships",
-      "url": "https://www.twenty19.com/internships/machine-learning",
+      "name": "HelloIntern \u2014 Web Dev Internships",
+      "url": "https://hellointern.in/internships/web-development-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 3,
+      "expected_quality": "medium"
     },
     {
-      "name": "LetsIntern — AI Internships",
-      "url": "https://www.letsintern.com/internship/artificial-intelligence",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Apna — ML Internships",
-      "url": "https://apna.co/jobs/machine-learning-internship-jobs",
-      "type": "dynamic",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Apna — AI Internships",
-      "url": "https://apna.co/jobs/artificial-intelligence-internship-jobs",
-      "type": "dynamic",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Shine — ML Internships",
-      "url": "https://www.shine.com/job-search/machine-learning-intern-jobs",
-      "type": "http",
-      "priority": "low",
-      "scrape_frequency": "weekly",
-      "expected_quality": "low",
-      "day_rotation": 3
-    },
-    {
-      "name": "TimesJobs — AI Internships",
-      "url": "https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=AI+intern&txtLocation=India",
-      "type": "dynamic",
-      "priority": "low",
-      "scrape_frequency": "weekly",
-      "expected_quality": "low",
-      "day_rotation": 3
-    },
-    {
-      "name": "Internships.in — ML Internships",
+      "name": "Internships.in \u2014 ML Internships",
       "url": "https://internships.in/machine-learning-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Internships.in — AI Internships",
+      "name": "Internships.in \u2014 AI Internships",
       "url": "https://internships.in/artificial-intelligence-internship",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
-      "name": "Remotive — AI & ML Remote Jobs",
+      "name": "Internships.in \u2014 Web Dev Internships",
+      "url": "https://internships.in/web-development-internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Apna \u2014 ML Internships",
+      "url": "https://apna.co/jobs/machine-learning-internship-jobs",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Apna \u2014 AI Internships",
+      "url": "https://apna.co/jobs/artificial-intelligence-internship-jobs",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Twenty19 \u2014 ML Internships",
+      "url": "https://www.twenty19.com/internships/machine-learning",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "LetsIntern \u2014 AI Internships",
+      "url": "https://www.letsintern.com/internship/artificial-intelligence",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "IIMJobs \u2014 Data Science Internship",
+      "url": "https://www.iimjobs.com/search/data-science-internship",
+      "type": "http",
+      "priority": "low",
+      "scrape_frequency": "weekly",
+      "day_rotation": 1,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "IIMJobs \u2014 AI Internship",
+      "url": "https://www.iimjobs.com/search/artificial-intelligence-internship",
+      "type": "http",
+      "priority": "low",
+      "scrape_frequency": "weekly",
+      "day_rotation": 2,
+      "expected_quality": "medium"
+    },
+    {
+      "name": "Shine \u2014 ML Internships",
+      "url": "https://www.shine.com/job-search/machine-learning-intern-jobs",
+      "type": "http",
+      "priority": "low",
+      "scrape_frequency": "weekly",
+      "day_rotation": 3,
+      "expected_quality": "low"
+    },
+    {
+      "name": "TimesJobs \u2014 AI Internships",
+      "url": "https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=AI+intern&txtLocation=India",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "weekly",
+      "day_rotation": 1,
+      "expected_quality": "low"
+    },
+    {
+      "name": "Remotive \u2014 AI & ML Remote Jobs",
       "url": "https://remotive.com/remote-jobs/software-dev/ai-machine-learning",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "We Work Remotely — AI Remote Jobs",
+      "name": "Remotive \u2014 Full Stack Remote Jobs",
+      "url": "https://remotive.com/remote-jobs/software-dev/full-stack",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "high"
+    },
+    {
+      "name": "We Work Remotely \u2014 AI Remote Jobs",
       "url": "https://weworkremotely.com/categories/remote-ai-jobs",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Himalayas — ML Remote Internships",
+      "name": "We Work Remotely \u2014 Full Stack Remote Jobs",
+      "url": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "high"
+    },
+    {
+      "name": "Himalayas \u2014 ML Remote Internships",
       "url": "https://himalayas.app/jobs/machine-learning?type=internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Himalayas — AI Remote Internships",
+      "name": "Himalayas \u2014 AI Remote Internships",
       "url": "https://himalayas.app/jobs/artificial-intelligence?type=internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 2,
+      "expected_quality": "high"
     },
     {
-      "name": "Arc.dev — Remote ML Internships",
+      "name": "Himalayas \u2014 Full Stack Remote Internships",
+      "url": "https://himalayas.app/jobs/full-stack?type=internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "high"
+    },
+    {
+      "name": "Arc.dev \u2014 Remote ML Internships",
       "url": "https://arc.dev/remote-jobs/machine-learning",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Jobicy — AI Remote Jobs",
+      "name": "Jobicy \u2014 AI Remote Jobs",
       "url": "https://jobicy.com/?s=AI+intern&job_location=india",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
       "name": "ML Jobs Board",
@@ -632,17 +857,17 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "AI Jobs — AIJobs.net",
+      "name": "AI Jobs \u2014 AIJobs.net",
       "url": "https://aijobs.net/?type=internship",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
       "name": "Deep Learning Jobs",
@@ -650,17 +875,17 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "OpenAI Careers — Internships",
+      "name": "OpenAI Careers \u2014 Internships",
       "url": "https://openai.com/careers/",
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Anthropic Careers",
@@ -668,17 +893,17 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "DeepMind Careers — Internships",
+      "name": "DeepMind Careers \u2014 Internships",
       "url": "https://deepmind.google/about/careers/",
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Mistral AI Careers",
@@ -686,8 +911,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Cohere Careers",
@@ -695,8 +920,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Hugging Face Jobs",
@@ -704,8 +929,8 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Stability AI Careers",
@@ -713,8 +938,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Perplexity AI Careers",
@@ -722,8 +947,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Runway ML Careers",
@@ -731,17 +956,17 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "Scale AI Careers — Internships",
+      "name": "Scale AI Careers \u2014 Internships",
       "url": "https://scale.com/careers",
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "Together AI Careers",
@@ -749,8 +974,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
       "name": "AI21 Labs Careers",
@@ -758,8 +983,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
       "name": "Replicate Careers",
@@ -767,8 +992,8 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
       "name": "Inflection AI Careers",
@@ -776,8 +1001,8 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
       "name": "DRDO Internship Portal",
@@ -785,8 +1010,8 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "weekly",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 2,
+      "expected_quality": "medium"
     },
     {
       "name": "ISRO Internship",
@@ -794,17 +1019,17 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "medium",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "IIT Research Internships — IITB",
+      "name": "IIT Research Internships \u2014 IITB",
       "url": "https://www.iitb.ac.in/newacadhome/researchinternship.jsp",
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
       "name": "IISc Research Internships",
@@ -812,347 +1037,68 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 3
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Microsoft Research India — Internships",
+      "name": "Microsoft Research India \u2014 Internships",
       "url": "https://www.microsoft.com/en-us/research/lab/microsoft-research-india/internships/",
       "type": "http",
       "priority": "high",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "Google Research India — Internships",
+      "name": "Google Research India \u2014 Internships",
       "url": "https://research.google/careers/",
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "monthly",
-      "expected_quality": "very high",
-      "day_rotation": 1
+      "day_rotation": 1,
+      "expected_quality": "very high"
     },
     {
-      "name": "IBM Research — Internships",
+      "name": "IBM Research \u2014 Internships",
       "url": "https://research.ibm.com/careers",
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "high"
     },
     {
-      "name": "Indeed — AI Research Internship Remote",
+      "name": "Indeed \u2014 AI Research Internship Remote",
       "url": "https://www.indeed.com/jobs?q=AI+research+intern&jt=internship&l=remote",
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Glassdoor — Machine Learning Intern Remote",
+      "name": "Glassdoor \u2014 Machine Learning Intern Remote",
       "url": "https://www.glassdoor.com/Job/remote-machine-learning-intern-jobs-SRCH_IL.0,6_IS11047_KO7,30.htm",
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "medium",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "medium"
     },
     {
-      "name": "Simplify Jobs — ML Internships",
+      "name": "Simplify Jobs \u2014 ML Internships",
       "url": "https://simplify.jobs/internships?search=machine+learning",
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "expected_quality": "high",
-      "day_rotation": 3
-    },
-    {
-      "name": "Internshala — Web Development",
-      "url": "https://internshala.com/internships/web-development-internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
-    },
-    {
-      "name": "Internshala — Full Stack Development",
-      "url": "https://internshala.com/internships/full-stack-development-internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "Internshala — React JS",
-      "url": "https://internshala.com/internships/reactjs-internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
-    },
-    {
-      "name": "Internshala — Node JS",
-      "url": "https://internshala.com/internships/nodejs-internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "Internshala — JavaScript",
-      "url": "https://internshala.com/internships/javascript-internship",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Internshala — Work From Home Web Dev",
-      "url": "https://internshala.com/internships/work-from-home-web-development-internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Internshala — Work From Home Full Stack",
-      "url": "https://internshala.com/internships/work-from-home-full-stack-development-internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "LinkedIn — Full Stack Internships India",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=full+stack+intern&location=India&f_JT=I",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
-    },
-    {
-      "name": "LinkedIn — Web Developer Internships India",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=web+developer+intern&location=India&f_JT=I",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
-    },
-    {
-      "name": "LinkedIn — React Developer Internships India",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=react+developer+intern&location=India&f_JT=I",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 3
-    },
-    {
-      "name": "LinkedIn — Full Stack Remote Internships",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=full+stack+intern&location=India&f_WT=2&f_JT=I",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
-    },
-    {
-      "name": "Wellfound — Full Stack Engineer Internships",
-      "url": "https://wellfound.com/jobs?role=Full+Stack+Engineer&jobType=internship&location=India",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 1
-    },
-    {
-      "name": "Wellfound — Frontend Engineer Internships",
-      "url": "https://wellfound.com/jobs?role=Frontend+Engineer&jobType=internship&location=India",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 2
-    },
-    {
-      "name": "Wellfound — Backend Engineer Internships",
-      "url": "https://wellfound.com/jobs?role=Backend+Engineer&jobType=internship&location=India",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 3
-    },
-    {
-      "name": "YC Work at a Startup — Full Stack Internships",
-      "url": "https://www.workatastartup.com/jobs?role=eng&jobType=intern&skill=full+stack",
-      "type": "dynamic",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "very high",
-      "day_rotation": 3
-    },
-    {
-      "name": "Naukri — Full Stack Internships",
-      "url": "https://www.naukri.com/full-stack-developer-internship-jobs",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 1
-    },
-    {
-      "name": "Naukri — Web Developer Internships",
-      "url": "https://www.naukri.com/web-developer-internship-jobs",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "Indeed India — Full Stack Intern",
-      "url": "https://in.indeed.com/jobs?q=full+stack+intern&jt=internship",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Indeed India — Web Developer Intern",
-      "url": "https://in.indeed.com/jobs?q=web+developer+intern&jt=internship",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Foundit — Full Stack Internships",
-      "url": "https://www.foundit.in/srp/results?query=full+stack+developer+intern&experienceRanges=0~1",
-      "type": "dynamic",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Hirist — Full Stack Jobs India",
-      "url": "https://www.hirist.tech/search?q=full+stack+intern",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
-    },
-    {
-      "name": "CutShort — Full Stack Internships India",
-      "url": "https://cutshort.io/jobs/full-stack-developer-jobs-in-india?experience=0-1",
-      "type": "dynamic",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "Instahyre — Full Stack Internships",
-      "url": "https://www.instahyre.com/search-jobs/?q=full+stack+internship",
-      "type": "dynamic",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
-    },
-    {
-      "name": "HelloIntern — Web Dev Internships",
-      "url": "https://hellointern.in/internships/web-development-internship",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "Internships.in — Web Dev Internships",
-      "url": "https://internships.in/web-development-internship",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "RemoteOK — Full Stack Remote Jobs",
-      "url": "https://remoteok.com/remote-fullstack-jobs",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
-    },
-    {
-      "name": "RemoteOK — React Remote Jobs",
-      "url": "https://remoteok.com/remote-react-jobs",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 2
-    },
-    {
-      "name": "RemoteOK — Node.js Remote Jobs",
-      "url": "https://remoteok.com/remote-node-jobs",
-      "type": "http",
-      "priority": "medium",
-      "scrape_frequency": "daily",
-      "expected_quality": "medium",
-      "day_rotation": 3
-    },
-    {
-      "name": "Remotive — Full Stack Remote Jobs",
-      "url": "https://remotive.com/remote-jobs/software-dev/full-stack",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 1
-    },
-    {
-      "name": "We Work Remotely — Full Stack Remote Jobs",
-      "url": "https://weworkremotely.com/categories/remote-full-stack-programming-jobs",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
-    },
-    {
-      "name": "Himalayas — Full Stack Remote Internships",
-      "url": "https://himalayas.app/jobs/full-stack?type=internship",
-      "type": "http",
-      "priority": "high",
-      "scrape_frequency": "daily",
-      "expected_quality": "high",
-      "day_rotation": 2
+      "day_rotation": 1,
+      "expected_quality": "high"
     }
   ],
   "scrape_config": {
-    "daily_sources_limit": 80,
-    "weekly_sources_limit": 20,
-    "monthly_sources_limit": 20,
+    "daily_sources_limit": 40,
+    "weekly_sources_limit": 10,
+    "monthly_sources_limit": 25,
     "max_concurrent_workers": 8,
     "delay_between_requests_sec": [
       2,
