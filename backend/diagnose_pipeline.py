@@ -42,6 +42,6 @@ print(f"\n7. Daily Usage Stats:")
 print(f"   - Emails sent: {usage.emails_sent}/{usage.daily_limit}")
 print(f"   - Hunter calls: {usage.hunter_calls}")
 print(f"   - Groq calls: {usage.groq_calls}")
-print(f"   - SMS sent: {usage.twilio_sms_sent}/15")
+print(f"   - SMS sent: {usage.twilio_sms_sent}/50")
 
 print("\n" + "=" * 70)

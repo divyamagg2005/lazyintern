@@ -23,21 +23,23 @@ SYSTEM_PROMPT = """You are an expert cold email writer for internship outreach.
 
 Candidate Profile:
 Name: {name}
-Current Education: {education}
+Current Education: {education} (seeking internship opportunities)
 Technical Skills: {skills}
-Flagship Project: LazyIntern - AI-Powered Internship Automation Platform (Python, FastAPI, Next.js, Groq AI, PostgreSQL)
 Key Projects: {projects}
 
 Writing Guidelines:
 - Tone: professional, concise, genuine
+- CLEARLY state the candidate is seeking an internship opportunity
+- Mention the candidate is a 3rd year Computer Science Engineering student
 - Never sound like a template or generic
-- Be specific about relevant experience (especially LazyIntern if relevant to the role)
-- Show you researched the company
+- Be specific about relevant experience and projects that match the role
+- Show you researched the company and understand their work
 - Highlight concrete achievements and technical depth
 - Emphasize hands-on experience with production systems, APIs, and full-stack development
+- Tailor the email to the company's domain (AI/ML, fintech, product, etc.)
 
 Output Format:
-  - Subject line (max 8 words, compelling)
+  - Subject line (max 8 words, compelling, mention internship)
   - Email body (150-200 words, 3 paragraphs)
   - Follow-up template (75 words, for day 5 if no reply)
 
@@ -46,7 +48,9 @@ Output ONLY valid JSON with this exact structure:
 
 IMPORTANT: 
 - Use the EXACT education year specified in the candidate profile above
-- If the role involves AI/ML/automation/full-stack, mention LazyIntern project
+- Make it CLEAR this is an internship application from a student
+- If the role involves AI/ML/automation/full-stack, mention relevant project experience
+- Tailor the project mentions to match the company's focus area
 - Keep it natural and conversational, not robotic
 """
 
@@ -56,13 +60,13 @@ def _build_system_prompt(resume: dict[str, Any]) -> str:
     name = resume.get("name", "Candidate")
     education = resume.get("education", {})
     
-    # Build education string with explicit year
+    # Build education string with explicit year and degree
     year = education.get("year", "")
     current_year = education.get("current_year", year)
     degree = education.get("degree", "")
     college = education.get("college", "")
     
-    edu_str = f"{degree} at {college}, {current_year}"
+    edu_str = f"{degree} student at {college}, {current_year}"
     
     skills = resume.get("skills", {})
     skills_str = ", ".join([
@@ -72,7 +76,7 @@ def _build_system_prompt(resume: dict[str, Any]) -> str:
     
     projects = resume.get("projects", [])[:3]
     projects_str = "\n".join([
-        f"- {p.get('name', '')}: {p.get('description', '')[:100]}"
+        f"- {p.get('name', '')}: {p.get('description', '')[:150]}"
         for p in projects
     ])
     
@@ -190,23 +194,25 @@ def _generate_fallback_draft(lead: dict[str, Any], internship: dict[str, Any], r
     
     education = resume.get("education", {})
     current_year = education.get("current_year", "3rd Year")
+    degree = education.get("degree", "B.Tech Computer Science")
     college = education.get("college", "VIT Vellore")
 
-    subject = f"Application for {role} at {company}"
+    subject = f"Internship Application: {role} at {company}"
     body = (
         f"Hi {recruiter},\n\n"
-        f"My name is {name}, a {current_year} student at {college}. "
-        f"I'm writing to express my interest in the {role} role at {company}.\n\n"
+        f"I'm {name}, a {current_year} {degree} student at {college}, "
+        f"and I'm reaching out to express my interest in the {role} internship at {company}.\n\n"
         f"I have hands-on experience with {languages} and {frameworks}, "
-        f"and recently built LazyIntern—an AI-powered automation platform using FastAPI, Next.js, and Groq AI. "
-        f"I'd love to bring this technical depth to your team.\n\n"
-        "Looking forward to discussing how I can contribute.\n\n"
+        f"and recently built an AI-powered automation platform using FastAPI, Next.js, and modern AI APIs. "
+        f"I'm excited about the opportunity to contribute to your team and learn from your work.\n\n"
+        "I'd love to discuss how my skills align with this role. "
+        "Looking forward to hearing from you.\n\n"
         "Best regards,\n"
         f"{name}"
     )
     followup = (
         f"Hi {recruiter},\n\n"
-        f"Following up on my application for the {role} role at {company}. "
+        f"Following up on my internship application for the {role} role at {company}. "
         "I'm still very interested and would love to explore whether there's a fit.\n\n"
         "Best,\n"
         f"{name}"

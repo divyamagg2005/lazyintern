@@ -32,3 +32,5 @@ approval/__pycache__
 
 api/__pycache__
 api/routes/__pycache__
+
+last_run.txt

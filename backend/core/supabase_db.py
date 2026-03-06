@@ -37,6 +37,17 @@ class SupabaseDB:
         self.client: Client = create_client(
             settings.supabase_url, settings.supabase_service_role_key
         )
+        
+        # Set timeout on the underlying httpx client to prevent hanging
+        # This fixes the issue where queries hang indefinitely on slow network
+        import httpx
+        if hasattr(self.client, 'postgrest') and hasattr(self.client.postgrest, 'session'):
+            self.client.postgrest.session.timeout = httpx.Timeout(
+                connect=10.0,  # 10 seconds to establish connection
+                read=30.0,     # 30 seconds to read response
+                write=10.0,    # 10 seconds to write request
+                pool=5.0       # 5 seconds to acquire connection from pool
+            )
 
     # -------------------------
     # Usage stats / guards
@@ -123,14 +134,16 @@ class SupabaseDB:
         return res.data[0] if res.data else None
 
     def list_discovered_internships(self, limit: int = 50) -> list[dict[str, Any]]:
-        res = (
-            self.client.table("internships")
-            .select("*")
-            .eq("status", "discovered")
-            .limit(limit)
-            .execute()
-        )
-        return list(res.data or [])
+            res = (
+                self.client.table("internships")
+                .select("*")
+                .eq("status", "discovered")
+                .is_("pre_score", "null")
+                .limit(limit)
+                .execute()
+            )
+            return list(res.data or [])
+
 
     def insert_lead(self, lead: dict[str, Any]) -> dict[str, Any] | None:
         """
@@ -200,35 +213,44 @@ class SupabaseDB:
         Used to optimize Hunter API calls - skip domains we've already emailed.
         
         Returns True if domain was contacted, False otherwise.
+        
+        OPTIMIZED: Uses a direct query to email_drafts with a join filter instead of
+        fetching all leads and iterating through drafts in Python.
         """
         if not domain:
             return False
         
-        # Find all leads with emails from this domain
-        domain_pattern = f"%@{domain}"
-        existing_leads = (
-            self.client.table("leads")
-            .select("id, email, email_drafts(status)")
-            .like("email", domain_pattern)
-            .execute()
-        )
-        
-        if not existing_leads.data:
+        try:
+            # More efficient approach: Query email_drafts directly with a filter on lead email
+            # This avoids fetching all leads and their drafts, then filtering in Python
+            domain_pattern = f"%@{domain}"
+            
+            # Query: Find any draft with status in (approved, auto_approved, sent)
+            # where the associated lead's email matches the domain pattern
+            result = (
+                self.client.table("email_drafts")
+                .select("id, lead_id, leads!inner(email)")
+                .in_("status", ["approved", "auto_approved", "sent"])
+                .like("leads.email", domain_pattern)
+                .limit(1)  # We only need to know if ANY exist
+                .execute()
+            )
+            
+            if result.data and len(result.data) > 0:
+                from core.logger import logger
+                lead_email = result.data[0].get("leads", {}).get("email", "unknown")
+                logger.info(
+                    f"Domain {domain} already contacted (email: {lead_email})"
+                )
+                return True
+            
             return False
-        
-        # Check if any have sent emails
-        for lead in existing_leads.data:
-            drafts = lead.get("email_drafts", [])
-            for draft in drafts:
-                draft_status = draft.get("status")
-                if draft_status in ("approved", "auto_approved", "sent"):
-                    from core.logger import logger
-                    logger.info(
-                        f"Domain {domain} already contacted (email: {lead.get('email')})"
-                    )
-                    return True
-        
-        return False
+            
+        except Exception as e:
+            # If query fails, log error and return False (don't block pipeline)
+            from core.logger import logger
+            logger.warning(f"Error checking domain {domain}: {e}. Proceeding anyway.")
+            return False
 
     def insert_email_draft(self, draft: dict[str, Any]) -> dict[str, Any]:
         res = self.client.table("email_drafts").insert(draft).execute()

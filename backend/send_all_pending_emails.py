@@ -111,7 +111,7 @@ def send_all_pending_emails():
     # Get initial counts
     today = today_utc()
     usage = db.get_or_create_daily_usage(today)
-    daily_limit = usage.daily_limit or 15
+    daily_limit = usage.daily_limit or 50
     pending_count = get_pending_drafts_count()
     all_statuses = get_all_draft_statuses()
     

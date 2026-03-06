@@ -25,7 +25,7 @@ def _twilio_client() -> Client | None:
 def send_notification_sms(draft: dict[str, Any], lead: dict[str, Any], internship: dict[str, Any], full_score: int) -> None:
     """
     Send notification SMS when email is queued for sending.
-    Enforces daily SMS limit of 15 messages.
+    Enforces daily SMS limit of 50 messages.
     If Twilio is not configured, we just log an event and skip.
     """
     client = _twilio_client()
@@ -37,7 +37,7 @@ def send_notification_sms(draft: dict[str, Any], lead: dict[str, Any], internshi
     # Check daily SMS limit
     today = today_utc()
     usage = db.get_or_create_daily_usage(today)
-    SMS_DAILY_LIMIT = 15
+    SMS_DAILY_LIMIT = 50
 
     if usage.twilio_sms_sent >= SMS_DAILY_LIMIT:
         logger.warning(f"⚠️  SMS daily limit reached ({usage.twilio_sms_sent}/{SMS_DAILY_LIMIT}), skipping notification SMS")

@@ -128,21 +128,21 @@ def _get_outreach_metrics() -> dict[str, Any]:
     # Pending follow-ups
     followups_count = db.client.table("followup_queue").select("id", count="exact").eq("sent", False).execute()
     
-    # Warmup progress (assume 11-day warmup to reach 15 emails/day)
-    warmup_progress = min(100, (usage.daily_limit / 15) * 100)
-    is_warmup = usage.daily_limit < 15
+    # Warmup progress (assume warmup to reach 50 emails/day)
+    warmup_progress = min(100, (usage.daily_limit / 50) * 100)
+    is_warmup = usage.daily_limit < 50
     
     return {
         "groqDraftsGenerated": groq_drafts,
         "approvalRate": round(approval_rate, 1),
         "autoApprovals": usage.auto_approvals,
         "emailsSentToday": usage.emails_sent,
-        "dailyEmailLimit": usage.daily_limit or 15,
+        "dailyEmailLimit": usage.daily_limit or 50,
         "isWarmupPhase": is_warmup,
         "warmupProgressPct": round(warmup_progress, 1),
         "pendingFollowups": followups_count.count or 0,
         "smsSentToday": usage.twilio_sms_sent,
-        "smsDailyLimit": 15
+        "smsDailyLimit": 50
     }
 
 

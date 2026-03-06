@@ -264,8 +264,7 @@ def run_cycle() -> None:
     
     # Display current usage stats
     logger.info(f"📊 Today's Stats:")
-    logger.info(f"   📧 Emails sent: {usage.emails_sent}/{usage.daily_limit or 15}")
-    logger.info(f"   📱 SMS sent: {usage.twilio_sms_sent}/15")
+    logger.info(f"   📧 {usage.emails_sent}/50 emails | 📱 {usage.twilio_sms_sent}/50 SMS")
     logger.info(f"   🤖 Groq calls: {usage.groq_calls}")
     logger.info("=" * 80 + "\n")
 
@@ -291,9 +290,9 @@ def run_cycle() -> None:
         # Process all pending drafts (respecting daily limits and spacing)
         drafts_sent = 0
         while True:
-            # Check if we've hit daily limit
+        # Check if we've hit daily limit
             usage = db.get_or_create_daily_usage(today)
-            daily_limit = usage.daily_limit or 15
+            daily_limit = usage.daily_limit or 50
 
             if usage.emails_sent >= daily_limit:
                 logger.info(f"⚠️  Daily email limit reached ({usage.emails_sent}/{daily_limit})")
@@ -343,8 +342,7 @@ def run_cycle() -> None:
     logger.info("🏁 CYCLE COMPLETE")
     logger.info("=" * 80)
     logger.info(f"📊 Final Stats:")
-    logger.info(f"   📧 Emails sent today: {final_usage.emails_sent}/{final_usage.daily_limit or 15}")
-    logger.info(f"   📱 SMS sent today: {final_usage.twilio_sms_sent}/15")
+    logger.info(f"   📧 {final_usage.emails_sent}/50 emails | 📱 {final_usage.twilio_sms_sent}/50 SMS")
     logger.info(f"   🤖 Groq calls today: {final_usage.groq_calls}")
     logger.info(f"   🔍 Pre-score kills: {final_usage.pre_score_kills}")
     logger.info(f"   ❌ Validation fails: {final_usage.validation_fails}")
@@ -354,6 +352,10 @@ def run_cycle() -> None:
 
 
 def main() -> None:
+    # Set up logging first
+    from core.logger import setup_logging
+    setup_logging()
+    
     parser = argparse.ArgumentParser(description="Run one LazyIntern scheduler cycle")
     parser.add_argument("--once", action="store_true", help="Run a single cycle and exit")
     args = parser.parse_args()

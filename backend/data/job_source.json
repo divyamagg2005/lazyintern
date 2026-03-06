@@ -1,8 +1,8 @@
 {
   "meta": {
-    "last_updated": "2026-03-02",
-    "total_sources": 97,
-    "notes": "type: http = Scrapling Tier 1 first. type: dynamic = Scrapling Tier 2 first. day_rotation: 1/2/3 = which day in 3-day cycle to scrape. Same domain never appears twice on same day. Monthly sources only run on 1st of month. Weekly sources only run if 7 days since last scraped."
+    "last_updated": "2026-03-03",
+    "total_sources": 155,
+    "notes": "type: http = Scrapling Tier 1 first. type: dynamic = Scrapling Tier 2 first. day_rotation: 1/2/3 = which day in 3-day cycle to scrape. Same domain never appears twice on same day. Monthly sources only run on 1st of month. Weekly sources only run if 7 days since last scraped. track: tech/finance/both \u2014 used by email generator to pick correct tone."
   },
   "sources": [
     {
@@ -12,7 +12,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "YC Work at a Startup \u2014 Data Science Internships",
@@ -21,7 +22,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "YC Work at a Startup \u2014 Full Stack Internships",
@@ -30,7 +32,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Wellfound \u2014 ML Engineer Internships",
@@ -39,7 +42,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Wellfound \u2014 AI Internships",
@@ -48,7 +52,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Wellfound \u2014 Data Science Internships",
@@ -57,7 +62,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Wellfound \u2014 Full Stack Engineer Internships",
@@ -66,7 +72,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Wellfound \u2014 Frontend Engineer Internships",
@@ -75,7 +82,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Wellfound \u2014 Backend Engineer Internships",
@@ -84,7 +92,18 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
+    },
+    {
+      "name": "Wellfound \u2014 Software Engineer Internships India",
+      "url": "https://wellfound.com/jobs?role=Software+Engineer&jobType=internship&location=India",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "HackerNews \u2014 Who is Hiring (Monthly Thread)",
@@ -93,7 +112,8 @@
       "priority": "high",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "both"
     },
     {
       "name": "HackerNews \u2014 Who Wants to be Hired (Monthly Thread)",
@@ -101,8 +121,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "both"
     },
     {
       "name": "RemoteOK \u2014 AI & ML Jobs",
@@ -111,7 +132,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 Machine Learning Jobs",
@@ -120,7 +142,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 Data Science Jobs",
@@ -129,7 +152,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 Deep Learning Jobs",
@@ -138,7 +162,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 Python Jobs",
@@ -147,7 +172,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 Full Stack Remote Jobs",
@@ -156,7 +182,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 React Remote Jobs",
@@ -165,7 +192,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "RemoteOK \u2014 Node.js Remote Jobs",
@@ -174,7 +202,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Machine Learning",
@@ -183,7 +212,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Artificial Intelligence",
@@ -192,7 +222,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Data Science",
@@ -201,7 +232,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Python",
@@ -210,7 +242,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Deep Learning",
@@ -219,7 +252,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Natural Language Processing",
@@ -228,7 +262,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Computer Vision",
@@ -237,7 +272,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Research Internships",
@@ -246,7 +282,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "both"
     },
     {
       "name": "Internshala \u2014 Work From Home ML",
@@ -255,7 +292,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Work From Home AI",
@@ -264,7 +302,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Web Development",
@@ -273,7 +312,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Full Stack Development",
@@ -282,7 +322,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 React JS",
@@ -291,7 +332,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Node JS",
@@ -300,7 +342,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 JavaScript",
@@ -309,7 +352,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Work From Home Web Dev",
@@ -318,7 +362,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internshala \u2014 Work From Home Full Stack",
@@ -327,7 +372,38 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "Internshala \u2014 Finance Internships",
+      "url": "https://internshala.com/internships/finance-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "finance"
+    },
+    {
+      "name": "Internshala \u2014 Investment Banking Internships",
+      "url": "https://internshala.com/internships/investment-banking-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "finance"
+    },
+    {
+      "name": "Internshala \u2014 Work From Home Finance",
+      "url": "https://internshala.com/internships/work-from-home-finance-internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "finance"
     },
     {
       "name": "LinkedIn \u2014 AI Internships India",
@@ -335,8 +411,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Machine Learning Internships India",
@@ -344,8 +421,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Data Science Internships India",
@@ -353,8 +431,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 AI Internships Remote",
@@ -362,8 +441,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 LLM Engineer Internships",
@@ -371,8 +451,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "very high"
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Generative AI Internships",
@@ -380,8 +461,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "very high"
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 NLP Internships India",
@@ -389,8 +471,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Computer Vision Internships India",
@@ -398,8 +481,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Research Intern India",
@@ -407,8 +491,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "very high"
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Full Stack Internships India",
@@ -416,8 +501,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Web Developer Internships India",
@@ -425,8 +511,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 React Developer Internships India",
@@ -434,8 +521,9 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "LinkedIn \u2014 Full Stack Remote Internships",
@@ -443,8 +531,109 @@
       "type": "dynamic",
       "priority": "high",
       "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
+    },
+    {
+      "name": "LinkedIn \u2014 Software Engineer Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=software+engineer+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
+    },
+    {
+      "name": "LinkedIn \u2014 SWE Internships Remote India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=SWE+intern&location=India&f_WT=2&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
+    },
+    {
+      "name": "LinkedIn \u2014 Investment Banking Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=investment+banking+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Equity Research Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=equity+research+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Quantitative Finance Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=quantitative+finance+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Private Equity Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=private+equity+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Venture Capital Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=venture+capital+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Financial Analyst Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=financial+analyst+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Summer Analyst Programs India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=summer+analyst+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "LinkedIn \u2014 Quant Trading Internships India",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=quant+trading+intern&location=India&f_JT=I",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "finance"
     },
     {
       "name": "Indeed India \u2014 AI Intern",
@@ -452,8 +641,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Indeed India \u2014 ML Intern",
@@ -461,8 +651,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Indeed India \u2014 Data Science Intern",
@@ -470,8 +661,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "medium"
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Indeed India \u2014 Full Stack Intern",
@@ -479,8 +671,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Indeed India \u2014 Web Developer Intern",
@@ -488,8 +681,29 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "Indeed India \u2014 Investment Banking Intern",
+      "url": "https://in.indeed.com/jobs?q=investment+banking+intern&jt=internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "finance"
+    },
+    {
+      "name": "Indeed India \u2014 Finance Intern",
+      "url": "https://in.indeed.com/jobs?q=finance+intern&jt=internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "finance"
     },
     {
       "name": "Glassdoor India \u2014 ML Internships",
@@ -497,8 +711,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Glassdoor India \u2014 AI Internships",
@@ -506,8 +721,19 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "Glassdoor India \u2014 Investment Banking Internships",
+      "url": "https://www.glassdoor.co.in/Job/india-investment-banking-intern-jobs-SRCH_IL.0,5_IN115_KO6,31.htm",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "finance"
     },
     {
       "name": "Unstop \u2014 Engineering Internships",
@@ -515,8 +741,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Unstop \u2014 Data Science Internships",
@@ -524,8 +751,19 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "Unstop \u2014 Finance Internships",
+      "url": "https://unstop.com/internships?domain=Finance&opportunity=Internships",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "finance"
     },
     {
       "name": "Foundit \u2014 ML Internships",
@@ -533,8 +771,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Foundit \u2014 AI Internships",
@@ -542,8 +781,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "medium"
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Foundit \u2014 Data Science Internships",
@@ -551,8 +791,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Foundit \u2014 Full Stack Internships",
@@ -560,8 +801,29 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "Foundit \u2014 Finance Internships",
+      "url": "https://www.foundit.in/srp/results?query=finance+intern&experienceRanges=0~1",
+      "type": "dynamic",
+      "priority": "medium",
+      "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "finance"
+    },
+    {
+      "name": "Foundit \u2014 Investment Banking Internships",
+      "url": "https://www.foundit.in/srp/results?query=investment+banking+intern&experienceRanges=0~1",
+      "type": "dynamic",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "finance"
     },
     {
       "name": "Hirist \u2014 AI Jobs India",
@@ -569,8 +831,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Hirist \u2014 ML Jobs India",
@@ -578,8 +841,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Hirist \u2014 Full Stack Jobs India",
@@ -587,8 +851,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Instahyre \u2014 AI Internships",
@@ -596,8 +861,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Instahyre \u2014 ML Internships",
@@ -605,8 +871,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Instahyre \u2014 Full Stack Internships",
@@ -614,8 +881,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "CutShort \u2014 AI Internships",
@@ -623,8 +891,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "CutShort \u2014 Data Science Internships",
@@ -632,8 +901,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "medium"
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "CutShort \u2014 Full Stack Internships India",
@@ -641,8 +911,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 3,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "HelloIntern \u2014 ML Internships",
@@ -650,8 +921,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "HelloIntern \u2014 AI Internships",
@@ -659,8 +931,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "medium"
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "HelloIntern \u2014 Web Dev Internships",
@@ -668,8 +941,19 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "HelloIntern \u2014 Finance Internships",
+      "url": "https://hellointern.in/internships/finance-internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "finance"
     },
     {
       "name": "Internships.in \u2014 ML Internships",
@@ -678,7 +962,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internships.in \u2014 AI Internships",
@@ -687,7 +972,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Internships.in \u2014 Web Dev Internships",
@@ -696,7 +982,18 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "Internships.in \u2014 Finance Internships",
+      "url": "https://internships.in/finance-internship",
+      "type": "http",
+      "priority": "medium",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "medium",
+      "track": "finance"
     },
     {
       "name": "Apna \u2014 ML Internships",
@@ -704,8 +1001,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Apna \u2014 AI Internships",
@@ -713,8 +1011,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Twenty19 \u2014 ML Internships",
@@ -723,7 +1022,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "LetsIntern \u2014 AI Internships",
@@ -731,26 +1031,79 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
+    },
+    {
+      "name": "IIMJobs \u2014 Investment Banking Internship",
+      "url": "https://www.iimjobs.com/search/investment-banking-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "IIMJobs \u2014 Equity Research Internship",
+      "url": "https://www.iimjobs.com/search/equity-research-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "IIMJobs \u2014 Quant Finance Internship",
+      "url": "https://www.iimjobs.com/search/quant-finance-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "IIMJobs \u2014 Private Equity Internship",
+      "url": "https://www.iimjobs.com/search/private-equity-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "IIMJobs \u2014 Venture Capital Internship",
+      "url": "https://www.iimjobs.com/search/venture-capital-internship",
+      "type": "http",
+      "priority": "high",
+      "scrape_frequency": "daily",
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "finance"
     },
     {
       "name": "IIMJobs \u2014 Data Science Internship",
       "url": "https://www.iimjobs.com/search/data-science-internship",
       "type": "http",
-      "priority": "low",
+      "priority": "medium",
       "scrape_frequency": "weekly",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "IIMJobs \u2014 AI Internship",
       "url": "https://www.iimjobs.com/search/artificial-intelligence-internship",
       "type": "http",
-      "priority": "low",
+      "priority": "medium",
       "scrape_frequency": "weekly",
-      "day_rotation": 2,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Shine \u2014 ML Internships",
@@ -758,8 +1111,9 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "weekly",
-      "day_rotation": 3,
-      "expected_quality": "low"
+      "day_rotation": 1,
+      "expected_quality": "low",
+      "track": "tech"
     },
     {
       "name": "TimesJobs \u2014 AI Internships",
@@ -767,8 +1121,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "weekly",
-      "day_rotation": 1,
-      "expected_quality": "low"
+      "day_rotation": 2,
+      "expected_quality": "low",
+      "track": "tech"
     },
     {
       "name": "Remotive \u2014 AI & ML Remote Jobs",
@@ -776,8 +1131,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Remotive \u2014 Full Stack Remote Jobs",
@@ -785,8 +1141,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "We Work Remotely \u2014 AI Remote Jobs",
@@ -794,8 +1151,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "We Work Remotely \u2014 Full Stack Remote Jobs",
@@ -803,8 +1161,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 2,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Himalayas \u2014 ML Remote Internships",
@@ -813,7 +1172,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Himalayas \u2014 AI Remote Internships",
@@ -822,7 +1182,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 2,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Himalayas \u2014 Full Stack Remote Internships",
@@ -831,7 +1192,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 3,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Arc.dev \u2014 Remote ML Internships",
@@ -840,7 +1202,8 @@
       "priority": "medium",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Jobicy \u2014 AI Remote Jobs",
@@ -848,8 +1211,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "ML Jobs Board",
@@ -857,8 +1221,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "AI Jobs \u2014 AIJobs.net",
@@ -867,7 +1232,8 @@
       "priority": "high",
       "scrape_frequency": "daily",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Deep Learning Jobs",
@@ -875,8 +1241,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "daily",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 2,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "OpenAI Careers \u2014 Internships",
@@ -884,8 +1251,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Anthropic Careers",
@@ -894,7 +1262,8 @@
       "priority": "low",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "DeepMind Careers \u2014 Internships",
@@ -902,8 +1271,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Mistral AI Careers",
@@ -911,8 +1281,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Cohere Careers",
@@ -921,7 +1292,8 @@
       "priority": "low",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Hugging Face Jobs",
@@ -929,8 +1301,9 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Stability AI Careers",
@@ -938,8 +1311,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Perplexity AI Careers",
@@ -948,7 +1322,8 @@
       "priority": "low",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Runway ML Careers",
@@ -956,8 +1331,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Scale AI Careers \u2014 Internships",
@@ -965,8 +1341,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Together AI Careers",
@@ -975,7 +1352,8 @@
       "priority": "low",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "AI21 Labs Careers",
@@ -983,8 +1361,9 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Replicate Careers",
@@ -992,8 +1371,9 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Inflection AI Careers",
@@ -1002,7 +1382,68 @@
       "priority": "low",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
+    },
+    {
+      "name": "Goldman Sachs Careers \u2014 India Internships",
+      "url": "https://www.goldmansachs.com/careers/students/programs/india/",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 2,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "Morgan Stanley Careers \u2014 India Internships",
+      "url": "https://www.morganstanley.com/people-opportunities/students-graduates/programs/internships/india",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "JP Morgan Careers \u2014 India Internships",
+      "url": "https://careers.jpmorgan.com/us/en/students/programs/internships?location=India",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 1,
+      "expected_quality": "very high",
+      "track": "finance"
+    },
+    {
+      "name": "Kotak Mahindra Careers \u2014 Internships",
+      "url": "https://www.kotak.com/en/careers.html",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "finance"
+    },
+    {
+      "name": "Edelweiss Careers \u2014 Internships",
+      "url": "https://www.edelweissfin.com/careers",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "finance"
+    },
+    {
+      "name": "Motilal Oswal Careers \u2014 Internships",
+      "url": "https://www.motilaloswal.com/career",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 1,
+      "expected_quality": "high",
+      "track": "finance"
     },
     {
       "name": "DRDO Internship Portal",
@@ -1011,7 +1452,8 @@
       "priority": "low",
       "scrape_frequency": "weekly",
       "day_rotation": 2,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "ISRO Internship",
@@ -1019,8 +1461,9 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "IIT Research Internships \u2014 IITB",
@@ -1029,7 +1472,8 @@
       "priority": "medium",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "high"
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "IISc Research Internships",
@@ -1037,8 +1481,9 @@
       "type": "http",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Microsoft Research India \u2014 Internships",
@@ -1046,8 +1491,9 @@
       "type": "http",
       "priority": "high",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "very high"
+      "day_rotation": 3,
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "Google Research India \u2014 Internships",
@@ -1056,7 +1502,8 @@
       "priority": "high",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "very high"
+      "expected_quality": "very high",
+      "track": "tech"
     },
     {
       "name": "IBM Research \u2014 Internships",
@@ -1064,8 +1511,9 @@
       "type": "dynamic",
       "priority": "medium",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
     },
     {
       "name": "Indeed \u2014 AI Research Internship Remote",
@@ -1073,8 +1521,9 @@
       "type": "http",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "medium"
+      "day_rotation": 3,
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Glassdoor \u2014 Machine Learning Intern Remote",
@@ -1083,7 +1532,8 @@
       "priority": "low",
       "scrape_frequency": "monthly",
       "day_rotation": 1,
-      "expected_quality": "medium"
+      "expected_quality": "medium",
+      "track": "tech"
     },
     {
       "name": "Simplify Jobs \u2014 ML Internships",
@@ -1091,8 +1541,19 @@
       "type": "dynamic",
       "priority": "low",
       "scrape_frequency": "monthly",
-      "day_rotation": 1,
-      "expected_quality": "high"
+      "day_rotation": 2,
+      "expected_quality": "high",
+      "track": "tech"
+    },
+    {
+      "name": "Simplify Jobs \u2014 Investment Banking Internships",
+      "url": "https://simplify.jobs/internships?search=investment+banking",
+      "type": "dynamic",
+      "priority": "low",
+      "scrape_frequency": "monthly",
+      "day_rotation": 3,
+      "expected_quality": "high",
+      "track": "finance"
     }
   ],
   "scrape_config": {

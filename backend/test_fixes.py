@@ -137,8 +137,8 @@ def test_sms_daily_limit():
     
     print(f"\n✓ Current SMS usage:")
     print(f"  SMS sent today: {usage.twilio_sms_sent}")
-    print(f"  SMS daily limit: 15")
-    print(f"  Remaining: {15 - usage.twilio_sms_sent}")
+    print(f"  SMS daily limit: 50")
+    print(f"  Remaining: {50 - usage.twilio_sms_sent}")
     
     # Check if twilio_sms_sent column exists
     has_column = hasattr(usage, 'twilio_sms_sent')
