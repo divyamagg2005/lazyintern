@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import time
 from datetime import datetime, timedelta
 
 from core.supabase_db import db, today_utc, utcnow
@@ -11,10 +12,12 @@ from core.logger import logger
 
 def process_email_queue() -> None:
     """
-    Process approved and auto-approved email drafts IMMEDIATELY.
+    Process approved and auto-approved email drafts with spacing delays.
     
-    NO spacing constraints, NO daily limits.
-    Sends all approved drafts as fast as possible.
+    Adds random delays between emails (45-90 seconds) to:
+    - Prevent spam detection
+    - Maintain Gmail account reputation
+    - Simulate natural human sending patterns
     """
     today = today_utc()
     
@@ -31,9 +34,9 @@ def process_email_queue() -> None:
     if not drafts:
         return
     
-    logger.info(f"Processing {len(drafts)} approved draft(s) - sending immediately")
+    logger.info(f"Processing {len(drafts)} approved draft(s) with spacing delays")
     
-    for row in drafts:
+    for idx, row in enumerate(drafts):
         draft = row
         
         lead = {
@@ -49,6 +52,13 @@ def process_email_queue() -> None:
             # Log success
             approval_type = "auto" if draft["status"] == "auto_approved" else "manual"
             logger.info(f"✓ Email sent ({approval_type}) to {lead['email']}")
+            
+            # Add delay between emails (except after the last one)
+            if idx < len(drafts) - 1:
+                # Random delay between 45-90 seconds to simulate natural sending
+                delay = random.randint(45, 90)
+                logger.info(f"⏳ Waiting {delay} seconds before next email (spam prevention)...")
+                time.sleep(delay)
             
         except Exception as e:
             logger.error(f"Failed to send email to {lead['email']}: {e}")

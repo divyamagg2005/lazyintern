@@ -85,6 +85,7 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
     """
     Sends a single email via Gmail API with resume attachment.
     Updates draft status and daily usage stats.
+    Sends SMS notification after successful send.
     """
     try:
         service = _build_service()
@@ -123,6 +124,21 @@ def send_email(draft: dict[str, Any], lead: dict[str, Any]) -> None:
         logger.info(f"📅 Follow-up scheduled for {followup_date}")
         
         logger.info(f"✅ Email sent successfully to {lead['email']}")
+        
+        # Send SMS notification AFTER successful email send
+        try:
+            # Get internship and full_score for SMS notification
+            if internship_id:
+                internship_res = db.client.table("internships").select("*").eq("id", internship_id).limit(1).execute()
+                if internship_res.data:
+                    internship = internship_res.data[0]
+                    full_score = internship.get("full_score", 0)
+                    
+                    from approval.twilio_sender import send_notification_sms
+                    send_notification_sms(draft, lead, internship, int(full_score))
+                    logger.info(f"📱 SMS notification sent for {lead['email']}")
+        except Exception as sms_error:
+            logger.warning(f"⚠️  SMS notification failed (email was sent successfully): {sms_error}")
         
     except Exception as e:
         logger.error(f"❌ Gmail send failed for {lead['email']}: {e}")

@@ -5,12 +5,52 @@
 Thumbs.db
 
 # =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# =========================
+# Testing & Coverage
+# =========================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+*.hypothesis/
+
+# =========================
 # Frontend Dev Cache
 # =========================
 frontend/dev/
 dashboard/.next/
 dashboard/node_modules/
-secrets
+node_modules/
+
 # =========================
 # IDEs
 # =========================
@@ -19,18 +59,54 @@ secrets
 *.swp
 *.swo
 *~
+*.code-workspace
 
 # =========================
-# Environment
+# Environment & Secrets
 # =========================
 .env
 .env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.crt
+token.json
+*_token.json
+gmail_token.json
+oauth_client.json
 
-core/__pycache__
-
-approval/__pycache__
-
-api/__pycache__
-api/routes/__pycache__
-
+# =========================
+# Logs & Runtime
+# =========================
+*.log
 last_run.txt
+*.txt.log
+logs/
+*.pid
+
+# =========================
+# Database
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+*.bak
+*.swp
+*~.nib
+.cache/
+
+# =========================
+# Project Specific
+# =========================
+# Disposable domains list (auto-downloaded)
+backend/data/disposable_domains.txt
+
+# Source tracking (runtime data)
+backend/data/source_tracking.json

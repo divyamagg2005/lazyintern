@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import time
 from datetime import timedelta
 
 from approval.twilio_sender import send_notification_sms
@@ -14,7 +15,8 @@ from pipeline.email_validator import validate_email
 from pipeline.full_scorer import full_score
 from pipeline.groq_client import generate_draft
 from pipeline.pre_scorer import _load_resume, pre_score  # type: ignore[attr-defined]
-from pipeline.hunter_client import extract_domain, find_company_domain, search_domain_for_email
+from pipeline.hunter_client import extract_domain, find_company_domain
+from pipeline.email_discovery import discover_email_with_fallback
 from scraper.scrape_router import discover_and_store
 
 logger = logging.getLogger("lazyintern")
@@ -98,9 +100,9 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 continue
             
             # EMAIL-LEVEL DEDUPLICATION: Check if domain was already contacted
-            # This saves Hunter API calls for domains we've already emailed
+            # This saves API calls for domains we've already emailed
             if db.check_domain_already_contacted(domain):
-                db.log_event(iid, "hunter_skipped_domain_contacted", {
+                db.log_event(iid, "email_discovery_skipped_domain_contacted", {
                     "domain": domain,
                     "company": company_name,
                     "reason": "Domain already contacted (email-level deduplication)"
@@ -110,33 +112,46 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
                 ).eq("id", iid).execute()
                 continue
             
-            hunter = search_domain_for_email(domain)
-            if not hunter:
-                db.log_event(iid, "hunter_no_results", {"domain": domain, "company": company_name})
+            # Use fallback chain orchestrator (Hunter → Pattern → Snov → Scraper)
+            result = discover_email_with_fallback(domain, company_name)
+            if not result:
+                db.log_event(iid, "email_discovery_all_methods_failed", {
+                    "domain": domain, 
+                    "company": company_name
+                })
+                db.client.table("internships").update(
+                    {"status": "no_email"}
+                ).eq("id", iid).execute()
                 continue
 
             lead = db.insert_lead(
                 {
                     "internship_id": iid,
-                    "recruiter_name": hunter.recruiter_name,
-                    "email": hunter.email,
-                    "source": hunter.source,
-                    "confidence": hunter.confidence,
+                    "recruiter_name": result.recruiter_name,
+                    "email": result.email,
+                    "source": result.source,
+                    "confidence": result.confidence,
                 }
             )
             
             # If lead is None, it means a duplicate was skipped
             if not lead:
                 db.log_event(iid, "lead_duplicate_skipped", {
-                    "email": hunter.email, 
-                    "source": "hunter",
+                    "email": result.email, 
+                    "source": result.source,
                     "reason": "Email already contacted or internship duplicate"
                 })
                 continue
             
-            logger.info(f"✉️  EMAIL FOUND (Hunter): {hunter.email}")
+            logger.info(f"✉️  EMAIL FOUND ({result.source}): {result.email}")
             logger.info(f"🎯 LEAD CREATED & INSERTED IN SUPABASE")
-            db.log_event(iid, "email_found_hunter", {"email": hunter.email, "domain": domain, "company": company_name})
+            db.log_event(iid, "email_found", {
+                "email": result.email, 
+                "source": result.source,
+                "confidence": result.confidence,
+                "domain": domain, 
+                "company": company_name
+            })
         else:
             lead = db.insert_lead(
                 {
@@ -163,7 +178,20 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
 
         # Phase 5 — validation
         v = validate_email(lead["email"], int(lead.get("confidence") or 0))
-        if not v.valid:
+        
+        # Set verified=FALSE for pattern_guess emails (unverified guesses)
+        # Other sources (hunter, snov, scraped, regex) follow validation result
+        if lead.get("source") == "pattern_guess":
+            db.client.table("leads").update(
+                {"verified": False, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
+            ).eq("id", lead["id"]).execute()
+            logger.info(f"ℹ️  Pattern guess email marked as unverified: {lead['email']}")
+            db.log_event(iid, "email_pattern_guess_unverified", {
+                "email": lead["email"],
+                "mx_valid": v.mx_valid,
+                "smtp_valid": v.smtp_valid
+            })
+        elif not v.valid:
             db.bump_daily_usage(today, validation_fails=1)
             db.client.table("leads").update(
                 {"verified": False, "mx_valid": v.mx_valid, "smtp_valid": v.smtp_valid}
@@ -196,6 +224,10 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
         # Phase 8 — Groq personalization
         logger.info(f"🤖 Generating personalized email draft...")
         draft_obj = generate_draft(lead, internship, resume)
+        
+        # Add small delay to prevent Groq rate limiting (2 seconds between calls)
+        time.sleep(2)
+        
         draft = db.insert_email_draft(
             {
                 "lead_id": lead["id"],
@@ -209,28 +241,16 @@ def _process_discovered_internships(resume: dict[str, object], *, limit: int = 2
         logger.info(f"✅ DRAFT GENERATED: '{draft_obj.subject}'")
         db.log_event(iid, "draft_generated", {"draft_id": draft["id"]})
 
-        # Phase 9 — Immediate sending (no approval delay)
-        # Send email IMMEDIATELY after draft generation
-        logger.info(f"📧 Sending email to {lead['email']}...")
-        try:
-            from outreach import gmail_client
-            gmail_client.send_email(draft, lead)
-            db.bump_daily_usage(today, emails_sent=1)
-            db.log_event(iid, "email_sent_immediately", {"draft_id": draft["id"]})
-            logger.info(f"✅ EMAIL SENT to {lead['email']}")
-        except Exception as e:
-            logger.error(f"❌ Failed to send email immediately: {e}")
-            # Email will be retried in next cycle via process_email_queue
+        # Phase 9 — Queue email for sending (will be sent by process_email_queue)
+        # Don't send immediately - let process_email_queue handle it with proper spacing
+        logger.info(f"✅ DRAFT APPROVED & QUEUED: '{draft_obj.subject}'")
+        db.log_event(iid, "draft_approved_queued", {"draft_id": draft["id"]})
         
         # Mark internship as processed
         db.client.table("internships").update(
-            {"status": "email_sent"}
+            {"status": "draft_generated"}
         ).eq("id", iid).execute()
         
-        # Send notification SMS to inform user that email was sent
-        logger.info(f"📱 Sending SMS notification...")
-        send_notification_sms(draft, lead, internship, int(fs.score))
-        logger.info(f"✅ SMS NOTIFICATION SENT")
         logger.info("=" * 80)
 
 
